@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/vacation_icon"
+        android:src="@drawable/biking"
+        android:longClickable="false"
+        android:layout_margin="5px" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/vacation_title_lbl"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/vacation_icon"
+        android:layout_margin="10px" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/vacation_desc_lbl"
+        android:layout_below="@+id/vacation_title_lbl"
+        android:layout_toEndOf="@+id/vacation_icon"
+        android:layout_margin="10px" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/vacation_signups_lbl"
+        android:layout_alignBottom="@+id/vacation_icon"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10px" />
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package hogent.hogentprojecteniii_groep10;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import java.util.List;
@@ -22,8 +24,7 @@ import retrofit.client.Response;
 
 public class Main extends Activity {
 
-    private EditText et;
-    private Button bt;
+    private ImageButton getCampsBtn;
     private final static String TAG = "MAIN";
 
     @Override
@@ -36,6 +37,16 @@ public class Main extends Activity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "Newsfeed clicked");
+            }
+        });
+
+        getCampsBtn = (ImageButton) findViewById(R.id.camp_btn);
+        getCampsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Jammer dat we geen API 5 mogen gebruiken. Anders zouden we animated transitions kunnen gebruiken.
+                Intent vacationOverviewIntent = new Intent(getApplicationContext(), VacationOverview.class);
+                startActivity(vacationOverviewIntent);
             }
         });
     }
