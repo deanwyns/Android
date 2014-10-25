@@ -4,5 +4,7 @@
     <string name="app_name">HogentProjectenIII_Groep10</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="nieuwsoverzicht">Nieuwsoverzicht</string>
+    <string name="newsfeed">Foto\'s van jou zijn toegevoegd aan actiekamp\nJoetz is cool!\nNog een hoogtepunt</string>
 
 </resources>
