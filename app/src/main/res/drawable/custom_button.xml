@@ -6,10 +6,7 @@
 
     <item android:state_pressed="true" >
         <shape>
-            <gradient
-                android:endColor="#5E26D8"
-                android:startColor="#290674"
-                android:angle="270" />
+            <solid android:color="@color/bright_purple"/>
             <corners
                 android:radius="3dp" />
             <padding
@@ -22,7 +19,7 @@
 
     <item>
         <shape>
-            <solid android:color="#B76EB8"/>
+            <solid android:color="@color/light_purple"/>
             <corners
                 android:radius="3dp" />
             <padding
