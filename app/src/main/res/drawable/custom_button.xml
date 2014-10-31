@@ -6,7 +6,7 @@
 
     <item android:state_pressed="true" >
         <shape>
-            <solid android:color="@color/bright_purple"/>
+            <solid android:color="@color/light_gray_tapped"/>
             <corners
                 android:radius="3dp" />
             <padding
@@ -19,7 +19,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/light_purple"/>
+            <solid android:color="@color/light_gray"/>
             <corners
                 android:radius="3dp" />
             <padding

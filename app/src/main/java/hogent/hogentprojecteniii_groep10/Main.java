@@ -1,13 +1,20 @@
 package hogent.hogentprojecteniii_groep10;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,6 +31,7 @@ import retrofit.client.Response;
 
 public class Main extends Activity {
 
+    private LinearLayout ll;
     private ImageButton getCampsBtn;
     private final static String TAG = "MAIN";
 
@@ -32,7 +40,14 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LinearLayout ll = (LinearLayout) findViewById(R.id.newsfeed_id);
+        ll = (LinearLayout) findViewById(R.id.newsfeed_id);
+        getCampsBtn = (ImageButton) findViewById(R.id.camp_btn);
+
+        setupListeners();
+
+    }
+
+    private void setupListeners() {
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,19 +55,17 @@ public class Main extends Activity {
             }
         });
 
-        getCampsBtn = (ImageButton) findViewById(R.id.camp_btn);
         getCampsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Jammer dat we geen API 5 mogen gebruiken. Anders zouden we animated transitions kunnen gebruiken.
+
                 Intent vacationOverviewIntent = new Intent(getApplicationContext(), VacationOverview.class);
                 startActivity(vacationOverviewIntent);
+                //Transition voorbeeld
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             }
         });
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

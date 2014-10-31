@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="gradient_red_1">#FF3A3A</color>
-    <color name="gradient_red_2">#FFBEBE</color>
-    <color name="light_purple">#70D3669D</color>
-    <color name="bright_purple">#70DF4995</color>
-    <color name="olive_green">#8042C042</color>
+    <color name="background">#F7F7F7</color>
+    <color name="light_gray">#E4E4E4</color>
+    <color name="light_gray_tapped">#DCDCDC</color>
 </resources>

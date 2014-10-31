@@ -3,6 +3,7 @@ package hogent.hogentprojecteniii_groep10;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -105,5 +106,11 @@ public class VacationOverview extends Activity {
 
             return itemView;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition( R.anim.fadein, R.anim.fadeout);
     }
 }

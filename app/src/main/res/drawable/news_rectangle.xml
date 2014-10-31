@@ -10,13 +10,9 @@
         android:top="5px"
         android:right="5px"
         android:bottom="5px" />
-    <gradient
-        android:startColor="@color/olive_green"
-        android:endColor="#FFFFFFFF"
-        android:angle="45"/>
     <!--<stroke-->
         <!--android:width="5px"-->
         <!--android:color="#C6CFD6" />-->
-    <!--<solid android:color="@color/olive_green"></solid>-->
+    <solid android:color="@color/light_gray"></solid>
 
 </shape>
