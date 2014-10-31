@@ -6,8 +6,12 @@
     <string name="action_settings">Settings</string>
     <string name="nieuwsoverzicht">Nieuwsoverzicht</string>
     <string name="newsfeed">Foto\'s van jou zijn toegevoegd aan actiekamp\nJoetz is cool!\nNog een hoogtepunt</string>
-    <string name="title_activity_vacation_overview">VacationOverview</string>
+    <string name="title_activity_vacation_overview">Vakanties</string>
     <string name="vacation_name_sort_btn">Naam ^</string>
     <string name="vacation_date_sort_btn">Datum ^</string>
+    <string name="search_vacation">Zoek een vakantie</string>
+    <string name="logged_in_name">Jan Mertens</string>
+    <string name="filter_vacations">Filter vakanties</string>
+    <string name="action_login">Login</string>
 
 </resources>

@@ -33,11 +33,4 @@
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/button" />
 
-    <SearchView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/search_vacation_view"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/vacation_overview_list_view" />
-
 </RelativeLayout>
