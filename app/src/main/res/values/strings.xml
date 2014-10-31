@@ -13,5 +13,9 @@
     <string name="logged_in_name">Jan Mertens</string>
     <string name="filter_vacations">Filter vakanties</string>
     <string name="action_login">Login</string>
+    <string name="title_activity_specific_vacation_view">SpecificVacationView</string>
+    <string name="inschrijven">Ik schrijf me in!</string>
+    <string name="description">Beschrijving</string>
+    <string name="price">Prijs</string>
 
 </resources>
