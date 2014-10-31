@@ -1,6 +1,11 @@
 package hogent.hogentprojecteniii_groep10.models;
 
-public class Vacation {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class Vacation implements Parcelable {
 
     private long id;
     private String title;
@@ -85,5 +90,63 @@ public class Vacation {
         return twoBmMemberCost;
     }
 
-    public boolean isTaxDeductable() { return taxDeductable; }
+    public boolean isTaxDeductable() {
+        return taxDeductable;
+    }
+
+
+    //Parcellable is blijkbaar sneller dan serializable wanneer we objecten doorgeven in intents.
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(promoText);
+        dest.writeString(location);
+        dest.writeInt(ageFrom);
+        dest.writeInt(ageTo);
+        dest.writeString(transportation);
+        dest.writeInt(maxParticipants);
+        dest.writeDouble(baseCost);
+        dest.writeDouble(oneBmMemberCost);
+        dest.writeDouble(twoBmMemberCost);
+        //Er is geen writeBoolean, dus een omweg maken.
+        //Lezen is dan via: boolean = in.readByte() != 0;
+        // boolean == true if byte != 0
+        dest.writeByte((byte) (taxDeductable ? 1 : 0));
+    }
+
+    private Vacation() {
+    }
+
+    public static final Parcelable.Creator<Vacation> CREATOR = new Creator<Vacation>() {
+        public Vacation createFromParcel(Parcel source) {
+            Vacation vacation = new Vacation();
+            vacation.id = source.readLong();
+            vacation.title = source.readString();
+            vacation.description = source.readString();
+            vacation.promoText = source.readString();
+            vacation.location = source.readString();
+            vacation.ageFrom = source.readInt();
+            vacation.ageTo = source.readInt();
+            vacation.transportation = source.readString();
+            vacation.maxParticipants = source.readInt();
+            vacation.baseCost = source.readDouble();
+            vacation.oneBmMemberCost = source.readDouble();
+            vacation.twoBmMemberCost = source.readDouble();
+            vacation.taxDeductable = source.readByte() != 0;
+            return vacation;
+        }
+
+        public Vacation[] newArray(int size) {
+            return new Vacation[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
 }

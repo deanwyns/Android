@@ -70,11 +70,12 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
         vacList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View viewClicked, int pos, long id) {
-                //Hier zal je de vakantie opzoeken en tonen waar he op hebt geklikt
                 Vacation clickedVacation = vacationList.get(pos);
-                String message = "Er is geklikt op " + pos
-                        + "\nMet titel: " + clickedVacation.getTitle();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Intent specificVacation = new Intent(getApplicationContext(), SpecificVacationView.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putParcelable("SpecificVacation", clickedVacation);
+                specificVacation.putExtras(mBundle);
+                startActivity(specificVacation);
             }
         });
     }
