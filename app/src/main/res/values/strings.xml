@@ -7,5 +7,7 @@
     <string name="nieuwsoverzicht">Nieuwsoverzicht</string>
     <string name="newsfeed">Foto\'s van jou zijn toegevoegd aan actiekamp\nJoetz is cool!\nNog een hoogtepunt</string>
     <string name="title_activity_vacation_overview">VacationOverview</string>
+    <string name="vacation_name_sort_btn">Naam ^</string>
+    <string name="vacation_date_sort_btn">Datum ^</string>
 
 </resources>

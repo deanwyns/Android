@@ -12,6 +12,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/vacation_overview_list_view"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/button" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vacation_name_sort_btn"
+        android:id="@+id/button"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vacation_date_sort_btn"
+        android:id="@+id/button2"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/button" />
+
+    <SearchView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_vacation_view"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/vacation_overview_list_view" />
+
 </RelativeLayout>
