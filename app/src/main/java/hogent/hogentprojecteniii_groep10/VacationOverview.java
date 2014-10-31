@@ -33,21 +33,16 @@ public class VacationOverview extends Activity {
         registerClickCallback();
     }
 
-    private void populateVacationList(){
-        String promoTextBarkenTijn = "Recept voor een fantastische zomervakantie: toffe monitoren, leuke vrienden, een prachtig vakantiecentrum en véél fun en ambiance! De monitoren zorgen voor een afwisselend programma (strand- en duinspelen, daguitstappen, themaspelen, fuif, …) maar willen jou er natuurlijk bij. Wacht niet te lang en plan je vakantie naar zee met JOETZ!";
-        Vacation barkentijnZomerLp = new Vacation(0, "JOETZ aan zee", "Uitgebreide beschrijving die momenteel korter is dan de promotext.", promoTextBarkenTijn, "De Barkentijn, Nieuwpoort", 5, 16, "busvervoer of eigen vervoer", 90, 400.00, 310.00, 220.00, true);
-        String promoTextKrokus = "Verveling krijgt geen kans tijdens de krokusvakantie want op maandag 03 maart 2014 trekken we er met z’n allen op uit! We logeren in het vakantiecentrum “De Barkentijn” te Nieuwpoort.\n" +
-                "Vijf dagen lang spelen we de leukste spelletjes, voor klein en groot. Samen met je vakantievriendjes beleef je het ene avontuur na het andere.  Plezier gegarandeerd!";
-        Vacation krokusVakantie = new Vacation(1, "Krokusvakantie aan zee", "Een beschrijving die meer zegt dan de huidige promotext die blijkbaar niet beschikbaar is.", promoTextKrokus, "De Barkentijn, Nieuwpoort", 5, 16, "busvervoer of eigen vervoer", 20, 165.00, 135.00, 105.00, true);
-
-        vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
-        vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
-        vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
-        vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
+    private void populateVacationList() {
+        vacationList.add(new Vacation("Fietsvakantie", "Tijd om te fietsen!", 20));
+        vacationList.add(new Vacation("Zwemvakantie", "Tijd om te zwemmen!", 15));
+        vacationList.add(new Vacation("Sportvakantie", "Is toch geen vakantie?", 30));
+        vacationList.add(new Vacation("Fietsvakantie", "Tijd om te fietsen!", 20));
+        vacationList.add(new Vacation("Zwemvakantie", "Tijd om te zwemmen!", 15));
+        vacationList.add(new Vacation("Sportvakantie", "Is toch geen vakantie?", 30));
+        vacationList.add(new Vacation("Fietsvakantie", "Tijd om te fietsen!", 20));
+        vacationList.add(new Vacation("Zwemvakantie", "Tijd om te zwemmen!", 15));
+        vacationList.add(new Vacation("Sportvakantie", "Is toch geen vakantie?", 30));
     }
 
     private void populateListView() {
@@ -102,6 +97,8 @@ public class VacationOverview extends Activity {
             titleTxt.setText(currentVacation.getTitle());
             TextView descTxt =  (TextView) itemView.findViewById(R.id.vacation_desc_lbl);
             descTxt.setText(currentVacation.getDescription());
+            TextView signupsTxt =  (TextView) itemView.findViewById(R.id.vacation_signups_lbl);
+            signupsTxt.setText(Integer.toString(currentVacation.getSignups()));
 
             return itemView;
         }
