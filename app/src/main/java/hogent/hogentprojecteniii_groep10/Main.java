@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +28,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class Main extends ActionBarActivity {
+public class Main extends Activity {
 
     private LinearLayout ll;
     private ImageButton getCampsBtn;
@@ -40,8 +38,8 @@ public class Main extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+//        setSupportActionBar(toolbar);
         ll = (LinearLayout) findViewById(R.id.newsfeed_id);
         getCampsBtn = (ImageButton) findViewById(R.id.camp_btn);
 
