@@ -29,15 +29,18 @@
         android:id="@+id/vacation_desc_lbl"
         android:layout_below="@+id/vacation_title_lbl"
         android:layout_toEndOf="@+id/vacation_icon"
-        android:layout_margin="10px" />
+        android:layout_marginLeft="10px"
+        android:layout_marginTop="10px"
+        android:layout_marginBottom="10px"
+        android:layout_toStartOf="@+id/vacation_begindate_lbl" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
-        android:id="@+id/vacation_signups_lbl"
-        android:layout_alignBottom="@+id/vacation_icon"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="10px" />
+        android:id="@+id/vacation_begindate_lbl"
+        android:layout_alignBaseline="@+id/vacation_desc_lbl"
+        android:layout_alignBottom="@+id/vacation_desc_lbl"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

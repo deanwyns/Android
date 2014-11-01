@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Vacation implements Parcelable {
 
@@ -12,6 +14,8 @@ public class Vacation implements Parcelable {
     private String description;
     private String promoText;
     private String location;
+    private GregorianCalendar beginDate;
+    private GregorianCalendar endDate;
     private int ageFrom;
     private int ageTo;
     private String transportation;
@@ -21,12 +25,14 @@ public class Vacation implements Parcelable {
     private double twoBmMemberCost;
     private boolean taxDeductable;
 
-    public Vacation(long id, String title, String description, String promoText, String location, int ageFrom, int ageTo, String transportation, int maxParticipants, double baseCost, double oneBmMemberCost, double twoBmMemberCost, boolean taxDeductable) {
+    public Vacation(long id, String title, String description, String promoText, String location, GregorianCalendar beginDate, GregorianCalendar endDate, int ageFrom, int ageTo, String transportation, int maxParticipants, double baseCost, double oneBmMemberCost, double twoBmMemberCost, boolean taxDeductable) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.promoText = promoText;
         this.location = location;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
         this.ageFrom = ageFrom;
         this.ageTo = ageTo;
         this.transportation = transportation;
@@ -38,8 +44,8 @@ public class Vacation implements Parcelable {
     }
 
     //"Basic" constructor
-    public Vacation(long id, String title, String description, String promoText, String location) {
-        this(id, title, description, promoText, location, 0, 0, null, 0, 0.0, 0.0, 0.0, false);
+    public Vacation(long id, String title, String description, String promoText, String location, GregorianCalendar beginDate, GregorianCalendar endDate) {
+        this(id, title, description, promoText, location, beginDate, endDate, 0, 0, null, 0, 0.0, 0.0, 0.0, false);
     }
 
     public long getId() {
@@ -60,6 +66,14 @@ public class Vacation implements Parcelable {
 
     public String getLocation() {
         return location;
+    }
+
+    public GregorianCalendar getBeginDate() {
+        return beginDate;
+    }
+
+    public GregorianCalendar getEndDate() {
+        return endDate;
     }
 
     public int getAgeFrom() {
@@ -95,7 +109,7 @@ public class Vacation implements Parcelable {
     }
 
 
-    //Parcellable is blijkbaar sneller dan serializable wanneer we objecten doorgeven in intents.
+    //Parcellable is sneller dan serializable wanneer we objecten doorgeven in intents.
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
@@ -103,6 +117,8 @@ public class Vacation implements Parcelable {
         dest.writeString(description);
         dest.writeString(promoText);
         dest.writeString(location);
+        dest.writeSerializable(beginDate);
+        dest.writeSerializable(endDate);
         dest.writeInt(ageFrom);
         dest.writeInt(ageTo);
         dest.writeString(transportation);
@@ -127,6 +143,8 @@ public class Vacation implements Parcelable {
             vacation.description = source.readString();
             vacation.promoText = source.readString();
             vacation.location = source.readString();
+            vacation.beginDate = (GregorianCalendar) source.readSerializable();
+            vacation.endDate = (GregorianCalendar) source.readSerializable();
             vacation.ageFrom = source.readInt();
             vacation.ageTo = source.readInt();
             vacation.transportation = source.readString();

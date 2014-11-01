@@ -1,6 +1,5 @@
 package hogent.hogentprojecteniii_groep10;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -15,13 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import hogent.hogentprojecteniii_groep10.models.Vacation;
@@ -29,7 +33,10 @@ import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 public class VacationOverview extends Activity implements SearchView.OnQueryTextListener {
 
+    private boolean titleSortedAscending, dateSortedAscending;
+    private Button sortByTitleBtn, sortByDateBtn;
     private SearchView mSearchView;
+    private ArrayAdapter<Vacation> vacationAdapter;
     private List<Vacation> vacationList = new ArrayList<Vacation>();
 
     @Override
@@ -37,20 +44,60 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vacation_overview);
 
+        sortByTitleBtn =(Button) findViewById(R.id.sort_title_btn);
+        sortByDateBtn =(Button) findViewById(R.id.sort_date_btn);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
 //        setSupportActionBar(toolbar);
 
+
         populateVacationList();
         populateListView();
+        setActionListeners();
         registerClickCallback();
+
+    }
+
+    private void setActionListeners() {
+        sortByTitleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(vacationList, new Comparator<Vacation>() {
+                    @Override
+                    public int compare(Vacation lhs, Vacation rhs) {
+                        if(!titleSortedAscending)
+                            return lhs.getTitle().compareTo(rhs.getTitle());
+                        else
+                            return rhs.getTitle().compareTo(lhs.getTitle());
+                    }
+                });
+                titleSortedAscending = !titleSortedAscending;
+                vacationAdapter.notifyDataSetChanged();
+            }
+        });
+        sortByDateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(vacationList, new Comparator<Vacation>() {
+                    @Override
+                    public int compare(Vacation lhs, Vacation rhs) {
+                        if(!dateSortedAscending)
+                            return lhs.getBeginDate().compareTo(rhs.getBeginDate());
+                        else
+                            return rhs.getBeginDate().compareTo(lhs.getBeginDate());
+                    }
+                });
+                dateSortedAscending = !dateSortedAscending;
+                vacationAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void populateVacationList() {
         String promoTextBarkenTijn = "Recept voor een fantastische zomervakantie: toffe monitoren, leuke vrienden, een prachtig vakantiecentrum en véél fun en ambiance! De monitoren zorgen voor een afwisselend programma (strand- en duinspelen, daguitstappen, themaspelen, fuif, …) maar willen jou er natuurlijk bij. Wacht niet te lang en plan je vakantie naar zee met JOETZ!";
-        Vacation barkentijnZomerLp = new Vacation(0, "JOETZ aan zee", "Uitgebreide beschrijving die momenteel korter is dan de promotext.", promoTextBarkenTijn, "De Barkentijn, Nieuwpoort", 5, 16, "busvervoer of eigen vervoer", 90, 400.00, 310.00, 220.00, true);
+        Vacation barkentijnZomerLp = new Vacation(0, "JOETZ aan zee", "Uitgebreide beschrijving die momenteel korter is dan de promotext.", promoTextBarkenTijn, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 6, 3), new GregorianCalendar(2014, 6, 12),5, 16, "busvervoer of eigen vervoer", 90, 400.00, 310.00, 220.00, true);
         String promoTextKrokus = "Verveling krijgt geen kans tijdens de krokusvakantie want op maandag 03 maart 2014 trekken we er met z’n allen op uit! We logeren in het vakantiecentrum “De Barkentijn” te Nieuwpoort.\n" +
                 "Vijf dagen lang spelen we de leukste spelletjes, voor klein en groot. Samen met je vakantievriendjes beleef je het ene avontuur na het andere.  Plezier gegarandeerd!";
-        Vacation krokusVakantie = new Vacation(1, "Krokusvakantie aan zee", "Een beschrijving die meer zegt dan de huidige promotext die blijkbaar niet beschikbaar is.", promoTextKrokus, "De Barkentijn, Nieuwpoort", 5, 16, "busvervoer of eigen vervoer", 20, 165.00, 135.00, 105.00, true);
+        Vacation krokusVakantie = new Vacation(1, "Krokusvakantie aan zee", "Een beschrijving die meer zegt dan de huidige promotext die blijkbaar niet beschikbaar is.", promoTextKrokus, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 8, 12), new GregorianCalendar(2014, 8, 24), 5, 16, "busvervoer of eigen vervoer", 20, 165.00, 135.00, 105.00, true);
 
         vacationList.add(barkentijnZomerLp);
         vacationList.add(krokusVakantie);
@@ -63,7 +110,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
     }
 
     private void populateListView() {
-        ArrayAdapter<Vacation> vacationAdapter = new VacationListAdapter();
+        vacationAdapter = new VacationListAdapter();
         ListView vacationList = (ListView) findViewById(R.id.vacation_overview_list_view);
         vacationList.setAdapter(vacationAdapter);
     }
@@ -115,6 +162,9 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
             titleTxt.setText(currentVacation.getTitle());
             TextView descTxt = (TextView) itemView.findViewById(R.id.vacation_desc_lbl);
             descTxt.setText(currentVacation.getDescription());
+            TextView beginDateTxt = (TextView) itemView.findViewById(R.id.vacation_begindate_lbl);
+            SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
+            beginDateTxt.setText(formatter.format(currentVacation.getBeginDate().getTime()));
 
             return itemView;
         }
