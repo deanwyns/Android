@@ -40,7 +40,8 @@ public class Main extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
         ll = (LinearLayout) findViewById(R.id.newsfeed_id);
         getCampsBtn = (ImageButton) findViewById(R.id.camp_btn);
 

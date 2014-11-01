@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +30,7 @@ import java.util.List;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 
-public class VacationOverview extends Activity implements SearchView.OnQueryTextListener {
+public class VacationOverview extends ActionBarActivity implements SearchView.OnQueryTextListener {
 
     private SearchView mSearchView;
     private List<Vacation> vacationList = new ArrayList<Vacation>();
@@ -37,6 +39,10 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vacation_overview);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+
         populateVacationList();
         populateListView();
         registerClickCallback();
@@ -138,7 +144,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
 //        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 //        getActionBar().setCustomView(R.layout.actionbar);
 
-        getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        //getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         return true;
     }
 
@@ -176,6 +182,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        Log.i("VacationOverview", query);
         return false;
     }
 
