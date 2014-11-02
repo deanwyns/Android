@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -38,7 +39,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
     private SearchView mSearchView;
     private ArrayAdapter<Vacation> vacationAdapter;
     private List<Vacation> vacationList = new ArrayList<Vacation>();
-    private final int FILTER_OPTION_REQUEST = 1;
+    public static final int FILTER_OPTION_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +96,10 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
 
     private void populateVacationList() {
         String promoTextBarkenTijn = "Recept voor een fantastische zomervakantie: toffe monitoren, leuke vrienden, een prachtig vakantiecentrum en véél fun en ambiance! De monitoren zorgen voor een afwisselend programma (strand- en duinspelen, daguitstappen, themaspelen, fuif, …) maar willen jou er natuurlijk bij. Wacht niet te lang en plan je vakantie naar zee met JOETZ!";
-        Vacation barkentijnZomerLp = new Vacation(0, "JOETZ aan zee", "Uitgebreide beschrijving die momenteel korter is dan de promotext.", promoTextBarkenTijn, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 6, 3), new GregorianCalendar(2014, 6, 12),5, 16, "busvervoer of eigen vervoer", 90, 400.00, 310.00, 220.00, true);
+        Vacation barkentijnZomerLp = new Vacation(0, "JOETZ aan zee", "Uitgebreide beschrijving die momenteel korter is dan de promotext.", promoTextBarkenTijn, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 6, 3), new GregorianCalendar(2014, 6, 12),4, 12, "busvervoer of eigen vervoer", 90, 400.00, 310.00, 220.00, true);
         String promoTextKrokus = "Verveling krijgt geen kans tijdens de krokusvakantie want op maandag 03 maart 2014 trekken we er met z’n allen op uit! We logeren in het vakantiecentrum “De Barkentijn” te Nieuwpoort.\n" +
                 "Vijf dagen lang spelen we de leukste spelletjes, voor klein en groot. Samen met je vakantievriendjes beleef je het ene avontuur na het andere.  Plezier gegarandeerd!";
-        Vacation krokusVakantie = new Vacation(1, "Krokusvakantie aan zee", "Een beschrijving die meer zegt dan de huidige promotext die blijkbaar niet beschikbaar is.", promoTextKrokus, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 8, 12), new GregorianCalendar(2014, 8, 24), 5, 16, "busvervoer of eigen vervoer", 20, 165.00, 135.00, 105.00, true);
+        Vacation krokusVakantie = new Vacation(1, "Krokusvakantie aan zee", "Een beschrijving die meer zegt dan de huidige promotext die blijkbaar niet beschikbaar is.", promoTextKrokus, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 8, 12), new GregorianCalendar(2014, 8, 24), 6, 16, "busvervoer of eigen vervoer", 20, 165.00, 135.00, 105.00, true);
 
         vacationList.add(barkentijnZomerLp);
         vacationList.add(krokusVakantie);
@@ -213,7 +214,33 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        vacationAdapter.clear();
+        populateVacationList();
+        populateListView();
+        if (requestCode == FILTER_OPTION_REQUEST) {
+            if(data.getBooleanExtra("ageFilterChecked", false)){
+                int startAge = data.getIntExtra("startAge", 0);
+                int endAge = data.getIntExtra("endAge", 99);
+                filterOnAges(startAge, endAge);
+            }
+        }
 
+    }
+
+    private void filterOnAges(int startAge, int endAge) {
+        List<Vacation> filteredVacationList = new ArrayList<Vacation>();
+
+        for(Vacation v : vacationList){
+            if(v.getAgeFrom() >= startAge && v.getAgeTo() <= endAge)
+                filteredVacationList.add(v);
+        }
+
+        vacationAdapter.clear();
+        vacationAdapter.addAll(filteredVacationList);
+    }
 
     private void setupSearchView(MenuItem searchItem) {
         searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);

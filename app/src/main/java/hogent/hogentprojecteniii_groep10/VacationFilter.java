@@ -1,36 +1,59 @@
 package hogent.hogentprojecteniii_groep10;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 
 public class VacationFilter extends Activity {
+
+    private Button searchWithFilterBtn;
+    private CheckBox ageFilterCheckbox;
+    private TextView startAgeTxt, endAgeTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vacation_filter);
+
+        ageFilterCheckbox = (CheckBox) findViewById(R.id.age_filter_checkbox);
+        searchWithFilterBtn = (Button) findViewById(R.id.search_with_filter_btn);
+        startAgeTxt = (TextView) findViewById(R.id.start_age_input_txt);
+        endAgeTxt = (TextView) findViewById(R.id.end_age_input_txt);
+
+        addListeners();
     }
 
+    private void addListeners() {
+        searchWithFilterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnedIntent = new Intent();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.vacation_filter, menu);
-        return true;
-    }
+                if(ageFilterCheckbox.isChecked())
+                {
+                    returnedIntent.putExtra("ageFilterChecked", true);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+                    int startAge = 0;
+                    if(!startAgeTxt.getText().toString().isEmpty())
+                        startAge = Integer.parseInt(startAgeTxt.getText().toString());
+                    int endAge = 99;
+                    if(!endAgeTxt.getText().toString().isEmpty())
+                        endAge = Integer.parseInt(endAgeTxt.getText().toString());
+
+                    returnedIntent.putExtra("startAge", startAge);
+                    returnedIntent.putExtra("endAge", endAge);
+                }
+
+                setResult(VacationOverview.FILTER_OPTION_REQUEST, returnedIntent);
+                finish();
+            }
+        });
     }
 }
