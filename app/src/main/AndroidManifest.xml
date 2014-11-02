@@ -36,6 +36,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hogent.hogentprojecteniii_groep10.VacationOverview" />
         </activity>
+        <activity
+            android:name=".VacationFilter"
+            android:label="@string/title_activity_vacation_filter"
+            android:parentActivityName=".VacationOverview" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="hogent.hogentprojecteniii_groep10.VacationOverview" />
+        </activity>
     </application>
 
 </manifest>

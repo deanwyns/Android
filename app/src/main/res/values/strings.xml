@@ -17,5 +17,13 @@
     <string name="inschrijven">Ik schrijf me in!</string>
     <string name="description">Beschrijving</string>
     <string name="price">Prijs</string>
+    <string name="thumbsup">Rate thumbs up</string>
+    <string name="thumbsdown">Rate thumbs down</string>
+    <string name="title_activity_vacation_filter">Filteropties</string>
+    <string name="extensive_filter_options">Uitgebreide Filteropties</string>
+    <string name="vacation_for_ages">Vakanties voor leeftijden:</string>
+    <string name="to_lbl">tot</string>
+    <string name="from_lbl">Van</string>
+    <string name="search_with_filter">Zoeken!</string>
 
 </resources>

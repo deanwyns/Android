@@ -1,8 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="hogent.hogentprojecteniii_groep10.SpecificVacationView" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+    <item android:id="@+id/thumbs_down"
+        android:icon="@drawable/thumbsdown"
+        android:title="@string/thumbsdown"
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/thumbs_up"
+        android:icon="@drawable/thumbsup"
+        android:title="@string/thumbsup"
+        android:showAsAction="ifRoom" />
 </menu>

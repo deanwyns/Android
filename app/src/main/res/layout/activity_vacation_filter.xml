@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="hogent.hogentprojecteniii_groep10.VacationFilter"
+    android:id="@+id/vacation_filter_layout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/extensive_filter_options"
+        android:id="@+id/extensive_filter_options_lbl"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/extensive_filter_options_lbl"
+        android:layout_alignParentStart="true"
+        android:id="@+id/gray_line" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/gray_line"
+        android:layout_centerHorizontal="true">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/age_filter_checkbox"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vacation_for_ages"
+            android:id="@+id/vacation_for_ages_lbl"
+            android:layout_alignTop="@+id/age_filter_checkbox"
+            android:layout_alignParentEnd="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/end_age_input_txt"
+            android:layout_below="@+id/vacation_for_ages_lbl"
+            android:layout_alignEnd="@+id/vacation_for_ages_lbl"
+            android:maxLength="2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/to_lbl"
+            android:id="@+id/to_lbl"
+            android:layout_alignBottom="@+id/end_age_input_txt"
+            android:layout_toStartOf="@+id/end_age_input_txt" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/start_age_input_txt"
+            android:layout_alignBottom="@+id/to_lbl"
+            android:layout_toStartOf="@+id/to_lbl"
+            android:maxLength="2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from_lbl"
+            android:id="@+id/from_lbl"
+            android:layout_alignBottom="@+id/start_age_input_txt"
+            android:layout_toStartOf="@+id/start_age_input_txt" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_with_filter"
+            android:id="@+id/search_with_filter_btn"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -38,6 +38,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
     private SearchView mSearchView;
     private ArrayAdapter<Vacation> vacationAdapter;
     private List<Vacation> vacationList = new ArrayList<Vacation>();
+    private final int FILTER_OPTION_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,8 +191,8 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
 //        Vervangt de action bar om de titel te centreren, maar de default "up" button verdwijnt. Ik laat centreren ff achterwege.
 //        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 //        getActionBar().setCustomView(R.layout.actionbar);
-
-        getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        if( getActionBar() != null)
+            getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         return true;
     }
 
@@ -203,10 +204,16 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
                 finish();
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 return true;
+            case(R.id.action_filter):
+                Intent filterOptions = new Intent(getApplicationContext(), VacationFilter.class);
+                startActivityForResult(filterOptions, FILTER_OPTION_REQUEST);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     private void setupSearchView(MenuItem searchItem) {
         searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
