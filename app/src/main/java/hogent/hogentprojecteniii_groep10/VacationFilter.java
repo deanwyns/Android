@@ -56,4 +56,12 @@ public class VacationFilter extends Activity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent returnedIntent = new Intent();
+        setResult(VacationOverview.FILTER_OPTION_REQUEST, returnedIntent);
+        finish();
+    }
 }

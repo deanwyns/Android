@@ -263,13 +263,34 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Log.i("VacationOverview", query);
-        return false;
+        filterOnTitle(query);
+        return true;
+    }
+
+    private void filterOnTitle(String query) {
+        List<Vacation> filteredVacationList = new ArrayList<Vacation>();
+
+        for(Vacation v : vacationList){
+            if(v.getTitle().toLowerCase().contains(query.toLowerCase()))
+                filteredVacationList.add(v);
+        }
+
+        vacationAdapter.clear();
+        vacationAdapter.addAll(filteredVacationList);
     }
 
     @Override
-    public boolean onQueryTextChange(String newText) {
+    public boolean onQueryTextChange(String query) {
+        if(query.isEmpty())
+        {
+            Log.i("VacationOverview", query);
+            vacationAdapter.clear();
+            populateVacationList();
+            populateListView();
+        }
         return false;
     }
+
+
 
 }
