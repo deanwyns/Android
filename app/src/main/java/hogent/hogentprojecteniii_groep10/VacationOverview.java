@@ -234,7 +234,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
         List<Vacation> filteredVacationList = new ArrayList<Vacation>();
 
         for(Vacation v : vacationList){
-            if(v.getAgeFrom() >= startAge && v.getAgeTo() <= endAge)
+            if(v.getAgeFrom() <= startAge && v.getAgeTo() >= endAge)
                 filteredVacationList.add(v);
         }
 
