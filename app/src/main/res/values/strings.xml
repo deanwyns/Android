@@ -25,5 +25,12 @@
     <string name="to_lbl">tot</string>
     <string name="from_lbl">Van</string>
     <string name="search_with_filter">Zoeken!</string>
+    <string name="promotional_text">Korte beschrijving</string>
+    <string name="destination">Bestemming</string>
+    <string name="age">Leeftijd</string>
+    <string name="when">Wanneer</string>
+    <string name="transportation">Vervoer</string>
+    <string name="amount_of_participants">Aantal deelnemers</string>
+    <string name="discount_price">JOETZ-Sterprijs</string>
 
 </resources>
