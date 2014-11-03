@@ -189,6 +189,22 @@
                 android:text="Placeholder text"
                 android:id="@+id/specific_vacation_discount_price_text" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/tax_deductable"
+                android:id="@+id/specific_vacation_tax_deductable_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder text"
+                android:id="@+id/specific_vacation_tax_deductable_text" />
+
 
             <Button
                 android:layout_width="match_parent"

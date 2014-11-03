@@ -32,5 +32,6 @@
     <string name="transportation">Vervoer</string>
     <string name="amount_of_participants">Aantal deelnemers</string>
     <string name="discount_price">JOETZ-Sterprijs</string>
+    <string name="tax_deductable">Fiscaal aftrekbaar</string>
 
 </resources>
