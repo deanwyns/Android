@@ -2,6 +2,7 @@ package hogent.hogentprojecteniii_groep10;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,5 +64,14 @@ public class VacationFilter extends VacationOverview {
         Intent returnedIntent = new Intent();
         setResult(VacationOverview.FILTER_OPTION_REQUEST, returnedIntent);
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.vacation_filter, menu);
+        if (getActionBar() != null) {
+            getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        }
+        return true;
     }
 }
