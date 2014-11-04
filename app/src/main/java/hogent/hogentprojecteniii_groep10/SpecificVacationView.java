@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 
-public class SpecificVacationView extends Activity {
+public class SpecificVacationView extends VacationOverview {
 
     private Vacation selectedVacation;
     private TextView vacationTitleTextView, vacationPromotionalTextTextView, vacationDescriptionTextView,

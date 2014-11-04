@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 
-public class VacationFilter extends Activity {
+public class VacationFilter extends VacationOverview {
 
     private Button searchWithFilterBtn;
     private CheckBox ageFilterCheckbox;

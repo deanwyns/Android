@@ -32,7 +32,7 @@ import java.util.List;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 
-public class VacationOverview extends Activity implements SearchView.OnQueryTextListener {
+public class VacationOverview extends Main implements SearchView.OnQueryTextListener {
 
     private boolean titleSortedAscending, dateSortedAscending;
     private Button sortByTitleBtn, sortByDateBtn;
@@ -176,7 +176,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+        //overridePendingTransition(R.anim.slide_leave, R.anim.slide_enter);
     }
 
     @Override
@@ -203,7 +203,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
         switch (item.getItemId()) {
             case(android.R.id.home):
                 finish();
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                //overridePendingTransition(R.anim.slide_leave, R.anim.slide_enter);
                 return true;
             case(R.id.action_filter):
                 Intent filterOptions = new Intent(getApplicationContext(), VacationFilter.class);
@@ -220,7 +220,7 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
         vacationAdapter.clear();
         populateVacationList();
         populateListView();
-        if (requestCode == FILTER_OPTION_REQUEST) {
+        if (requestCode == FILTER_OPTION_REQUEST && data != null) {
             if(data.getBooleanExtra("ageFilterChecked", false)){
                 int startAge = data.getIntExtra("startAge", 0);
                 int endAge = data.getIntExtra("endAge", 99);

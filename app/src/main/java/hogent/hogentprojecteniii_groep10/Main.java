@@ -30,6 +30,7 @@ import retrofit.client.Response;
 
 public class Main extends Activity {
 
+    int onStartCount = 0;
     private LinearLayout ll;
     private ImageButton getCampsBtn;
     private final static String TAG = "MAIN";
@@ -38,12 +39,36 @@ public class Main extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        onStartCount = 1;
+        if (savedInstanceState == null) // 1st time
+        {
+            this.overridePendingTransition(R.anim.slide_in_left,
+                    R.anim.slide_out_left);
+        } else // already created so reverse animation
+        {
+            onStartCount = 2;
+        }
+
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
 //        setSupportActionBar(toolbar);
         ll = (LinearLayout) findViewById(R.id.newsfeed_id);
         getCampsBtn = (ImageButton) findViewById(R.id.camp_btn);
 
         setupListeners();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (onStartCount > 1) {
+            this.overridePendingTransition(R.anim.slide_in_right,
+                    R.anim.slide_out_right);
+
+        } else if (onStartCount == 1) {
+            onStartCount++;
+        }
 
     }
 
@@ -62,7 +87,7 @@ public class Main extends Activity {
                 Intent vacationOverviewIntent = new Intent(getApplicationContext(), VacationOverview.class);
                 startActivity(vacationOverviewIntent);
                 //Transition voorbeeld
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                //overridePendingTransition(R.anim., R.anim.slide_leave);
             }
         });
     }
