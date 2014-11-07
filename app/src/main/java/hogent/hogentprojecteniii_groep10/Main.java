@@ -107,6 +107,10 @@ public class Main extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        } else if(id == R.id.action_login)
+        {
+            Intent login = new Intent(getApplicationContext(), Login.class);
+            startActivity(login);
         }
         return super.onOptionsItemSelected(item);
     }

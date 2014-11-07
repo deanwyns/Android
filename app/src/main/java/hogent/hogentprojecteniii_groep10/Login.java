@@ -12,18 +12,31 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import hogent.hogentprojecteniii_groep10.models.LoginToken;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Fabrice on 5/11/2014.
  */
 public class Login extends Activity {
+    private final static String TAG = "Login";
+    private static final String CLIENT_ID = "SPVS3YCK8QEbSXwneK4PFJrVPTrvM7ag9Yx2yrZC";
+    private static final String CLIENT_SECRET = "vM&PR2rqMU8xD^&g9YUfJNbQj%ahqc_tTtNuaXAj";
 
     private EditText mEmailView;
     private EditText mPasswordView;
@@ -56,7 +69,6 @@ public class Login extends Activity {
             @Override
             public void onClick(View view) {
                 onLoginClicked();
-                attemptLogin();
             }
         });
 
@@ -216,23 +228,71 @@ public class Login extends Activity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            Map<String, String> loginParameterMap = new HashMap<String, String>();
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+            loginParameterMap.put("grant_type", "password");
+            loginParameterMap.put("username", mEmail);
+            loginParameterMap.put("password", mPassword);
+            loginParameterMap.put("client_id", CLIENT_ID);
+            loginParameterMap.put("client_secret", CLIENT_SECRET);
+            sendLoginRequest(loginParameterMap);
+
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
+
+
             return true;
+        }
+
+        private void sendLoginRequest(final Map<String, String> loginParameterMap) {
+
+//            RestAdapter restAdapter = new RestAdapter.Builder()
+//                    .setEndpoint("http://lloyd.deanwyns.me/api")
+//                    .setLogLevel(RestAdapter.LogLevel.FULL)
+//                    .build();
+//            final RestService service = restAdapter.create(RestService.class);
+//            LoginToken token = null;
+//            try {
+//                token = new AsyncTask<Void, Void, LoginToken>(){
+//                    @Override
+//                    protected LoginToken doInBackground(Void... voids) {
+//                        return service.login(loginParameterMap);
+//                    }
+//                }.execute().get();
+//            } catch(InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            }
+
+            RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setEndpoint("http://lloyd.deanwyns.me/api")
+                    .build();
+            RestService service = restAdapter.create(RestService.class);
+
+            Callback<LoginToken> callback = new Callback<LoginToken>() {
+                @Override
+                public void success(LoginToken loginToken, Response response) {
+                    Log.i(TAG, loginToken.toString());
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    error.printStackTrace();
+                }
+            };
+            service.login(loginParameterMap, callback);
+
+//            if(token != null){
+//                Log.i("Login", String.format("%s %s", token.tokenType, token.accessToken));
+//            }else
+//                Log.i(TAG, "Token is null");
         }
 
         @Override
@@ -241,8 +301,8 @@ public class Login extends Activity {
             showProgress(false);
 
             if (success) {
-                Intent toMainIntent = new Intent(getApplicationContext(), Main.class);
-                startActivity(toMainIntent);
+                //Intent toMainIntent = new Intent(getApplicationContext(), Main.class);
+                //startActivity(toMainIntent);
 
                 finish();
             } else {
