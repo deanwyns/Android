@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -132,46 +134,7 @@ public class VacationOverview extends Main implements SearchView.OnQueryTextList
         });
     }
 
-    private class VacationListAdapter extends ArrayAdapter<Vacation> {
 
-        public VacationListAdapter() {
-            super(getApplicationContext(), R.layout.vacation_item_view, vacationList);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            //Haal de view op die ingevuld moet worden
-            View itemView = convertView;
-            if (itemView == null) {
-                itemView = getLayoutInflater().inflate(R.layout.vacation_item_view, parent, false);
-            }
-
-            //Geselecteerde vakantie zoeken
-            Vacation currentVacation = vacationList.get(position);
-
-            //Afbeelding opzetten
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.vacation_icon);
-            //Het zou makkelijker zijn om een id in de model te steken en op basis daarvan de afbeelding te selecteren.
-            if (currentVacation.getTitle().startsWith("Fiets"))
-                imageView.setImageResource(R.drawable.biking);
-            else if (currentVacation.getTitle().startsWith("Zwem"))
-                imageView.setImageResource(R.drawable.swimming);
-            else
-                imageView.setImageResource(R.drawable.sports);
-
-            //Verder de view opvullen
-            TextView titleTxt = (TextView) itemView.findViewById(R.id.vacation_title_lbl);
-            titleTxt.setText(currentVacation.getTitle());
-            TextView descTxt = (TextView) itemView.findViewById(R.id.vacation_desc_lbl);
-            descTxt.setText(currentVacation.getDescription());
-            TextView beginDateTxt = (TextView) itemView.findViewById(R.id.vacation_begindate_lbl);
-            SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
-            beginDateTxt.setText(formatter.format(currentVacation.getBeginDate().getTime()));
-
-            return itemView;
-        }
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -291,6 +254,43 @@ public class VacationOverview extends Main implements SearchView.OnQueryTextList
         return false;
     }
 
+    private class VacationListAdapter extends ArrayAdapter<Vacation> implements Filterable {
 
+        public VacationListAdapter() {
+            super(getApplicationContext(), R.layout.vacation_item_view, vacationList);
+        }
 
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //Haal de view op die ingevuld moet worden
+            View itemView = convertView;
+            if (itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.vacation_item_view, parent, false);
+            }
+
+            //Geselecteerde vakantie zoeken
+            Vacation currentVacation = vacationList.get(position);
+
+            //Afbeelding opzetten
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.vacation_icon);
+            //Het zou makkelijker zijn om een id in de model te steken en op basis daarvan de afbeelding te selecteren.
+            if (currentVacation.getTitle().startsWith("Fiets"))
+                imageView.setImageResource(R.drawable.biking);
+            else if (currentVacation.getTitle().startsWith("Zwem"))
+                imageView.setImageResource(R.drawable.swimming);
+            else
+                imageView.setImageResource(R.drawable.sports);
+
+            //Verder de view opvullen
+            TextView titleTxt = (TextView) itemView.findViewById(R.id.vacation_title_lbl);
+            titleTxt.setText(currentVacation.getTitle());
+            TextView descTxt = (TextView) itemView.findViewById(R.id.vacation_desc_lbl);
+            descTxt.setText(currentVacation.getDescription());
+            TextView beginDateTxt = (TextView) itemView.findViewById(R.id.vacation_begindate_lbl);
+            SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
+            beginDateTxt.setText(formatter.format(currentVacation.getBeginDate().getTime()));
+
+            return itemView;
+        }
+    }
 }
