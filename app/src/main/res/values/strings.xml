@@ -33,5 +33,26 @@
     <string name="amount_of_participants">Aantal deelnemers</string>
     <string name="discount_price">JOETZ-Sterprijs</string>
     <string name="tax_deductable">Fiscaal aftrekbaar</string>
+    <string name="registreren">Registreer</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Wachtwoord</string>
+    <string name="username_hint">Gebruikersnaam</string>
+    <string name="enter">Enter</string>
+    <string name="error_invalid_password">Wachtwoord fout</string>
+    <string name="error_field_required">Verplicht</string>
+    <string name="error_invalid_email">Ongeldig emailadres</string>
+    <string name="error_incorrect_password">Foutief wachtwoord</string>
+    <string name="title_login">Inloggen</string>
+    <string name="naam_moeder">Naam moeder</string>
+    <string name="voornaam_moeder">Voornaam moeder</string>
+    <string name="rrn_moeder">Rijksregisternummer moeder</string>
+    <string name="naam_vader">Naam vader</string>
+    <string name="voornaam_vader">Voornaam vader</string>
+    <string name="rrn_vader">Rijksregisternummer vader</string>
+    <string name="telNr">Telefoonnummer</string>
+    <string name="email">E-mailadres</string>
+    <string name="title_registreren">Registreren</string>
+    <string name="bevestig_password">Bevestig wachtwoord</string>
+    <string name="error_passwords_different">Wachtwoorden komen niet overeen</string>
 
 </resources>

@@ -30,6 +30,18 @@
             android:parentActivityName=".Main" >
         </activity>
         <activity
+            android:name=".Login"
+            android:label="@string/title_login"
+            android:parentActivityName=".Main"
+            android:windowSoftInputMode="adjustResize|stateVisible">
+        </activity>
+        <activity
+            android:name=".Registreren"
+            android:label="@string/title_registreren"
+            android:parentActivityName=".Main"
+            android:windowSoftInputMode="adjustResize|stateVisible">
+        </activity>
+        <activity
             android:name=".SpecificVacationView"
             android:label="@string/title_activity_specific_vacation_view"
             android:parentActivityName=".VacationOverview" >
