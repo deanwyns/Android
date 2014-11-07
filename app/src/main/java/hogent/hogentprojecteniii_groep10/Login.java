@@ -251,26 +251,6 @@ public class Login extends Activity {
         }
 
         private void sendLoginRequest(final Map<String, String> loginParameterMap) {
-
-//            RestAdapter restAdapter = new RestAdapter.Builder()
-//                    .setEndpoint("http://lloyd.deanwyns.me/api")
-//                    .setLogLevel(RestAdapter.LogLevel.FULL)
-//                    .build();
-//            final RestService service = restAdapter.create(RestService.class);
-//            LoginToken token = null;
-//            try {
-//                token = new AsyncTask<Void, Void, LoginToken>(){
-//                    @Override
-//                    protected LoginToken doInBackground(Void... voids) {
-//                        return service.login(loginParameterMap);
-//                    }
-//                }.execute().get();
-//            } catch(InterruptedException e) {
-//                e.printStackTrace();
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            }
-
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint("http://lloyd.deanwyns.me/api")
                     .build();
@@ -288,11 +268,6 @@ public class Login extends Activity {
                 }
             };
             service.login(loginParameterMap, callback);
-
-//            if(token != null){
-//                Log.i("Login", String.format("%s %s", token.tokenType, token.accessToken));
-//            }else
-//                Log.i(TAG, "Token is null");
         }
 
         @Override

@@ -14,14 +14,4 @@ public class LoginToken {
     public String toString() {
         return String.format("%s %s", tokenType, accessToken);
     }
-
-
-//    public String access_token;
-//    public String token_type;
-//    public int expires_in;
-//
-//    @Override
-//    public String toString() {
-//        return String.format("%s %s", token_type, access_token);
-//    }
 }
