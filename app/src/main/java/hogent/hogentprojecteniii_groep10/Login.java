@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,11 +31,9 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by Fabrice on 5/11/2014.
- */
 public class Login extends Activity {
     private final static String TAG = "Login";
+    private final static String GRANT_TYPE = "password";
     private static final String CLIENT_ID = "SPVS3YCK8QEbSXwneK4PFJrVPTrvM7ag9Yx2yrZC";
     private static final String CLIENT_SECRET = "vM&PR2rqMU8xD^&g9YUfJNbQj%ahqc_tTtNuaXAj";
 
@@ -44,9 +43,6 @@ public class Login extends Activity {
     private View mLoginFormView;
     private Button mEmailSignInButton,mSignUpButton;
     private UserLoginTask mAuthTask = null;
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,22 +227,12 @@ public class Login extends Activity {
 
             Map<String, String> loginParameterMap = new HashMap<String, String>();
 
-            loginParameterMap.put("grant_type", "password");
+            loginParameterMap.put("grant_type", GRANT_TYPE);
             loginParameterMap.put("username", mEmail);
             loginParameterMap.put("password", mPassword);
             loginParameterMap.put("client_id", CLIENT_ID);
             loginParameterMap.put("client_secret", CLIENT_SECRET);
             sendLoginRequest(loginParameterMap);
-
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
-
-
             return true;
         }
 
@@ -266,6 +252,7 @@ public class Login extends Activity {
                 public void failure(RetrofitError error) {
                     error.printStackTrace();
                 }
+
             };
             service.login(loginParameterMap, callback);
         }
