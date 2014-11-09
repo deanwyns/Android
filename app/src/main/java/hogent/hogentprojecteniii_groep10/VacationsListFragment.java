@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     private ListView vacationListView;
     private List<Vacation> vacationList = new ArrayList<Vacation>();
     private OnListItemSelectedListener listener;
+    private boolean titleSortedAscending, dateSortedAscending;
+    private Button sortByTitleBtn, sortByDateBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,9 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_vacations_list, container, false);
         setupListviewAndAdapter();
+        sortByTitleBtn =(Button) view.findViewById(R.id.sort_title_btn);
+        sortByDateBtn =(Button) view.findViewById(R.id.sort_date_btn);
+        setActionListeners();
         return view;
     }
 
@@ -70,49 +77,43 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         if (activity instanceof OnListItemSelectedListener) {
             listener = (OnListItemSelectedListener) activity;
         } else {
-            throw new ClassCastException(
-                    activity.toString()
-                            + " must implement ItemsListFragment.OnListItemSelectedListener");
+            throw new ClassCastException(activity.toString() + " must implement VacationsListFragment.OnListItemSelectedListener");
         }
     }
 
-    /**
-     * Turns on activate-on-click mode. When this mode is on, list items will be
-     * given the 'activated' state when touched.
-     */
-    public void setActivateOnItemClick(boolean activateOnItemClick) {
-        // When setting CHOICE_MODE_SINGLE, ListView will automatically
-        // give items the 'activated' state when touched.
-        vacationListView.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        filterOnTitle(query);
-        return true;
-    }
-
-    private void filterOnTitle(String query) {
-        List<Vacation> filteredVacationList = new ArrayList<Vacation>();
-
-        for(Vacation v : vacationList){
-            if(v.getTitle().toLowerCase().contains(query.toLowerCase()))
-                filteredVacationList.add(v);
-        }
-        vacationAdapter.clear();
-        vacationAdapter.addAll(filteredVacationList);
-    }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
-        if(query.isEmpty())
-        {
-            Log.i("VacationOverview", query);
-            vacationAdapter.clear();
-            populateVacationList();
-            setupListviewAndAdapter();
-        }
-        return false;
+    private void setActionListeners() {
+        sortByTitleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(vacationList, new Comparator<Vacation>() {
+                    @Override
+                    public int compare(Vacation lhs, Vacation rhs) {
+                        if(!titleSortedAscending)
+                            return lhs.getTitle().compareTo(rhs.getTitle());
+                        else
+                            return rhs.getTitle().compareTo(lhs.getTitle());
+                    }
+                });
+                titleSortedAscending = !titleSortedAscending;
+                vacationAdapter.notifyDataSetChanged();
+            }
+        });
+        sortByDateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(vacationList, new Comparator<Vacation>() {
+                    @Override
+                    public int compare(Vacation lhs, Vacation rhs) {
+                        if(!dateSortedAscending)
+                            return lhs.getBeginDate().compareTo(rhs.getBeginDate());
+                        else
+                            return rhs.getBeginDate().compareTo(lhs.getBeginDate());
+                    }
+                });
+                dateSortedAscending = !dateSortedAscending;
+                vacationAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void setupListviewAndAdapter() {
@@ -129,6 +130,33 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
             }
         });
     }
+
+    public boolean onQueryTextSubmit(String query) {
+        filterOnTitle(query);
+        return true;
+    }
+
+    private void filterOnTitle(String query) {
+        List<Vacation> filteredVacationList = new ArrayList<Vacation>();
+
+        for (Vacation v : vacationList) {
+            if (v.getTitle().toLowerCase().contains(query.toLowerCase()))
+                filteredVacationList.add(v);
+        }
+        vacationAdapter.clear();
+        vacationAdapter.addAll(filteredVacationList);
+    }
+
+    public boolean onQueryTextChange(String query) {
+        if (query.isEmpty()) {
+            Log.i("VacationOverview", query);
+            vacationAdapter.clear();
+            populateVacationList();
+            setupListviewAndAdapter();
+        }
+        return false;
+    }
+
 
     public interface OnListItemSelectedListener {
         public void onItemSelected(Vacation vacation);

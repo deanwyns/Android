@@ -12,7 +12,7 @@ import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 public class VacationDetailActivity extends FragmentActivity {
 
-    VacationDetailFragment fragmentVacationDetail;
+    private VacationDetailFragment fragmentVacationDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

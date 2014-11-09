@@ -9,11 +9,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import hogent.hogentprojecteniii_groep10.models.Vacation;
@@ -36,10 +41,12 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
         FrameLayout fragmentItemDetail = (FrameLayout) findViewById(R.id.flDetailContainer);
         if (fragmentItemDetail != null) {
             isTwoPane = true;
-            fragmentItemsList = (VacationsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentVacationsList);
-            fragmentItemsList.setActivateOnItemClick(true);
         }
+        fragmentItemsList = (VacationsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentVacationsList);
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,4 +113,5 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
         }
         mSearchView.setOnQueryTextListener(fragmentItemsList);
     }
+
 }
