@@ -42,7 +42,7 @@ public class Login extends Activity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private Button mEmailSignInButton,mSignUpButton;
+    private Button mEmailSignInButton, mSignUpButton;
     private UserLoginTask mAuthTask = null;
 
     @Override
@@ -69,9 +69,9 @@ public class Login extends Activity {
             }
         });
 
-        mSignUpButton.setOnClickListener(new View.OnClickListener(){
+        mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 onSignUpClicked();
             }
         });
@@ -83,10 +83,10 @@ public class Login extends Activity {
     }
 
     private void onLoginClicked() {
-        if(!isNetworkAvailable()) {
+        if (!isNetworkAvailable()) {
             Toast.makeText(getBaseContext(), "No network connection", Toast.LENGTH_SHORT).show();
         } else {
-           attemptLogin();
+            attemptLogin();
         }
     }
 
@@ -176,7 +176,7 @@ public class Login extends Activity {
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    //@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
@@ -223,6 +223,7 @@ public class Login extends Activity {
             mPassword = password;
         }
 
+
         @Override
         protected Boolean doInBackground(Void... params) {
 
@@ -235,6 +236,7 @@ public class Login extends Activity {
             loginParameterMap.put("client_secret", CLIENT_SECRET);
 
             return sendLoginRequest(loginParameterMap);
+
         }
 
         private boolean sendLoginRequest(final Map<String, String> loginParameterMap) {
@@ -245,9 +247,7 @@ public class Login extends Activity {
             LoginToken loginToken;
             try {
                 loginToken = service.login(loginParameterMap);
-
-                Log.i(TAG, loginToken.toString());
-                if(loginToken != null){
+                if (loginToken != null) {
                     SharedPreferences sharedPref = getApplication()
                             .getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
@@ -255,7 +255,7 @@ public class Login extends Activity {
                     editor.apply();
                     return true;
                 }
-            }catch (RetrofitError retrofitError){
+            } catch (RetrofitError retrofitError) {
                 retrofitError.printStackTrace();
                 return false;
             }
@@ -265,11 +265,8 @@ public class Login extends Activity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(true);
+            showProgress(false);
             if (success) {
-                //Intent toMainIntent = new Intent(getApplicationContext(), Main.class);
-                //startActivity(toMainIntent);
-
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

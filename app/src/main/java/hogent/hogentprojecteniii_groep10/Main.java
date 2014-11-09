@@ -58,8 +58,6 @@ public class Main extends Activity {
         SharedPreferences sharedPref = getApplication()
                 .getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
         String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
-        Toast toast = Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT);
-        toast.show();
         isLoggedIn = !token.equals("No token");
         return isLoggedIn;
     }
