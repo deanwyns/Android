@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -245,7 +246,11 @@ public class Login extends Activity {
             Callback<LoginToken> callback = new Callback<LoginToken>() {
                 @Override
                 public void success(LoginToken loginToken, Response response) {
-                    Log.i(TAG, loginToken.toString());
+                    SharedPreferences sharedPref = getApplication()
+                            .getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(getString(R.string.authorization), loginToken.toString());
+                    editor.commit();
                 }
 
                 @Override

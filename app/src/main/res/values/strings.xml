@@ -62,5 +62,7 @@
     <string name="title_vacation_detail">Vacation Detail</string>
     <string name="title_activity_vacations_list">VacationsListActivity</string>
     <string name="title_activity_vacation_detail">VacationDetailActivity</string>
+    <string name="authorization_preference_file">hogent.hogentprojecteniii_groep10.AUTHORIZATION_PREFERENCE_FILE</string>
+    <string name="authorization">Authorization</string>
 
 </resources>

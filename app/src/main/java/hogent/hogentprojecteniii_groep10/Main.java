@@ -1,38 +1,24 @@
 package hogent.hogentprojecteniii_groep10;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.LayoutAnimationController;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import hogent.hogentprojecteniii_groep10.models.WeerOverzichtVoorbeeld;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import android.widget.Toast;
 
 
 public class Main extends Activity {
 
     int onStartCount = 0;
     private LinearLayout ll;
-    private ImageButton getCampsBtn;
+    private ImageButton getVacationsBtn, getPhotosBtn;
     private final static String TAG = "MAIN";
 
     @Override
@@ -43,8 +29,7 @@ public class Main extends Activity {
         onStartCount = 1;
         if (savedInstanceState == null) // 1st time
         {
-            this.overridePendingTransition(R.anim.slide_in_left,
-                    R.anim.slide_out_left);
+            this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         } else // already created so reverse animation
         {
             onStartCount = 2;
@@ -53,10 +38,21 @@ public class Main extends Activity {
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
 //        setSupportActionBar(toolbar);
         ll = (LinearLayout) findViewById(R.id.newsfeed_id);
-        getCampsBtn = (ImageButton) findViewById(R.id.camp_btn);
+        getVacationsBtn = (ImageButton) findViewById(R.id.camp_btn);
+        getPhotosBtn = (ImageButton) findViewById(R.id.photo_btn);
 
         setupListeners();
 
+    }
+
+
+
+    private void readLoginData() {
+        SharedPreferences sharedPref = getApplication()
+                .getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
+        String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
+        Toast toast = Toast.makeText(getApplicationContext(), token, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
@@ -80,14 +76,20 @@ public class Main extends Activity {
             }
         });
 
-        getCampsBtn.setOnClickListener(new View.OnClickListener() {
+        getVacationsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent vacationOverviewIntent = new Intent(getApplicationContext(), VacationOverview.class);
                 startActivity(vacationOverviewIntent);
-                //Transition voorbeeld
-                //overridePendingTransition(R.anim., R.anim.slide_leave);
+            }
+        });
+
+        getPhotosBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Om de access token te testen. Wordt natuurlijk vervangen door foto's
+                readLoginData();
             }
         });
     }
@@ -107,8 +109,7 @@ public class Main extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
-        } else if(id == R.id.action_login)
-        {
+        } else if (id == R.id.action_login) {
             Intent login = new Intent(getApplicationContext(), Login.class);
             startActivity(login);
         }
