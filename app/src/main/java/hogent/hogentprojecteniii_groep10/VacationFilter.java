@@ -12,7 +12,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 
-public class VacationFilter extends VacationOverview {
+public class VacationFilter extends Activity {
 
     private Button searchWithFilterBtn;
     private CheckBox ageFilterCheckbox;

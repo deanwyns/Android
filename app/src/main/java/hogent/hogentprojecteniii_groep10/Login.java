@@ -233,40 +233,39 @@ public class Login extends Activity {
             loginParameterMap.put("password", mPassword);
             loginParameterMap.put("client_id", CLIENT_ID);
             loginParameterMap.put("client_secret", CLIENT_SECRET);
-            sendLoginRequest(loginParameterMap);
-            return true;
+
+            return sendLoginRequest(loginParameterMap);
         }
 
-        private void sendLoginRequest(final Map<String, String> loginParameterMap) {
+        private boolean sendLoginRequest(final Map<String, String> loginParameterMap) {
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint("http://lloyd.deanwyns.me/api")
                     .build();
             RestService service = restAdapter.create(RestService.class);
+            LoginToken loginToken;
+            try {
+                loginToken = service.login(loginParameterMap);
 
-            Callback<LoginToken> callback = new Callback<LoginToken>() {
-                @Override
-                public void success(LoginToken loginToken, Response response) {
+                Log.i(TAG, loginToken.toString());
+                if(loginToken != null){
                     SharedPreferences sharedPref = getApplication()
                             .getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(getString(R.string.authorization), loginToken.toString());
-                    editor.commit();
+                    editor.apply();
+                    return true;
                 }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    error.printStackTrace();
-                }
-
-            };
-            service.login(loginParameterMap, callback);
+            }catch (RetrofitError retrofitError){
+                retrofitError.printStackTrace();
+                return false;
+            }
+            return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
-
+            showProgress(true);
             if (success) {
                 //Intent toMainIntent = new Intent(getApplicationContext(), Main.class);
                 //startActivity(toMainIntent);

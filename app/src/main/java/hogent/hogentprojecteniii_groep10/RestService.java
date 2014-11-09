@@ -19,7 +19,7 @@ public interface RestService {
 
     @FormUrlEncoded
     @POST("/access_token")
-    void login(@FieldMap Map<String, String> options, Callback<LoginToken> cb);
+    LoginToken login(@FieldMap Map<String, String> options);
 
 
 }

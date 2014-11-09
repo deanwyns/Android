@@ -34,7 +34,7 @@ import java.util.List;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 
-public class VacationOverview extends Main implements SearchView.OnQueryTextListener {
+public class VacationOverview extends Activity implements SearchView.OnQueryTextListener {
 
     private boolean titleSortedAscending, dateSortedAscending;
     private Button sortByTitleBtn, sortByDateBtn;

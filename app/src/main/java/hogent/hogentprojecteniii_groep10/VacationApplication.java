@@ -19,7 +19,7 @@ public class VacationApplication extends Application {
         if(sharedPref.contains(getResources().getString(R.string.authorization))){
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.remove(getResources().getString(R.string.authorization));
-            editor.commit();
+            editor.apply();
         }
     }
 }
