@@ -22,17 +22,16 @@
         android:layout_margin="10px" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/vacation_desc_lbl"
-        android:layout_below="@+id/vacation_title_lbl"
         android:layout_toEndOf="@+id/vacation_icon"
-        android:layout_marginLeft="10px"
-        android:layout_marginTop="10px"
-        android:layout_marginBottom="10px"
-        android:layout_toStartOf="@+id/vacation_begindate_lbl" />
+        android:layout_toStartOf="@+id/vacation_begindate_lbl"
+        android:layout_below="@+id/vacation_icon"
+        android:layout_alignStart="@+id/vacation_icon"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,7 +39,6 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/vacation_begindate_lbl"
-        android:layout_alignBaseline="@+id/vacation_desc_lbl"
-        android:layout_alignBottom="@+id/vacation_desc_lbl"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/vacation_title_lbl"
+        android:layout_alignStart="@+id/vacation_title_lbl" />
 </RelativeLayout>

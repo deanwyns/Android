@@ -49,9 +49,9 @@ public class SpecificVacationView extends VacationOverview {
         vacationTransportationTextView.setText(selectedVacation.getTransportation());
         vacationParticipantsTextView.setText(String.format("?/%d", selectedVacation.getMaxParticipants()));
         vacationPriceTextView.setText(String.format("€%.2f", selectedVacation.getBaseCost()));
-        vacationDiscountPriceTextView.setText(String.format("Eén ouder lid van Bond Moyson: €%.2f\nBeide ouders lid van Bond Moyson: €%.2f",
-                selectedVacation.getOneBmMemberCost(), selectedVacation.getTwoBmMemberCost()));
-        vacationTaxDeductableTextView.setText((selectedVacation.isTaxDeductable() ? "Ja" : "Nee"));
+        vacationDiscountPriceTextView.setText(String.format("%s €%.2f\n%s €%.2f", R.string.eenOuderLidBM,
+                selectedVacation.getOneBmMemberCost(), R.string.beideOudersLidBM, selectedVacation.getTwoBmMemberCost()));
+        vacationTaxDeductableTextView.setText((selectedVacation.isTaxDeductable() ? R.string.ja : R.string.nee));
     }
 
 

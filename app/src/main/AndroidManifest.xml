@@ -10,7 +10,6 @@
         android:targetSdkVersion="21" />
 
     <application
-
         android:allowBackup="true"
         android:icon="@drawable/ic_joetz_launcher"
         android:label="@string/app_name"
@@ -18,11 +17,13 @@
         <activity
             android:name=".Main"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name=".VacationOverview"
@@ -33,13 +34,13 @@
             android:name=".Login"
             android:label="@string/title_login"
             android:parentActivityName=".Main"
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
             android:name=".Registreren"
             android:label="@string/title_registreren"
             android:parentActivityName=".Main"
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
             android:name=".SpecificVacationView"
@@ -56,6 +57,19 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hogent.hogentprojecteniii_groep10.VacationOverview" />
+        </activity>
+        <activity
+            android:name=".VacationsListActivity"
+            android:label="@string/title_activity_vacations_list" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".VacationDetailActivity"
+            android:label="@string/title_activity_vacation_detail" >
         </activity>
     </application>
 

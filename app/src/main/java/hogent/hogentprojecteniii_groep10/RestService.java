@@ -9,9 +9,7 @@ import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.*;
 
-/**
- * Created by Jaimy Smets on 20/10/2014.
- */
+
 public interface RestService {
     @GET("/users/{user}/repos")
     List<Response> listRepos(@Path("user") String user);

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="hogent.hogentprojecteniii_groep10.SpecificVacationView">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/specific_vacation_image"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/joetz"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Placeholder Title"
+        android:id="@+id/specific_vacation_title"
+        android:layout_alignBottom="@+id/specific_vacation_image"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp"
+        android:typeface="serif"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/specific_vacation_image"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/promotional_text"
+                android:id="@+id/specific_vacation_promotext_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder promotional text"
+                android:id="@+id/specific_vacation_promotext_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/description"
+                android:id="@+id/specific_vacation_description_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder description text"
+                android:id="@+id/specific_vacation_description_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/destination"
+                android:id="@+id/specific_vacation_destination_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder text"
+                android:id="@+id/specific_vacation_destination_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/age"
+                android:id="@+id/specific_vacation_age_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder text"
+                android:id="@+id/specific_vacation_age_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/when"
+                android:id="@+id/specific_vacation_when_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder text"
+                android:id="@+id/specific_vacation_when_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/transportation"
+                android:id="@+id/specific_vacation_transportation_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder text"
+                android:id="@+id/specific_vacation_transportation_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/amount_of_participants"
+                android:id="@+id/specific_vacation_participants_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder text"
+                android:id="@+id/specific_vacation_participants_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/price"
+                android:id="@+id/specific_vacation_price_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder price text"
+                android:id="@+id/specific_vacation_price_text"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/discount_price"
+                android:id="@+id/specific_vacation_discount_price_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder text"
+                android:id="@+id/specific_vacation_discount_price_text" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/tax_deductable"
+                android:id="@+id/specific_vacation_tax_deductable_title"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Placeholder text"
+                android:id="@+id/specific_vacation_tax_deductable_text" />
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/inschrijven"
+                android:id="@+id/specific_vacation_signup_btn"
+                android:drawableLeft="@drawable/sign_up"
+                android:layout_marginTop="100dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

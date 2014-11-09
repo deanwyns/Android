@@ -54,5 +54,13 @@
     <string name="title_registreren">Registreren</string>
     <string name="bevestig_password">Bevestig wachtwoord</string>
     <string name="error_passwords_different">Wachtwoorden komen niet overeen</string>
+    <string name="ja">Ja</string>
+    <string name="nee">Nee</string>
+    <string name="eenOuderLidBM">Eén ouder lid van Bond Moyson:</string>
+    <string name="beideOudersLidBM">Beide ouders lid van Bond Moyson:</string>
+    <string name="title_vacation_list">Vacations</string>
+    <string name="title_vacation_detail">Vacation Detail</string>
+    <string name="title_activity_vacations_list">VacationsListActivity</string>
+    <string name="title_activity_vacation_detail">VacationDetailActivity</string>
 
 </resources>

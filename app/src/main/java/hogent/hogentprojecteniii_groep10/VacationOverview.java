@@ -285,7 +285,7 @@ public class VacationOverview extends Main implements SearchView.OnQueryTextList
             TextView titleTxt = (TextView) itemView.findViewById(R.id.vacation_title_lbl);
             titleTxt.setText(currentVacation.getTitle());
             TextView descTxt = (TextView) itemView.findViewById(R.id.vacation_desc_lbl);
-            descTxt.setText(currentVacation.getDescription());
+            descTxt.setText(currentVacation.getPromoText());
             TextView beginDateTxt = (TextView) itemView.findViewById(R.id.vacation_begindate_lbl);
             SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
             beginDateTxt.setText(formatter.format(currentVacation.getBeginDate().getTime()));
