@@ -156,11 +156,9 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
     }
 
 
-
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //overridePendingTransition(R.anim.slide_leave, R.anim.slide_enter);
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -190,8 +188,12 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
                 //overridePendingTransition(R.anim.slide_leave, R.anim.slide_enter);
                 return true;
             case(R.id.action_filter):
-                Intent filterOptions = new Intent(getApplicationContext(), VacationFilter.class);
-                startActivityForResult(filterOptions, FILTER_OPTION_REQUEST);
+                //Filter met activity
+//                Intent filterOptions = new Intent(getApplicationContext(), VacationFilter.class);
+//                startActivityForResult(filterOptions, FILTER_OPTION_REQUEST);
+                //Filter met preferences
+                Intent filterSettings = new Intent(getApplicationContext(), VacationFilterActivity.class);
+                startActivity(filterSettings);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

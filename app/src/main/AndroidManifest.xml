@@ -72,6 +72,10 @@
             android:name=".VacationDetailActivity"
             android:label="@string/title_activity_vacation_detail" >
         </activity>
+        <activity
+            android:name=".VacationFilterActivity"
+            android:label="@string/title_activity_vacation_filter" >
+        </activity>
     </application>
 
 </manifest>

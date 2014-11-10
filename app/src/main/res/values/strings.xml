@@ -64,5 +64,9 @@
     <string name="title_activity_vacation_detail">VacationDetailActivity</string>
     <string name="authorization_preference_file">hogent.hogentprojecteniii_groep10.AUTHORIZATION_PREFERENCE_FILE</string>
     <string name="authorization">Authorization</string>
+    <string name="age_filter_setting">Filter op leeftijd</string>
+    <string name="age_filter_key">age_filter_key</string>
+    <string name="start_age_filter_key">start_age_filter_key</string>
+    <string name="end_age_filter_key">end_age_filter_key</string>
 
 </resources>

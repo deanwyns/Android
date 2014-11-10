@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/age_filter_checkbox"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vacation_for_ages"
+        android:id="@+id/vacation_for_ages_lbl"
+        android:layout_alignTop="@+id/age_filter_checkbox"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/end_age_input_txt"
+        android:layout_below="@+id/vacation_for_ages_lbl"
+        android:layout_alignEnd="@+id/vacation_for_ages_lbl"
+        android:maxLength="2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/to_lbl"
+        android:id="@+id/to_lbl"
+        android:layout_alignBottom="@+id/end_age_input_txt"
+        android:layout_toStartOf="@+id/end_age_input_txt" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/start_age_input_txt"
+        android:layout_alignBottom="@+id/to_lbl"
+        android:layout_toStartOf="@+id/to_lbl"
+        android:maxLength="2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/from_lbl"
+        android:id="@+id/from_lbl"
+        android:layout_alignBottom="@+id/start_age_input_txt"
+        android:layout_toStartOf="@+id/start_age_input_txt" />
+</RelativeLayout>
