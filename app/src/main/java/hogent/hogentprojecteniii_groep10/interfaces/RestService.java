@@ -25,5 +25,9 @@ public interface RestService {
     @POST("/access_token")
     LoginToken login(@FieldMap Map<String, String> options);
 
+    @FormUrlEncoded
+    @POST("/user")
+    void register(@FieldMap Map<String, String> options);
+
 
 }

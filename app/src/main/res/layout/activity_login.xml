@@ -48,7 +48,8 @@
             android:textColorHint="#cccccc"
             android:password="true"
             android:drawableLeft="@drawable/password"
-            android:imeActionLabel="@string/enter"
+            android:imeActionLabel="@string/title_login"
+            android:imeOptions="actionDone"
             android:inputType="textPassword"/>
 
         <Button

@@ -18,4 +18,20 @@ public class Gebruiker {
         this.emailadres = emailadres;
     }
 
+    public String getNaam() {
+        return naam;
+    }
+
+    public String getVoornaam() {
+        return voornaam;
+    }
+
+    public String getTelNr() {
+        return telNr;
+    }
+
+    public String getEmailadres() {
+        return emailadres;
+    }
+
 }

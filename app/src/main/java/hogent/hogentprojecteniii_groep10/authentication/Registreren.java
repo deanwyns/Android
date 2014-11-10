@@ -9,12 +9,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Ouder;
+import retrofit.Callback;
+import retrofit.RestAdapter;
 
 /**
  * Created by Fabrice on 6/11/2014.
@@ -124,24 +129,6 @@ public class Registreren extends Activity {
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(naamVader)) {
-            mNaamVaderView.setError(getString(R.string.error_field_required));
-            focusView = mNaamVaderView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(voornaamVader)) {
-            mVoornaamVaderView.setError(getString(R.string.error_field_required));
-            focusView = mVoornaamVaderView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(rrnVader)) {
-            mRrnVaderView.setError(getString(R.string.error_field_required));
-            focusView = mRrnVaderView;
-            cancel = true;
-        }
-
         if (TextUtils.isEmpty(telNr)) {
             mTelNrView.setError(getString(R.string.error_field_required));
             focusView = mTelNrView;
@@ -157,15 +144,17 @@ public class Registreren extends Activity {
             focusView.requestFocus();
         } else {
             Gebruiker gebruiker = new Ouder(naamMoeder,voornaamMoeder, rrnMoeder, naamVader, voornaamVader, rrnVader, telNr, email);
-            mAuthTask = new UserRegisterTask(gebruiker, password);
+            mAuthTask = new UserRegisterTask((Ouder)gebruiker, password, password2);
             mAuthTask.execute((Void) null);
         }
 
     }
 
     public void resetErrors() {
+        mVoornaamMoederView.setError(null);
+        mTelNrView.setError(null);
+        mNaamMoederView.setError(null);
         mRrnMoederView.setError(null);
-        mRrnVaderView.setError(null);
         mEmailView.setError(null);
         mPasswordView.setError(null);
         mBevestigPasswordView.setError(null);
@@ -194,18 +183,33 @@ public class Registreren extends Activity {
 
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final Gebruiker gebruiker;
-        private final String password;
+        private final Ouder mGebruiker;
+        private final String mPassword;
+        private final String mPasswordConfirmed;
 
-        public UserRegisterTask(Gebruiker gebruiker, String password) {
-           this.gebruiker=gebruiker;
-            this.password=password;
+        public UserRegisterTask(Ouder gebruiker, String password, String passwordConfirmed) {
+           this.mGebruiker=gebruiker;
+            this.mPassword=password;
+            this.mPasswordConfirmed = passwordConfirmed;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
 
-            //TODO: naar db
+            Map<String, String> signUpParamMap = new HashMap<String, String>();
+
+            signUpParamMap.put("email", mGebruiker.getEmailadres());
+            signUpParamMap.put("password", mPassword);
+            signUpParamMap.put("password_confirmed", mPasswordConfirmed);
+            signUpParamMap.put("phone_number", mGebruiker.getTelNr());
+            signUpParamMap.put("first_name_mother", mGebruiker.getVoornaam());
+            signUpParamMap.put("last_name_mother", mGebruiker.getNaam());
+            signUpParamMap.put("rrn_mother", ((Ouder) mGebruiker).getRrnMoeder());
+            signUpParamMap.put("first_name_father", ((Ouder) mGebruiker).getVoornaamOuder2());
+            signUpParamMap.put("last_name_father", ((Ouder) mGebruiker).getNaamOuder2());
+            signUpParamMap.put("rrn_father", ((Ouder) mGebruiker).getRrnVader());
+
+            sendSignUpRequest(signUpParamMap);
             return true;
         }
 
@@ -216,12 +220,20 @@ public class Registreren extends Activity {
             if (success) {
                 Intent loginIntent = new Intent(getApplicationContext(), Login.class);
                 startActivity(loginIntent);
-
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+        }
+
+        private void sendSignUpRequest(final Map<String, String> signUpParamMap){
+            RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setEndpoint("http://lloyd.deanwyns.me/api")
+                    .build();
+            RestService service = restAdapter.create(RestService.class);
+
+            service.register(signUpParamMap);
         }
 
         @Override
