@@ -51,7 +51,7 @@ public class SpecificVacationView extends Activity {
         vacationPriceTextView.setText(String.format("€%.2f", selectedVacation.getBaseCost()));
         vacationDiscountPriceTextView.setText(String.format("%s €%.2f\n%s €%.2f", R.string.eenOuderLidBM,
                 selectedVacation.getOneBmMemberCost(), R.string.beideOudersLidBM, selectedVacation.getTwoBmMemberCost()));
-        vacationTaxDeductableTextView.setText((selectedVacation.isTaxDeductable() ? R.string.ja : R.string.nee));
+        vacationTaxDeductableTextView.setText((selectedVacation.isTaxDeductable()==1 ? R.string.ja : R.string.nee));
     }
 
 

@@ -53,7 +53,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         return view;
     }
 
-    private void populateVacationList() {
+    private void populateVacationList() {/*
         String promoTextBarkenTijn = "Recept voor een fantastische zomervakantie: toffe monitoren, leuke vrienden, een prachtig vakantiecentrum en véél fun en ambiance! De monitoren zorgen voor een afwisselend programma (strand- en duinspelen, daguitstappen, themaspelen, fuif, …) maar willen jou er natuurlijk bij. Wacht niet te lang en plan je vakantie naar zee met JOETZ!";
         Vacation barkentijnZomerLp = new Vacation(0, "JOETZ aan zee", "Uitgebreide beschrijving die momenteel korter is dan de promotext.", promoTextBarkenTijn, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 6, 3), new GregorianCalendar(2014, 6, 12), 4, 12, "busvervoer of eigen vervoer", 90, 400.00, 310.00, 220.00, true);
         String promoTextKrokus = "Verveling krijgt geen kans tijdens de krokusvakantie want op maandag 03 maart 2014 trekken we er met z’n allen op uit! We logeren in het vakantiecentrum “De Barkentijn” te Nieuwpoort.\n" +
@@ -67,7 +67,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         vacationList.add(barkentijnZomerLp);
         vacationList.add(krokusVakantie);
         vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
+        vacationList.add(krokusVakantie);*/
     }
 
 

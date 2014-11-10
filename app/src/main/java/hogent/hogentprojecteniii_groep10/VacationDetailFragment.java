@@ -49,7 +49,7 @@ public class VacationDetailFragment extends Fragment {
         vacationPriceTextView.setText(String.format("€%.2f", vacation.getBaseCost()));
         vacationDiscountPriceTextView.setText(String.format("%s €%.2f\n%s €%.2f", R.string.eenOuderLidBM,
                 vacation.getOneBmMemberCost(), R.string.beideOudersLidBM, vacation.getTwoBmMemberCost()));
-        vacationTaxDeductableTextView.setText((vacation.isTaxDeductable() ? R.string.ja : R.string.nee));
+        vacationTaxDeductableTextView.setText((vacation.isTaxDeductable()==1 ? R.string.ja : R.string.nee));
 
         return view;
     }

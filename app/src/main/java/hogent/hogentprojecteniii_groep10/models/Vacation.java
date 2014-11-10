@@ -14,8 +14,8 @@ public class Vacation implements Parcelable {
     private String description;
     private String promoText;
     private String location;
-    private GregorianCalendar beginDate;
-    private GregorianCalendar endDate;
+    private Date beginDate;
+    private Date endDate;
     private int ageFrom;
     private int ageTo;
     private String transportation;
@@ -23,9 +23,9 @@ public class Vacation implements Parcelable {
     private double baseCost;
     private double oneBmMemberCost;
     private double twoBmMemberCost;
-    private boolean taxDeductable;
+    private int taxDeductable;
 
-    public Vacation(long id, String title, String description, String promoText, String location, GregorianCalendar beginDate, GregorianCalendar endDate, int ageFrom, int ageTo, String transportation, int maxParticipants, double baseCost, double oneBmMemberCost, double twoBmMemberCost, boolean taxDeductable) {
+    public Vacation(long id, String title, String description, String promoText, String location, Date beginDate, Date endDate, int ageFrom, int ageTo, String transportation, int maxParticipants, double baseCost, double oneBmMemberCost, double twoBmMemberCost, int taxDeductable) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -44,8 +44,8 @@ public class Vacation implements Parcelable {
     }
 
     //"Basic" constructor
-    public Vacation(long id, String title, String description, String promoText, String location, GregorianCalendar beginDate, GregorianCalendar endDate) {
-        this(id, title, description, promoText, location, beginDate, endDate, 0, 0, null, 0, 0.0, 0.0, 0.0, false);
+    public Vacation(long id, String title, String description, String promoText, String location, Date beginDate, Date endDate) {
+        this(id, title, description, promoText, location, beginDate, endDate, 0, 0, null, 0, 0.0, 0.0, 0.0, 0);
     }
 
     public long getId() {
@@ -68,11 +68,11 @@ public class Vacation implements Parcelable {
         return location;
     }
 
-    public GregorianCalendar getBeginDate() {
+    public Date getBeginDate() {
         return beginDate;
     }
 
-    public GregorianCalendar getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
@@ -104,7 +104,7 @@ public class Vacation implements Parcelable {
         return twoBmMemberCost;
     }
 
-    public boolean isTaxDeductable() {
+    public int isTaxDeductable() {
         return taxDeductable;
     }
 
@@ -129,7 +129,7 @@ public class Vacation implements Parcelable {
         //Er is geen writeBoolean, dus een omweg maken.
         //Lezen is dan via: boolean = in.readByte() != 0;
         // boolean == true if byte != 0
-        dest.writeByte((byte) (taxDeductable ? 1 : 0));
+        dest.writeByte((byte) (taxDeductable==1 ? 1 : 0));
     }
 
     private Vacation() {
@@ -143,8 +143,8 @@ public class Vacation implements Parcelable {
             vacation.description = source.readString();
             vacation.promoText = source.readString();
             vacation.location = source.readString();
-            vacation.beginDate = (GregorianCalendar) source.readSerializable();
-            vacation.endDate = (GregorianCalendar) source.readSerializable();
+            vacation.beginDate = (Date) source.readSerializable();
+            vacation.endDate = (Date) source.readSerializable();
             vacation.ageFrom = source.readInt();
             vacation.ageTo = source.readInt();
             vacation.transportation = source.readString();
@@ -152,7 +152,7 @@ public class Vacation implements Parcelable {
             vacation.baseCost = source.readDouble();
             vacation.oneBmMemberCost = source.readDouble();
             vacation.twoBmMemberCost = source.readDouble();
-            vacation.taxDeductable = source.readByte() != 0;
+            vacation.taxDeductable = source.readByte() != 0 ? 1:0;
             return vacation;
         }
 

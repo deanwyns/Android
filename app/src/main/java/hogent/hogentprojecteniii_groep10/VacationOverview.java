@@ -6,6 +6,7 @@ import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +23,9 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,8 +34,12 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.models.Vacation;
+import hogent.hogentprojecteniii_groep10.models.VacationResponse;
+import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 
 
 public class VacationOverview extends Activity implements SearchView.OnQueryTextListener {
@@ -42,11 +50,22 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
     private ArrayAdapter<Vacation> vacationAdapter;
     private List<Vacation> vacationList = new ArrayList<Vacation>();
     public static final int FILTER_OPTION_REQUEST = 1;
+    private final String ENDPOINT = "http://lloyd.deanwyns.me/api";
+    private RestService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vacation_overview);
+
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ENDPOINT)
+                .setConverter(new GsonConverter(gson))
+                .build();
+        service = restAdapter.create(RestService.class);
 
         sortByTitleBtn =(Button) findViewById(R.id.sort_title_btn);
         sortByDateBtn =(Button) findViewById(R.id.sort_date_btn);
@@ -97,20 +116,22 @@ public class VacationOverview extends Activity implements SearchView.OnQueryText
     }
 
     private void populateVacationList() {
-        String promoTextBarkenTijn = "Recept voor een fantastische zomervakantie: toffe monitoren, leuke vrienden, een prachtig vakantiecentrum en véél fun en ambiance! De monitoren zorgen voor een afwisselend programma (strand- en duinspelen, daguitstappen, themaspelen, fuif, …) maar willen jou er natuurlijk bij. Wacht niet te lang en plan je vakantie naar zee met JOETZ!";
-        Vacation barkentijnZomerLp = new Vacation(0, "JOETZ aan zee", "Uitgebreide beschrijving die momenteel korter is dan de promotext.", promoTextBarkenTijn, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 6, 3), new GregorianCalendar(2014, 6, 12),4, 12, "busvervoer of eigen vervoer", 90, 400.00, 310.00, 220.00, true);
-        String promoTextKrokus = "Verveling krijgt geen kans tijdens de krokusvakantie want op maandag 03 maart 2014 trekken we er met z’n allen op uit! We logeren in het vakantiecentrum “De Barkentijn” te Nieuwpoort.\n" +
-                "Vijf dagen lang spelen we de leukste spelletjes, voor klein en groot. Samen met je vakantievriendjes beleef je het ene avontuur na het andere.  Plezier gegarandeerd!";
-        Vacation krokusVakantie = new Vacation(1, "Krokusvakantie aan zee", "Een beschrijving die meer zegt dan de huidige promotext die blijkbaar niet beschikbaar is.", promoTextKrokus, "De Barkentijn, Nieuwpoort", new GregorianCalendar(2014, 8, 12), new GregorianCalendar(2014, 8, 24), 6, 16, "busvervoer of eigen vervoer", 20, 165.00, 135.00, 105.00, true);
+        VacationResponse response = null;
+        try {
+            response = new AsyncTask<Void, Void, VacationResponse>(){
+                @Override
+                protected VacationResponse doInBackground(Void... voids) {
+                    return service.getVacationOverview();
+                }
+            }.execute().get();
 
-        vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
-        vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
-        vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
-        vacationList.add(barkentijnZomerLp);
-        vacationList.add(krokusVakantie);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        vacationList = response.getVacations();
     }
 
     private void populateListView() {
