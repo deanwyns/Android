@@ -1,9 +1,11 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.main;
 
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import hogent.hogentprojecteniii_groep10.R;
 
 public class VacationApplication extends Application {
     @Override

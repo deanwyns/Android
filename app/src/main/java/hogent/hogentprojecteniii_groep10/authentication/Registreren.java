@@ -1,4 +1,4 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.authentication;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Ouder;
 

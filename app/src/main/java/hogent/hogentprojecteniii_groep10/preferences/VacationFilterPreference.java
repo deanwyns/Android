@@ -1,4 +1,4 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import hogent.hogentprojecteniii_groep10.R;
 
 public class VacationFilterPreference extends DialogPreference {
     private CheckBox ageFilterCheckbox;

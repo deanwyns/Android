@@ -1,6 +1,5 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.activities;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
@@ -9,18 +8,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.fragments.VacationDetailFragment;
+import hogent.hogentprojecteniii_groep10.fragments.VacationsListFragment;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 
@@ -43,7 +40,6 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
             isTwoPane = true;
         }
         fragmentItemsList = (VacationsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentVacationsList);
-
     }
 
 
@@ -70,12 +66,13 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
                 return true;
             case(R.id.action_filter):
                 Intent filterOptions = new Intent(getApplicationContext(), VacationFilter.class);
-                startActivityForResult(filterOptions, FILTER_OPTION_REQUEST);
+                fragmentItemsList.startActivityForResult(filterOptions, FILTER_OPTION_REQUEST);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     @Override
     public void onItemSelected(Vacation vacation) {

@@ -1,7 +1,9 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.activities;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
+import hogent.hogentprojecteniii_groep10.preferences.VacationFilterFragment;
 
 public class VacationFilterActivity extends PreferenceActivity {
     @Override

@@ -1,4 +1,4 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
 
 
 public class VacationFilter extends Activity {
@@ -52,7 +55,7 @@ public class VacationFilter extends Activity {
                     returnedIntent.putExtra("endAge", endAge);
                 }
 
-                setResult(VacationOverview.FILTER_OPTION_REQUEST, returnedIntent);
+                setResult(VacationsListActivity.FILTER_OPTION_REQUEST, returnedIntent);
                 finish();
             }
         });
@@ -62,7 +65,7 @@ public class VacationFilter extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent returnedIntent = new Intent();
-        setResult(VacationOverview.FILTER_OPTION_REQUEST, returnedIntent);
+        setResult(VacationsListActivity.FILTER_OPTION_REQUEST, returnedIntent);
         finish();
     }
 

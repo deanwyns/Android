@@ -1,17 +1,18 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.activities;
 
-import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
-import android.view.MenuItem;
 
+import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.fragments.VacationDetailFragment;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 
 public class VacationDetailActivity extends FragmentActivity {
-
+    private Vacation vacation;
     private VacationDetailFragment fragmentVacationDetail;
 
     @Override
@@ -19,7 +20,7 @@ public class VacationDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vacation_detail);
         // Fetch the item to display from bundle
-        Vacation vacation = (Vacation) getIntent().getParcelableExtra("SpecificVacation");
+        vacation = (Vacation) getIntent().getParcelableExtra("SpecificVacation");
         if (savedInstanceState == null) {
             // Insert detail fragment based on the item passed
             fragmentVacationDetail = VacationDetailFragment.newInstance(vacation);
@@ -27,5 +28,17 @@ public class VacationDetailActivity extends FragmentActivity {
             ft.replace(R.id.flDetailContainer, fragmentVacationDetail);
             ft.commit();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.specific_vacation_view, menu);
+        if (getActionBar() != null)
+        {
+            getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+            getActionBar().setTitle(vacation.getTitle());
+        }
+
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.interfaces;
 
 import java.util.List;
 import java.util.Map;

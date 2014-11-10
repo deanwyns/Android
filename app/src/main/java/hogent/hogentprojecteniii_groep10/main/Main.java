@@ -1,4 +1,4 @@
-package hogent.hogentprojecteniii_groep10;
+package hogent.hogentprojecteniii_groep10.main;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
+import hogent.hogentprojecteniii_groep10.authentication.Login;
 
 
 public class Main extends Activity {
@@ -74,7 +77,7 @@ public class Main extends Activity {
             @Override
             public void onClick(View view) {
 
-                Intent vacationOverviewIntent = new Intent(getApplicationContext(), VacationOverview.class);
+                Intent vacationOverviewIntent = new Intent(getApplicationContext(), VacationsListActivity.class);
                 startActivity(vacationOverviewIntent);
             }
         });
