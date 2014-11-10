@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,8 @@ import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Ouder;
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by Fabrice on 6/11/2014.
@@ -31,6 +34,7 @@ public class Registreren extends Activity {
             mRrnVaderView, mTelNrView, mEmailView, mPasswordView, mBevestigPasswordView;
     private Button mRegistrerenButton;
     private UserRegisterTask mAuthTask = null;
+    private final static String TAG = "Register";
 
 
     @Override
@@ -233,7 +237,19 @@ public class Registreren extends Activity {
                     .build();
             RestService service = restAdapter.create(RestService.class);
 
-            service.register(signUpParamMap);
+            Callback<Gebruiker> callback = new Callback<Gebruiker>() {
+                @Override
+                public void success(Gebruiker gebruiker, Response response) {
+                    Log.i(TAG, gebruiker.toString());
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+
+            };
+            service.register(signUpParamMap, callback);
         }
 
         @Override
