@@ -65,7 +65,7 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
                 //overridePendingTransition(R.anim.slide_leave, R.anim.slide_enter);
                 return true;
             case(R.id.action_filter):
-                Intent filterOptions = new Intent(getApplicationContext(), VacationFilter.class);
+                Intent filterOptions = new Intent(getApplicationContext(), VacationFilterActivity.class);
                 fragmentItemsList.startActivityForResult(filterOptions, FILTER_OPTION_REQUEST);
                 return true;
             default:

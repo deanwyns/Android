@@ -36,9 +36,9 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name=".activities.VacationFilter"
+            android:name=".activities.VacationFilterActivity"
             android:label="@string/title_activity_vacation_filter"
-            android:parentActivityName=".VacationOverview" >
+            android:parentActivityName=".activities.VacationsListActivity" >
         </activity>
         <activity
             android:name=".activities.VacationsListActivity"
@@ -49,10 +49,6 @@
             android:name=".activities.VacationDetailActivity"
             android:label="@string/title_activity_specific_vacation_view"
             android:parentActivityName=".activities.VacationsListActivity" >
-        </activity>
-        <activity
-            android:name=".activities.VacationFilterActivity"
-            android:label="@string/title_activity_vacation_filter" >
         </activity>
     </application>
 

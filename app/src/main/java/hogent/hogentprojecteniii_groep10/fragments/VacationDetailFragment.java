@@ -48,8 +48,8 @@ public class VacationDetailFragment extends Fragment {
         vacationTransportationTextView.setText(vacation.getTransportation());
         vacationParticipantsTextView.setText(String.format("?/%d", vacation.getMaxParticipants()));
         vacationPriceTextView.setText(String.format("€%.2f", vacation.getBaseCost()));
-        vacationDiscountPriceTextView.setText(String.format("%s €%.2f\n%s €%.2f", R.string.eenOuderLidBM,
-                vacation.getOneBmMemberCost(), R.string.beideOudersLidBM, vacation.getTwoBmMemberCost()));
+        vacationDiscountPriceTextView.setText(String.format("%s €%.2f\n%s €%.2f", getResources().getString(R.string.eenOuderLidBM),
+                vacation.getOneBmMemberCost(), getResources().getString(R.string.beideOudersLidBM), vacation.getTwoBmMemberCost()));
         vacationTaxDeductableTextView.setText((vacation.isTaxDeductable()==1 ? R.string.ja : R.string.nee));
 
         return view;
