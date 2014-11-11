@@ -1,7 +1,10 @@
 package hogent.hogentprojecteniii_groep10.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +24,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,10 +33,14 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.helpers.NetworkingMethods;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
+import hogent.hogentprojecteniii_groep10.persistence.SQLiteHelper;
+import hogent.hogentprojecteniii_groep10.persistence.VacationDataSource;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 import retrofit.converter.GsonConverter;
 
 public class VacationsListFragment extends Fragment implements SearchView.OnQueryTextListener {
@@ -46,18 +54,24 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     private final String ENDPOINT = "http://lloyd.deanwyns.me/api";
     private RestService service;
     public static final int FILTER_OPTION_REQUEST = 1;
+    private VacationDataSource vacationDataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        vacationDataSource = new VacationDataSource(getActivity().getApplicationContext());
+        prepareRestAdapter();
+        populateVacationList();
+        vacationAdapter = new VacationListAdapter();
+    }
+
+    private void prepareRestAdapter() {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(gson))
                 .build();
         service = restAdapter.create(RestService.class);
-        populateVacationList();
-        vacationAdapter = new VacationListAdapter();
     }
 
     @Override
@@ -72,22 +86,70 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     private void populateVacationList() {
 
-        VacationResponse response = null;
-        try {
-            response = new AsyncTask<Void, Void, VacationResponse>() {
-                @Override
-                protected VacationResponse doInBackground(Void... voids) {
-                    return service.getVacationOverview();
+        //Is er internet?
+        if (NetworkingMethods.isNetworkAvailable(getActivity().getApplicationContext())) {
+            //Er is internet. Haal het van de server afhankelijk of deze DB en de server DB gelijk zijn
+
+            //Is de versie van de db anders dan die op de server?
+            //TODO: Implementeer code voor het checken van versies.
+            if (true) {
+                //De versie is niet gelijk, haal het van de server
+                VacationResponse response = null;
+                try {
+                    response = new AsyncTask<Void, Void, VacationResponse>() {
+                        @Override
+                        protected VacationResponse doInBackground(Void... voids) {
+                            return service.getVacationOverview();
+                        }
+                    }.execute().get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
-            }.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+                if (response != null && response.getVacations() != null)
+                    vacationList = response.getVacations();
+
+                //Vervang de DB door de nieuwe vakanties
+                storeVacationsInSQLiteDB(vacationList);
+
+            } else {
+                //De versie is gelijk, haal het uit de android DB
+                vacationList = getVacationsFromSQLiteDB();
+            }
+        } else {
+            //Er is geen internet, haal de vakanties uit de android DB
+            vacationList = getVacationsFromSQLiteDB();
         }
-        vacationList = response.getVacations();
+
     }
 
+    private void storeVacationsInSQLiteDB(List<Vacation> vacationList) {
+        vacationDataSource.close();
+        getActivity().deleteDatabase("vacations.db");
+        vacationDataSource.open();
+        for (Vacation v : vacationList) {
+            vacationDataSource.createVacation(v);
+        }
+    }
+
+    private List<Vacation> getVacationsFromSQLiteDB() {
+        vacationDataSource.open();
+        List<Vacation> vacations = vacationDataSource.getAllVacations();
+        return vacations;
+    }
+
+    @Override
+    public void onResume() {
+        vacationDataSource.open();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        vacationDataSource.close();
+        super.onPause();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -96,7 +158,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         populateVacationList();
         setupListviewAndAdapter();
         if (requestCode == FILTER_OPTION_REQUEST && data != null) {
-            if(data.getBooleanExtra("ageFilterChecked", false)){
+            if (data.getBooleanExtra("ageFilterChecked", false)) {
                 int startAge = data.getIntExtra("startAge", 0);
                 int endAge = data.getIntExtra("endAge", 99);
                 filterOnAges(startAge, endAge);
@@ -107,8 +169,8 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     private void filterOnAges(int startAge, int endAge) {
         List<Vacation> filteredVacationList = new ArrayList<Vacation>();
 
-        for(Vacation v : vacationList){
-            if(v.getAgeFrom() <= startAge && v.getAgeTo() >= endAge)
+        for (Vacation v : vacationList) {
+            if (v.getAgeFrom() <= startAge && v.getAgeTo() >= endAge)
                 filteredVacationList.add(v);
         }
 
