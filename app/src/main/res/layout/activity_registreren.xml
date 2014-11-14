@@ -158,7 +158,8 @@
                 android:password="true"
                 android:imeActionLabel="string/registreer"
                 android:inputType="textPassword"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:imeOptions="actionDone"/>
 
             <Button
                 android:id="@+id/sign_up"

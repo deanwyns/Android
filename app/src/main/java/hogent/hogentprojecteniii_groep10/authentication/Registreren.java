@@ -6,9 +6,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +30,7 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 /**
  * Created by Fabrice on 6/11/2014.
@@ -62,6 +70,18 @@ public class Registreren extends Activity {
             @Override
             public void onClick(View view) {
                 attemptRegistration();
+            }
+        });
+
+        mBevestigPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE){
+                    attemptRegistration();
+                    handled = true;
+                }
+                return handled;
             }
         });
     }
@@ -147,8 +167,8 @@ public class Registreren extends Activity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            Gebruiker gebruiker = new Ouder(naamMoeder,voornaamMoeder, rrnMoeder, naamVader, voornaamVader, rrnVader, telNr, email);
-            mAuthTask = new UserRegisterTask((Ouder)gebruiker, password, password2);
+            Gebruiker gebruiker = new Gebruiker(email,password,telNr, naamMoeder,voornaamMoeder, rrnMoeder,  voornaamVader,naamVader, rrnVader);
+            mAuthTask = new UserRegisterTask(gebruiker, password2);
             mAuthTask.execute((Void) null);
         }
 
@@ -187,14 +207,13 @@ public class Registreren extends Activity {
 
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final Ouder mGebruiker;
-        private final String mPassword;
-        private final String mPasswordConfirmed;
+        private final Gebruiker mGebruiker;
+        private final String passwordConfirmed;
 
-        public UserRegisterTask(Ouder gebruiker, String password, String passwordConfirmed) {
+        public UserRegisterTask(Gebruiker gebruiker, String passwordConfirmed) {
            this.mGebruiker=gebruiker;
-            this.mPassword=password;
-            this.mPasswordConfirmed = passwordConfirmed;
+            this.passwordConfirmed=passwordConfirmed;
+
         }
 
         @Override
@@ -203,15 +222,15 @@ public class Registreren extends Activity {
             Map<String, String> signUpParamMap = new HashMap<String, String>();
 
             signUpParamMap.put("email", mGebruiker.getEmailadres());
-            signUpParamMap.put("password", mPassword);
-            signUpParamMap.put("password_confirmed", mPasswordConfirmed);
+            signUpParamMap.put("password", mGebruiker.getPassword());
+            signUpParamMap.put("password_confirmed", passwordConfirmed);
             signUpParamMap.put("phone_number", mGebruiker.getTelNr());
             signUpParamMap.put("first_name_mother", mGebruiker.getVoornaam());
             signUpParamMap.put("last_name_mother", mGebruiker.getNaam());
-            signUpParamMap.put("rrn_mother", ((Ouder) mGebruiker).getRrnMoeder());
-            signUpParamMap.put("first_name_father", ((Ouder) mGebruiker).getVoornaamOuder2());
-            signUpParamMap.put("last_name_father", ((Ouder) mGebruiker).getNaamOuder2());
-            signUpParamMap.put("rrn_father", ((Ouder) mGebruiker).getRrnVader());
+            signUpParamMap.put("nrn_mother", mGebruiker.getRrnMoeder());
+            signUpParamMap.put("first_name_father", mGebruiker.getVoornaamOuder2());
+            signUpParamMap.put("last_name_father",  mGebruiker.getNaamOuder2());
+            signUpParamMap.put("nrn_father", mGebruiker.getRrnVader());
 
             sendSignUpRequest(signUpParamMap);
             return true;
@@ -231,25 +250,32 @@ public class Registreren extends Activity {
             }
         }
 
-        private void sendSignUpRequest(final Map<String, String> signUpParamMap){
+        private void sendSignUpRequest(Map<String, String> signupParamMap){
+
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint("http://lloyd.deanwyns.me/api")
+                    .setConverter(new GsonConverter(gson))
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
             RestService service = restAdapter.create(RestService.class);
 
-            Callback<Gebruiker> callback = new Callback<Gebruiker>() {
+            Callback<String> gebruiker = new Callback<String>() {
                 @Override
-                public void success(Gebruiker gebruiker, Response response) {
-                    Log.i(TAG, gebruiker.toString());
+                public void success(String gebruiker, Response response) {
+                    //Log.i(TAG, gebruiker.toString());
+                    response.getBody();
+                    Toast.makeText(getBaseContext(), "Geregistreerd", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-
+                    error.printStackTrace();
+                    error.getCause();
                 }
 
             };
-            service.register(signUpParamMap, callback);
+            service.register(signupParamMap, gebruiker);
         }
 
         @Override

@@ -28,6 +28,6 @@ public interface RestService {
 
     @FormUrlEncoded
     @POST("/user")
-    void register(@FieldMap Map<String, String> options, Callback <Gebruiker> callback);
+    void register(@FieldMap Map<String, String> options, Callback<String> callback);
 
 }
