@@ -73,5 +73,10 @@
     <string name="age_filter_start_age_preference">age_filter_start_age_preference</string>
     <string name="age_filter_end_age_preference">age_filter_end_age_preference</string>
     <string name="next">Next</string>
+    <string name="title_activity_vacation_signup">Inschrijven voor</string>
+    <string name="select_child">Wie wenst u in te schrijven voor deze vakantie?</string>
+    <string name="add_child_spinner">Ik wens nog iemand in te schrijven</string>
+    <string name="child_not_in_list">Mijn kind staat niet in het lijstje</string>
+    <string name="go_to_billing">Ga verder naar de facturatie</string>
 
 </resources>

@@ -1,30 +1,49 @@
 package hogent.hogentprojecteniii_groep10.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.activities.VacationSignupActivity;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 public class VacationDetailFragment extends Fragment {
 
     private Vacation vacation;
+    private Button registerButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         vacation = (Vacation) getArguments().getParcelable("SpecificVacation");
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vacation_detail, container, false);
+
+        registerButton = (Button) view.findViewById(R.id.specific_vacation_signup_btn);
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signupActivity = new Intent(getActivity().getApplicationContext(), VacationSignupActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putParcelable("SpecificVacation", vacation);
+                signupActivity.putExtras(mBundle);
+                startActivity(signupActivity);
+            }
+        });
 
         TextView vacationTitleTextView = (TextView) view.findViewById(R.id.specific_vacation_title);
         TextView vacationPromotionalTextTextView = (TextView) view.findViewById(R.id.specific_vacation_promotext_text);
