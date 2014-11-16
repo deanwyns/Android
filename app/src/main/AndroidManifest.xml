@@ -54,7 +54,15 @@
         <activity
             android:name=".activities.VacationSignupActivity"
             android:label="@string/title_activity_vacation_signup"
-            android:parentActivityName=".activities.VacationsListActivity">
+            android:parentActivityName=".activities.VacationsListActivity" >
+        </activity>
+        <activity
+            android:name=".activities.VacationBillingActivity"
+            android:label="@string/title_activity_vacation_billing" >
+        </activity>
+        <activity
+            android:name=".activities.VacationSignupOverviewActivity"
+            android:label="@string/title_activity_vacation_signup_overview" >
         </activity>
     </application>
 

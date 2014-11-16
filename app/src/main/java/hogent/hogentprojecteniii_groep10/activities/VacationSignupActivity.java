@@ -1,8 +1,10 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
@@ -22,6 +28,7 @@ public class VacationSignupActivity extends Activity {
     private Button addChildToAccountBtn, goToBillingBtn, addChildSpinnerBtn;
     private LinearLayout childrenSpinnerLayout;
     private Spinner firstChildSpinner;
+    private List<Spinner> spinnerList = new ArrayList<Spinner>();
 
     private Gebruiker[] tempArray;
     private ArrayAdapter<Gebruiker> adapter;
@@ -40,6 +47,8 @@ public class VacationSignupActivity extends Activity {
         childrenSpinnerLayout = (LinearLayout) findViewById(R.id.linear_layout_children_spinners);
         firstChildSpinner  = (Spinner) findViewById(R.id.first_child_spinner);
 
+        spinnerList.add(firstChildSpinner);
+
         Gebruiker child1 = new Gebruiker("email", "pass", "000", "Kind1", "Kind1", "000", "ouder1", "ouder2", "000");
         Gebruiker child2 = new Gebruiker("email2", "pass2", "000", "Kind2", "Kind2", "000", "ouder1", "ouder2", "000");
         Gebruiker child3 = new Gebruiker("email3", "pass3", "000", "Kind3", "Kind3", "000", "ouder1", "ouder2", "000");
@@ -57,9 +66,12 @@ public class VacationSignupActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //Spinner childSpinner = new Spinner(getApplicationContext());
-                Spinner childSpinner = new Spinner(getApplicationContext(), null, android.R.attr.spinnerStyle);
-                childSpinner.setAdapter(adapter);
-                childrenSpinnerLayout.addView(childSpinner);
+                if(spinnerList.size() < tempArray.length){
+                    Spinner childSpinner = new Spinner(getApplicationContext(), null, android.R.attr.spinnerStyle);
+                    spinnerList.add(childSpinner);
+                    childSpinner.setAdapter(adapter);
+                    childrenSpinnerLayout.addView(childSpinner);
+                }
             }
         });
 
@@ -74,10 +86,20 @@ public class VacationSignupActivity extends Activity {
         goToBillingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent billingDetails = new Intent(getApplicationContext(), VacationBillingActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putParcelable("SpecificVacation", vacation);
+                Gebruiker[] signedUpChildren = new Gebruiker[spinnerList.size()];
+                for (int i = 0; i < spinnerList.size(); i++){
+                    signedUpChildren[i] = adapter.getItem(i);
+                }
+                mBundle.putParcelableArray("SignedUpChildren", signedUpChildren);
+                billingDetails.putExtras(mBundle);
+                startActivity(billingDetails);
             }
         });
     }
+
 
 
     @Override

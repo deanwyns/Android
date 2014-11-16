@@ -78,5 +78,27 @@
     <string name="add_child_spinner">Ik wens nog iemand in te schrijven</string>
     <string name="child_not_in_list">Mijn kind staat niet in het lijstje</string>
     <string name="go_to_billing">Ga verder naar de facturatie</string>
+    <string name="title_activity_vacation_billing">Betalingsgegevens</string>
+    <string name="firstname">Voornaam</string>
+    <string name="lastname">Naam</string>
+    <string name="billing_paying_person">Gegevens van de betalende persoon</string>
+    <string name="billing_overview">Betalingsgegevens</string>
+    <string name="billing_postal_address">Factuuradres</string>
+    <string name="street_and_housenumber">Straat Huisnummer</string>
+    <string name="postal_code_and_city">Postcode Gemeente</string>
+    <string name="go_to_billing_overview">Ga naar het gegevensoverzicht</string>
+    <string name="wrong_input_on_billing">Gelieve de invoer na te kijken!</string>
+    <string name="title_activity_vacation_signup_overview">VacationSignupOverviewActivity</string>
+    <string name="vacation">Vakantie</string>
+    <string name="signup_overview_title">Titel: </string>
+    <string name="signup_overview_date">Datum: </string>
+    <string name="signup_overview_price_per_person">Prijs per persoon: </string>
+    <string name="signup_overview_total_price">Totale prijs: </string>
+    <string name="signup_overview_signups">Vakantiegangers</string>
+    <string name="signup_overview_payment_details">Betalingsgegevens</string>
+    <string name="signup_overview_paying_person">Betalingspersoon</string>
+    <string name="cancel">Annuleren</string>
+    <string name="signup_overview_signup">Inschrijven!</string>
+    <string name="signup_overview_billing_address">Factuuradres</string>
 
 </resources>
