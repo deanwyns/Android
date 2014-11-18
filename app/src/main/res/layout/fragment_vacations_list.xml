@@ -15,7 +15,9 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
+        android:background="@drawable/custom_button"
+        android:textColor="@android:color/white"
         android:layout_height="wrap_content"
         android:text="@string/vacation_title_sort_btn"
         android:id="@+id/sort_title_btn"
@@ -24,11 +26,14 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
+        android:background="@drawable/custom_button"
+        android:textColor="@android:color/white"
         android:layout_height="wrap_content"
         android:text="@string/vacation_date_sort_btn"
         android:id="@+id/sort_date_btn"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/sort_title_btn" />
+        android:layout_toEndOf="@+id/sort_title_btn"
+        android:layout_marginLeft="5dp" />
 
 </RelativeLayout>

@@ -46,19 +46,28 @@
                 android:id="@+id/add_child_spinner_btn"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add_child_spinner" />
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/white"
+                android:text="@string/add_child_spinner"
+                android:layout_marginTop="10dp" />
 
             <Button
                 android:id="@+id/add_child_to_account_btn"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/child_not_in_list" />
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/white"
+                android:text="@string/child_not_in_list"
+                android:layout_marginTop="10dp" />
 
             <Button
                 android:id="@+id/go_to_billing_btn"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/go_to_billing" />
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/white"
+                android:text="@string/go_to_billing"
+                android:layout_marginTop="10dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

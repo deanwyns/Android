@@ -87,6 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/search_with_filter"
+            android:background="@drawable/custom_button"
+            android:textColor="@android:color/white"
             android:id="@+id/search_with_filter_btn"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />

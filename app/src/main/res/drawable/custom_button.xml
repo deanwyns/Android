@@ -5,9 +5,9 @@
     android:layout_width="match_parent">
     <item android:state_pressed="true" >
         <shape>
-            <solid android:color="@color/light_gray_tapped"/>
+            <solid android:color="@color/colorPrimaryDark"/>
             <corners
-                android:radius="3dp" />
+                android:radius="20dp" />
             <padding
                 android:left="10dp"
                 android:top="10dp"
@@ -18,9 +18,9 @@
 
     <item>
         <shape>
-            <solid android:color="@color/light_gray"/>
+            <solid android:color="@color/colorPrimary"/>
             <corners
-                android:radius="3dp" />
+                android:radius="20dp" />
             <padding
                 android:left="10dp"
                 android:top="10dp"

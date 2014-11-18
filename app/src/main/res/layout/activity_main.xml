@@ -61,6 +61,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:background="@drawable/custom_button"
+            android:textColor="@android:color/white"
             android:scaleType="fitCenter"
             android:src="@drawable/vacation" />
 
@@ -72,6 +73,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:background="@drawable/custom_button"
+            android:textColor="@android:color/white"
             android:scaleType="fitCenter"
             android:src="@drawable/photo" />
 
@@ -91,6 +93,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:background="@drawable/custom_button"
+            android:textColor="@android:color/white"
             android:scaleType="fitCenter"
             android:src="@drawable/files" />
 
@@ -100,6 +103,7 @@
             android:layout_margin="5px"
             android:layout_weight="1"
             android:background="@drawable/custom_button"
+            android:textColor="@android:color/white"
             android:visibility="invisible" />
 
     </LinearLayout>

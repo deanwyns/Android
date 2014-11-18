@@ -212,6 +212,8 @@
                 android:text="@string/inschrijven"
                 android:id="@+id/specific_vacation_signup_btn"
                 android:drawableLeft="@drawable/sign_up"
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/white"
                 android:layout_marginTop="100dp" />
         </LinearLayout>
     </ScrollView>

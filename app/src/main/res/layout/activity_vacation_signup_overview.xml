@@ -118,14 +118,20 @@
                     android:layout_height="wrap_content"
                     android:text="@string/cancel"
                     android:id="@+id/signup_overview_cancel_btn"
-                    android:layout_weight="1" />
+                    android:background="@drawable/custom_button"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"
+                    android:layout_marginRight="5dp" />
 
                 <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/signup_overview_signup"
                     android:id="@+id/signup_overview_signup_btn"
-                    android:layout_weight="1" />
+                    android:background="@drawable/custom_button"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp" />
             </LinearLayout>
 
 
