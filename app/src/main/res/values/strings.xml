@@ -100,5 +100,13 @@
     <string name="cancel">Annuleren</string>
     <string name="signup_overview_signup">Inschrijven!</string>
     <string name="signup_overview_billing_address">Factuuradres</string>
+    <string name="rrn">Rijksregisternummer</string>
+    <string name="adres">Adres</string>
+    <string name="gegevens_kind">Gegevens kind</string>
+    <string name="straat">Straat</string>
+    <string name="huisnummer">Huisnummer</string>
+    <string name="postcode">Postcode</string>
+    <string name="stad">Stad of gemeente</string>
+    <string name="toevoegen">Toevoegen</string>
 
 </resources>

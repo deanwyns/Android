@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/joetz"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gegevens_kind"
+                />
+
+            <EditText
+                android:id="@+id/firstname_add_child"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeActionLabel="@string/next"
+                android:singleLine="true"
+                android:hint="@string/firstname"/>
+
+            <EditText
+                android:id="@+id/lastname_add_child"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeActionLabel="@string/next"
+                android:singleLine="true"
+                android:hint="@string/lastname"/>
+
+            <EditText
+                android:id="@+id/rrn_add_child"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeActionLabel="@string/next"
+                android:singleLine="true"
+                android:hint="@string/rrn"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/adres"
+                />
+
+            <EditText
+                android:id="@+id/straat_add_child"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeActionLabel="@string/next"
+                android:singleLine="true"
+                android:hint="@string/straat"/>
+
+            <EditText
+                android:id="@+id/huisnummer_add_child"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeActionLabel="@string/next"
+                android:singleLine="true"
+                android:hint="@string/huisnummer"/>
+
+            <EditText
+                android:id="@+id/postcode_add_child"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeActionLabel="@string/next"
+                android:singleLine="true"
+                android:hint="@string/postcode"/>
+
+            <EditText
+                android:id="@+id/stad_add_child"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeActionLabel="@string/next"
+                android:singleLine="true"
+                android:hint="@string/stad"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button"
+                android:textColor="@android:color/white"
+                android:text="@string/toevoegen"
+                android:id="@+id/toevoegen_btn" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
