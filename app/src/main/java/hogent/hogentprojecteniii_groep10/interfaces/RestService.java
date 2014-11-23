@@ -30,4 +30,8 @@ public interface RestService {
     @POST("/user")
     void register(@FieldMap Map<String, String> options, Callback<String> callback);
 
+    @FormUrlEncoded
+    @POST("url")
+    String addChild(@FieldMap Map<String, String> options);
+
 }

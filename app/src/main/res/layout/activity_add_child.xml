@@ -95,7 +95,7 @@
                 android:background="@drawable/custom_button"
                 android:textColor="@android:color/white"
                 android:text="@string/toevoegen"
-                android:id="@+id/toevoegen_btn" />
+                android:id="@+id/toevoegen_btn_add_child" />
 
         </LinearLayout>
     </ScrollView>
