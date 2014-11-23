@@ -78,8 +78,8 @@ public class VacationSignupActivity extends Activity {
         addChildToAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast todo = Toast.makeText(getApplicationContext(), "Wordt gemaakt door Fabrice", Toast.LENGTH_SHORT);
-                todo.show();
+                Intent addChild = new Intent(getApplicationContext(), AddChildActivity.class);
+                startActivity(addChild);
             }
         });
 

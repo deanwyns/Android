@@ -108,5 +108,8 @@
     <string name="postcode">Postcode</string>
     <string name="stad">Stad of gemeente</string>
     <string name="toevoegen">Toevoegen</string>
+    <string name="gegevens_moeder">Gegevens moeder</string>
+    <string name="gegevens_vader">Gegevens vader</string>
+    <string name="accountgegevens">Accountgegevens</string>
 
 </resources>

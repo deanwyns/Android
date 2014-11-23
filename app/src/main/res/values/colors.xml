@@ -10,4 +10,5 @@
     <color name="windowBackgroundColor">#FF2300</color>
     <color name="black_translucent">#80000000</color>
     <color name="accent">#FF4D31</color>
+    <color name="loginHints">#cccccc</color>
 </resources>

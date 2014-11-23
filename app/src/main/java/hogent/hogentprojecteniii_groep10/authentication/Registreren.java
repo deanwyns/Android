@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,13 +39,12 @@ import retrofit.converter.GsonConverter;
  */
 public class Registreren extends Activity {
 
-
     private EditText mVoornaamMoederView, mNaamMoederView, mRrnMoederView, mNaamVaderView, mVoornaamVaderView,
             mRrnVaderView, mTelNrView, mEmailView, mPasswordView, mBevestigPasswordView;
     private Button mRegistrerenButton;
     private UserRegisterTask mAuthTask = null;
-    private final static String TAG = "Register";
-
+    private boolean isTelnrValid, isEmailValid, isPasswordValid, isVoornaamMoederValid, isNaamMoederValid,
+    isRrnMoederValid, isBevestigPasswordValid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +74,126 @@ public class Registreren extends Activity {
             }
         });
 
-        mBevestigPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mRrnVaderView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE){
+                boolean isValidKey = keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+                boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
+
+                if ((isValidAction || isValidKey)&& isTelnrValid && isEmailValid && isPasswordValid
+                        && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid){
                     attemptRegistration();
-                    handled = true;
                 }
-                return handled;
+                return false;
             }
         });
+        mPasswordView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isPasswordValid(s.toString());
+                changeButtonState();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mVoornaamMoederView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isVoornaamMoederValid = s.length()!=0;
+                changeButtonState();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mNaamMoederView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isNaamMoederValid = s.length()!=0;
+                changeButtonState();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mRrnMoederView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isRrnMoederValid = s.length()!=0;
+                changeButtonState();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mTelNrView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isTelNrValid(s.toString());
+                changeButtonState();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mEmailView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isEmailValid(s.toString());
+                changeButtonState();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mBevestigPasswordView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                (s.toString());
+                changeButtonState();
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
     public void attemptRegistration() {
@@ -184,7 +294,20 @@ public class Registreren extends Activity {
         mBevestigPasswordView.setError(null);
     }
 
-    private boolean isEmailValid(String email) {
+    private void isTelNrValid(String telnr){
+        String telnrRegex, gsmnrRegex;
+        Pattern patternTelnr, patternGsmnr;
+        telnrRegex = "^[0]{1}[1-9]{1}[0-9]{1}\\/{1}[0-9]{6}$";
+        gsmnrRegex = "^[0]{1}[4]{1}[789]{1}[0-9]{1}\\/{1}[0-9]{6}$";
+        patternTelnr = Pattern.compile(telnrRegex);
+        patternGsmnr = Pattern.compile(gsmnrRegex);
+        Matcher matcher1 = patternTelnr.matcher(telnr);
+        Matcher matcher2 = patternGsmnr.matcher(telnr);
+
+        isTelnrValid =  matcher1.find() && matcher2.find() && !telnr.isEmpty();
+    }
+
+    private void isEmailValid(String email) {
         String emailRegEx;
         Pattern pattern;
         // Regex for a valid email address
@@ -193,11 +316,11 @@ public class Registreren extends Activity {
         pattern = Pattern.compile(emailRegEx);
         Matcher matcher = pattern.matcher(email);
 
-        return matcher.find();
+        isEmailValid =  matcher.find() && email.isEmpty();
     }
 
-    private boolean passwordsMatch(String pw1, String pw2) {
-        return pw1.equals(pw2);
+    private void passwordsMatch(String pw1, String pw2) {
+        isBevestigPasswordValid =  pw1.equals(pw2);
     }
 
     private boolean isPasswordValid(String password) {
