@@ -206,15 +206,35 @@
                 android:id="@+id/specific_vacation_tax_deductable_text" />
 
 
-            <Button
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/inschrijven"
-                android:id="@+id/specific_vacation_signup_btn"
-                android:drawableLeft="@drawable/sign_up"
-                android:background="@drawable/custom_button"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="100dp" />
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/go_to_photos_temp"
+                    android:id="@+id/specific_vacation_images_btn"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"
+                    android:layout_marginRight="5dp" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/inschrijven"
+                    android:id="@+id/specific_vacation_signup_btn"
+                    android:drawableStart="@drawable/sign_up"
+                    android:background="@drawable/custom_button"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp" />
+            </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 

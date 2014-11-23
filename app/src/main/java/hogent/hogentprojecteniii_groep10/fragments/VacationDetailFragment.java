@@ -12,13 +12,14 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.activities.VacationPhotosActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationSignupActivity;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 public class VacationDetailFragment extends Fragment {
 
     private Vacation vacation;
-    private Button registerButton;
+    private Button registerButton, photosButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class VacationDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_vacation_detail, container, false);
 
         registerButton = (Button) view.findViewById(R.id.specific_vacation_signup_btn);
+        photosButton = (Button) view.findViewById(R.id.specific_vacation_images_btn);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +44,17 @@ public class VacationDetailFragment extends Fragment {
                 mBundle.putParcelable("SpecificVacation", vacation);
                 signupActivity.putExtras(mBundle);
                 startActivity(signupActivity);
+            }
+        });
+
+        photosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoGallery = new Intent(getActivity().getApplicationContext(), VacationPhotosActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putParcelable("SpecificVacation", vacation);
+                photoGallery.putExtras(mBundle);
+                startActivity(photoGallery);
             }
         });
 

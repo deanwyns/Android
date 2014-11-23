@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hogent.hogentprojecteniii_groep10.activities.VacationPhotosActivity">
+
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/photo_slider"
+        android:background="@drawable/joetz"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/photo_grid" />
+
+
+</LinearLayout>

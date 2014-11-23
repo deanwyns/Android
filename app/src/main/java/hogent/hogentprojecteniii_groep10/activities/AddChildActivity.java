@@ -167,7 +167,8 @@ public class AddChildActivity extends FragmentActivity {
             focusView.requestFocus();
         } else {
             Gebruiker gebruiker = new Gebruiker(email,password,telNr, naamMoeder,voornaamMoeder, rrnMoeder,  voornaamVader,naamVader, rrnVader);
-            mAuthTask = new UserRegisterTask(gebruiker, password2);
+            //Je code build niet, heb het in commentaar gezet zodat ik verder kan werken
+            //mAuthTask = new UserRegisterTask(gebruiker, password2);
             mAuthTask.execute((Void) null);
         }
 

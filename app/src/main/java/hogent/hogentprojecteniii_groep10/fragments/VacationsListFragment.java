@@ -192,22 +192,41 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         sortByTitleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String titleBtnText = sortByTitleBtn.getText().toString();
+                StringBuilder adjustedTitleBtnText = new StringBuilder(titleBtnText);
+                if(titleSortedAscending)
+                    adjustedTitleBtnText.replace(titleBtnText.length() - 1, titleBtnText.length(), "v");
+                else
+                    adjustedTitleBtnText.replace(titleBtnText.length() - 1, titleBtnText.length(), "^");
+                sortByTitleBtn.setText(adjustedTitleBtnText.toString());
+
                 Collections.sort(vacationList, new Comparator<Vacation>() {
                     @Override
                     public int compare(Vacation lhs, Vacation rhs) {
-                        if (!titleSortedAscending)
-                            return lhs.getTitle().compareTo(rhs.getTitle());
-                        else
-                            return rhs.getTitle().compareTo(lhs.getTitle());
+                        if (!titleSortedAscending){
+                            return lhs.getTitle().toLowerCase().compareTo(rhs.getTitle().toLowerCase());
+                        }
+                        else{
+                            return rhs.getTitle().toLowerCase().compareTo(lhs.getTitle().toLowerCase());
+                        }
                     }
                 });
                 titleSortedAscending = !titleSortedAscending;
                 vacationAdapter.notifyDataSetChanged();
             }
+
         });
         sortByDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String dateBtnText = sortByDateBtn.getText().toString();
+                StringBuilder adjustedDateBtnText = new StringBuilder(dateBtnText);
+                if(dateSortedAscending)
+                    adjustedDateBtnText.replace(dateBtnText.length() - 1, dateBtnText.length(), "v");
+                else
+                    adjustedDateBtnText.replace(dateBtnText.length() - 1, dateBtnText.length(), "^");
+                sortByDateBtn.setText(adjustedDateBtnText.toString());
+
                 Collections.sort(vacationList, new Comparator<Vacation>() {
                     @Override
                     public int compare(Vacation lhs, Vacation rhs) {

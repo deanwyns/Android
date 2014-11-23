@@ -108,5 +108,11 @@
     <string name="postcode">Postcode</string>
     <string name="stad">Stad of gemeente</string>
     <string name="toevoegen">Toevoegen</string>
+    <string name="title_activity_vacation_photo_overview">VacationPhotoOverviewActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="go_to_photos_temp">Ga naar foto\'s (temp)</string>
+    <string name="title_activity_vacation_photos">Foto\'s van </string>
+    <string name="play_slideshow">Start de slideshow opnieuw</string>
 
 </resources>
