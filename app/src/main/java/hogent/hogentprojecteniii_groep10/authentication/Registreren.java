@@ -1,8 +1,12 @@
 package hogent.hogentprojecteniii_groep10.authentication;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -41,10 +45,13 @@ public class Registreren extends Activity {
 
     private EditText mVoornaamMoederView, mNaamMoederView, mRrnMoederView, mNaamVaderView, mVoornaamVaderView,
             mRrnVaderView, mTelNrView, mEmailView, mPasswordView, mBevestigPasswordView;
-    private Button mRegistrerenButton;
+    private Button mRegistrerenButton/* mCancelButton*/;
     private UserRegisterTask mAuthTask = null;
     private boolean isTelnrValid, isEmailValid, isPasswordValid, isVoornaamMoederValid, isNaamMoederValid,
-    isRrnMoederValid, isBevestigPasswordValid;
+    isRrnMoederValid, isBevestigPasswordValid, isNaamVaderValid=true, isVoornaamVaderValid=true,
+            isRrnVaderValid=true;
+    private View mProgressView;
+    private View mRegisterFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,9 @@ public class Registreren extends Activity {
         mPasswordView = (EditText) findViewById(R.id.registreer_password);
         mRegistrerenButton = (Button) findViewById(R.id.sign_up);
         mBevestigPasswordView = (EditText) findViewById(R.id.bevestig_password);
+        mRegisterFormView = findViewById(R.id.register_form);
+        mProgressView = findViewById(R.id.register_progress);
+        //mCancelButton = (Button)findViewById(R.id.btnCancel_register);
 
         setUpListeners();
     }
@@ -90,7 +100,6 @@ public class Registreren extends Activity {
         mPasswordView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
-
             }
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -105,7 +114,6 @@ public class Registreren extends Activity {
         mVoornaamMoederView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
-
             }
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -120,7 +128,6 @@ public class Registreren extends Activity {
         mNaamMoederView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
-
             }
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -135,11 +142,10 @@ public class Registreren extends Activity {
         mRrnMoederView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
-
             }
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                isRrnMoederValid = s.length()!=0;
+                isRrnMoederValid = isRrnValid(s.toString());
                 changeButtonState();
             }
             @Override
@@ -150,7 +156,6 @@ public class Registreren extends Activity {
         mTelNrView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
-
             }
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -165,7 +170,6 @@ public class Registreren extends Activity {
         mEmailView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
-
             }
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -185,9 +189,82 @@ public class Registreren extends Activity {
             }
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                (s.toString());
+                passwordsMatch(mPasswordView.getText().toString(), s.toString());
                 changeButtonState();
             }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mNaamVaderView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                if(!s.toString().isEmpty()) {
+                    if (mVoornaamVaderView.getText().toString().isEmpty())
+                        isVoornaamVaderValid = false;
+                    isRrnVaderValid=isRrnValid(mRrnVaderView.getText().toString());
+                }
+                changeValidityGegevensVader();
+                changeButtonState();
+
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mVoornaamVaderView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                if(!s.toString().isEmpty()) {
+                    isVoornaamVaderValid=true;
+                    if (mNaamVaderView.getText().toString().isEmpty())
+                        isNaamVaderValid = false;
+                    isRrnVaderValid=isRrnValid(mRrnVaderView.getText().toString());
+                }
+                changeValidityGegevensVader();
+                changeButtonState();
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        mRrnVaderView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                if(!s.toString().isEmpty()) {
+                    if (mVoornaamVaderView.getText().toString().isEmpty())
+                        isVoornaamVaderValid = false;
+                    if(mNaamVaderView.getText().toString().isEmpty())
+                        isNaamVaderValid = false;
+                    isRrnVaderValid=isRrnValid(mRrnVaderView.getText().toString());
+                }
+                changeValidityGegevensVader();
+                changeButtonState();
+
+
+            }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -196,8 +273,17 @@ public class Registreren extends Activity {
 
     }
 
+    public void changeValidityGegevensVader(){
+        if (mNaamVaderView.getText().toString().isEmpty()
+                && mVoornaamVaderView.getText().toString().isEmpty()
+                && mRrnVaderView.getText().toString().isEmpty()) {
+            isVoornaamVaderValid = true;
+            isNaamVaderValid = true;
+            isRrnVaderValid = true;
+        }
+    }
+
     public void attemptRegistration() {
-        resetErrors();
 
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
@@ -209,102 +295,22 @@ public class Registreren extends Activity {
         String voornaamVader = mVoornaamVaderView.getText().toString();
         String rrnVader = mRrnVaderView.getText().toString();
         String telNr = mTelNrView.getText().toString();
+        showProgress(true);
 
-        boolean cancel = false;
-        View focusView = null;
-
-        //TODO: validatie nog aanpassen
-
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        if (!isPasswordValid(password)){
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        if (!passwordsMatch(password, password2)){
-            mPasswordView.setError(getString(R.string.error_passwords_different));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(password2)) {
-            mBevestigPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mBevestigPasswordView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(voornaamMoeder)) {
-            mVoornaamMoederView.setError(getString(R.string.error_field_required));
-            focusView = mVoornaamMoederView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(rrnMoeder)) {
-            mRrnMoederView.setError(getString(R.string.error_field_required));
-            focusView = mRrnMoederView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(telNr)) {
-            mTelNrView.setError(getString(R.string.error_field_required));
-            focusView = mTelNrView;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(naamMoeder)) {
-            mNaamMoederView.setError(getString(R.string.error_field_required));
-            focusView = mNaamMoederView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            focusView.requestFocus();
-        } else {
             Gebruiker gebruiker = new Gebruiker(email,password,telNr, naamMoeder,voornaamMoeder, rrnMoeder,  voornaamVader,naamVader, rrnVader);
             mAuthTask = new UserRegisterTask(gebruiker, password2);
             mAuthTask.execute((Void) null);
-        }
 
-    }
-
-    public void resetErrors() {
-        mVoornaamMoederView.setError(null);
-        mTelNrView.setError(null);
-        mNaamMoederView.setError(null);
-        mRrnMoederView.setError(null);
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-        mBevestigPasswordView.setError(null);
     }
 
     private void isTelNrValid(String telnr){
-        String telnrRegex, gsmnrRegex;
-        Pattern patternTelnr, patternGsmnr;
-        telnrRegex = "^[0]{1}[1-9]{1}[0-9]{1}\\/{1}[0-9]{6}$";
-        gsmnrRegex = "^[0]{1}[4]{1}[789]{1}[0-9]{1}\\/{1}[0-9]{6}$";
+        String telnrRegex;
+        Pattern patternTelnr;
+        telnrRegex = "0(\\d{3}|\\d{2})\\d{6}";
         patternTelnr = Pattern.compile(telnrRegex);
-        patternGsmnr = Pattern.compile(gsmnrRegex);
-        Matcher matcher1 = patternTelnr.matcher(telnr);
-        Matcher matcher2 = patternGsmnr.matcher(telnr);
+        Matcher matcher = patternTelnr.matcher(telnr);
 
-        isTelnrValid =  matcher1.find() && matcher2.find() && !telnr.isEmpty();
+        isTelnrValid =  matcher.find();
     }
 
     private void isEmailValid(String email) {
@@ -316,16 +322,111 @@ public class Registreren extends Activity {
         pattern = Pattern.compile(emailRegEx);
         Matcher matcher = pattern.matcher(email);
 
-        isEmailValid =  matcher.find() && email.isEmpty();
+        isEmailValid =  matcher.find() && !email.isEmpty();
     }
 
     private void passwordsMatch(String pw1, String pw2) {
         isBevestigPasswordValid =  pw1.equals(pw2);
     }
 
-    private boolean isPasswordValid(String password) {
-        //TODO:validatie wachtwoord toevoegen
-        return true;
+    private boolean isRrnValid(String rrn){
+        if (rrn.length()==11) {
+            return true;
+            /*int rrnNumber = Integer.parseInt(rrn.substring(0, 8));
+            int modulo = rrnNumber % 97;
+
+            return ((97 - modulo)-Integer.parseInt(rrn.substring(9)))==0;*/
+        }else
+            return false;
+    }
+
+    private void isPasswordValid(String password) {
+        isPasswordValid =  !password.isEmpty();
+    }
+
+    public void setErrors(){
+        if (isTelnrValid && isEmailValid && isPasswordValid
+                && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid
+                && isBevestigPasswordValid && isVoornaamVaderValid && isNaamVaderValid && isRrnVaderValid) {
+            mBevestigPasswordView.setError(null);
+            mTelNrView.setError(null);
+            mEmailView.setError(null);
+            mPasswordView.setError(null);
+            mVoornaamMoederView.setError(null);
+            mNaamMoederView.setError(null);
+            mRrnMoederView.setError(null);
+            mVoornaamVaderView.setError(null);
+            mNaamVaderView.setError(null);
+            mRrnVaderView.setError(null);
+        }else{
+            if (!isTelnrValid)
+                mTelNrView.setError(getString(R.string.error_invalid_telephonenumber));
+            if(!isEmailValid)
+                mEmailView.setError(getString(R.string.error_invalid_email));
+            if(!isPasswordValid)
+                mPasswordView.setError(getString(R.string.error_invalid_password));
+            if (!isVoornaamMoederValid)
+                mVoornaamMoederView.setError(getString(R.string.error_field_required));
+            if(!isNaamMoederValid)
+                mNaamMoederView.setError(getString(R.string.error_field_required));
+            if(!isRrnMoederValid)
+                mRrnMoederView.setError(getString(R.string.error_invalid_rrn));
+            if(!isBevestigPasswordValid)
+                mBevestigPasswordView.setError(getString(R.string.error_passwords_different));
+            if(!isRrnVaderValid)
+                mRrnVaderView.setError(getString(R.string.error_invalid_rrn));
+            if(!isNaamVaderValid)
+                mNaamVaderView.setError(getString(R.string.error_field_required));
+            if(!isVoornaamVaderValid)
+                mVoornaamVaderView.setError(getString(R.string.error_field_required));
+        }
+
+    }
+
+    private void changeButtonState(){
+        if (isTelnrValid && isEmailValid && isPasswordValid
+                && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid
+                && isBevestigPasswordValid && isNaamVaderValid && isVoornaamVaderValid && isRrnVaderValid){
+            mRegistrerenButton.setEnabled(true);
+        }else{
+            mRegistrerenButton.setEnabled(false);
+        }
+        setErrors();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            //mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+           // mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
+            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
@@ -362,7 +463,7 @@ public class Registreren extends Activity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-
+            showProgress(false);
             if (success) {
                 Intent loginIntent = new Intent(getApplicationContext(), Login.class);
                 startActivity(loginIntent);
@@ -375,10 +476,10 @@ public class Registreren extends Activity {
 
         private void sendSignUpRequest(Map<String, String> signupParamMap){
 
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+            //Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint("http://lloyd.deanwyns.me/api")
-                    .setConverter(new GsonConverter(gson))
+                    //.setConverter(new GsonConverter(gson))
                     .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
             RestService service = restAdapter.create(RestService.class);
@@ -394,7 +495,7 @@ public class Registreren extends Activity {
                 @Override
                 public void failure(RetrofitError error) {
                     error.printStackTrace();
-                    error.getCause();
+
                 }
 
             };
@@ -404,6 +505,7 @@ public class Registreren extends Activity {
         @Override
         protected void onCancelled() {
             mAuthTask = null;
+            showProgress(false);
         }
     }
  }

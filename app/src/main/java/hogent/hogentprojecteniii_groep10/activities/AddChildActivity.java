@@ -92,7 +92,7 @@ public class AddChildActivity extends FragmentActivity {
         }
 
         if (TextUtils.isEmpty(voornaam)) {
-            mVoornaamView.setError(getString(R.string.error_invalid_email));
+            mVoornaamView.setError(getString(R.string.error_field_required));
             focusView = mVoornaamView;
             cancel = true;
         }
@@ -104,7 +104,7 @@ public class AddChildActivity extends FragmentActivity {
         }
 
         if (TextUtils.isEmpty(straat)){
-            mStraatView.setError(getString(R.string.error_invalid_password));
+            mStraatView.setError(getString(R.string.error_field_required));
             focusView = mStraatView;
             cancel = true;
         }

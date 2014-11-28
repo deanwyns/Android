@@ -16,7 +16,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/joetz"/>
+            android:src="@drawable/joetz"
+            android:contentDescription="@string/joetz_image_description"/>
 
         <EditText
             android:id="@+id/email_address"

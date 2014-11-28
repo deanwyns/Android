@@ -175,19 +175,17 @@ public class Login extends Activity {
         pattern = Pattern.compile(emailRegEx);
         Matcher matcher = pattern.matcher(email);
 
-        emailValid =  matcher.find() && !TextUtils.isEmpty(email);
+        emailValid =  matcher.find();
     }
 
     private void isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         passwordValid =  !TextUtils.isEmpty(password);
     }
 
     private void changeButtonState(){
         if (emailValid && passwordValid){
             mEmailSignInButton.setEnabled(true);
-            mEmailView.setError(null);
-            mPasswordView.setError(null);
+
         }else{
             mEmailSignInButton.setEnabled(false);
             if (!emailValid)
@@ -218,7 +216,7 @@ public class Login extends Activity {
             });
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
+            //mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -230,7 +228,7 @@ public class Login extends Activity {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
+            //mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
@@ -248,7 +246,6 @@ public class Login extends Activity {
             mEmail = email;
             mPassword = password;
         }
-
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -293,8 +290,6 @@ public class Login extends Activity {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            //showDialog();
-            //mProgressView.setVisibility(View.INVISIBLE);
             if (success) {
                 finish();
             } else {
@@ -307,8 +302,6 @@ public class Login extends Activity {
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
-            //showDialog();
-            //mProgressView.setVisibility(View.INVISIBLE);
         }
     }
 }

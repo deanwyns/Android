@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ScrollView android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" android:id="@+id/register_form">
 
         <LinearLayout
             android:orientation="vertical"
@@ -15,12 +16,14 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/joetz"/>
+                android:src="@drawable/joetz"
+                android:contentDescription="@string/joetz_image_description"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/accountgegevens"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 />
 
             <EditText
@@ -29,7 +32,9 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/telNr"/>
+                android:hint="@string/telNr"
+                android:inputType="numberDecimal"
+                android:digits="0123456789"/>
 
             <EditText
                 android:id="@+id/registreer_email"
@@ -53,7 +58,6 @@
                 android:id="@+id/bevestig_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeActionLabel="string/registreer"
                 android:inputType="textPassword"
                 android:singleLine="true"
                 android:hint="@string/bevestig_password"/>
@@ -62,6 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/gegevens_moeder"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 />
 
             <EditText
@@ -86,12 +91,15 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/rrn"/>
+                android:hint="@string/rrn"
+                android:inputType="numberDecimal"
+                android:digits="0123456789"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/gegevens_vader"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 />
 
             <EditText
@@ -116,7 +124,9 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/rrn"/>
+                android:hint="@string/rrn"
+                android:inputType="numberDecimal"
+                android:digits="0123456789"/>
 
             <Button
                 android:id="@+id/sign_up"
@@ -133,4 +143,23 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/btnCancel_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_margin="4dp"
+        android:visibility="invisible"
+        android:background="@drawable/custom_button"
+        android:textColor="@android:color/white"
+        android:text="@string/cancel"
+        android:layout_gravity="center_vertical"
+        />
+
+    <ProgressBar android:id="@+id/register_progress" style="?android:attr/progressBarStyleLarge"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>
