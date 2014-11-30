@@ -1,6 +1,7 @@
 package hogent.hogentprojecteniii_groep10.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -33,14 +34,17 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
 import hogent.hogentprojecteniii_groep10.helpers.NetworkingMethods;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import hogent.hogentprojecteniii_groep10.persistence.SQLiteHelper;
 import hogent.hogentprojecteniii_groep10.persistence.VacationDataSource;
+import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
 public class VacationsListFragment extends Fragment implements SearchView.OnQueryTextListener {
@@ -61,8 +65,6 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         super.onCreate(savedInstanceState);
         vacationDataSource = new VacationDataSource(getActivity().getApplicationContext());
         prepareRestAdapter();
-        populateVacationList();
-        vacationAdapter = new VacationListAdapter();
     }
 
     private void prepareRestAdapter() {
@@ -77,7 +79,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_vacations_list, container, false);
-        setupListviewAndAdapter();
+        populateVacationList();
         sortByTitleBtn = (Button) view.findViewById(R.id.sort_title_btn);
         sortByDateBtn = (Button) view.findViewById(R.id.sort_date_btn);
         setActionListeners();
@@ -85,43 +87,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     }
 
     private void populateVacationList() {
-
-        //Is er internet?
-        if (NetworkingMethods.isNetworkAvailable(getActivity().getApplicationContext())) {
-            //Er is internet. Haal het van de server afhankelijk of deze DB en de server DB gelijk zijn
-
-            //Is de versie van de db anders dan die op de server?
-            //TODO: Implementeer code voor het checken van versies.
-            if (true) {
-                //De versie is niet gelijk, haal het van de server
-                VacationResponse response = null;
-                try {
-                    response = new AsyncTask<Void, Void, VacationResponse>() {
-                        @Override
-                        protected VacationResponse doInBackground(Void... voids) {
-                            return service.getVacationOverview();
-                        }
-                    }.execute().get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                if (response != null && response.getVacations() != null)
-                    vacationList = response.getVacations();
-
-                //Vervang de DB door de nieuwe vakanties
-                storeVacationsInSQLiteDB(vacationList);
-
-            } else {
-                //De versie is gelijk, haal het uit de android DB
-                vacationList = getVacationsFromSQLiteDB();
-            }
-        } else {
-            //Er is geen internet, haal de vakanties uit de android DB
-            vacationList = getVacationsFromSQLiteDB();
-        }
-
+        new DownloadTask(getActivity()).execute();
     }
 
     private void storeVacationsInSQLiteDB(List<Vacation> vacationList) {
@@ -156,7 +122,6 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         super.onActivityResult(requestCode, resultCode, data);
         vacationAdapter.clear();
         populateVacationList();
-        setupListviewAndAdapter();
         if (requestCode == FILTER_OPTION_REQUEST && data != null) {
             if (data.getBooleanExtra("ageFilterChecked", false)) {
                 int startAge = data.getIntExtra("startAge", 0);
@@ -194,7 +159,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
             public void onClick(View v) {
                 String titleBtnText = sortByTitleBtn.getText().toString();
                 StringBuilder adjustedTitleBtnText = new StringBuilder(titleBtnText);
-                if(titleSortedAscending)
+                if (titleSortedAscending)
                     adjustedTitleBtnText.replace(titleBtnText.length() - 1, titleBtnText.length(), "v");
                 else
                     adjustedTitleBtnText.replace(titleBtnText.length() - 1, titleBtnText.length(), "^");
@@ -203,10 +168,9 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
                 Collections.sort(vacationList, new Comparator<Vacation>() {
                     @Override
                     public int compare(Vacation lhs, Vacation rhs) {
-                        if (!titleSortedAscending){
+                        if (!titleSortedAscending) {
                             return lhs.getTitle().toLowerCase().compareTo(rhs.getTitle().toLowerCase());
-                        }
-                        else{
+                        } else {
                             return rhs.getTitle().toLowerCase().compareTo(lhs.getTitle().toLowerCase());
                         }
                     }
@@ -221,7 +185,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
             public void onClick(View v) {
                 String dateBtnText = sortByDateBtn.getText().toString();
                 StringBuilder adjustedDateBtnText = new StringBuilder(dateBtnText);
-                if(dateSortedAscending)
+                if (dateSortedAscending)
                     adjustedDateBtnText.replace(dateBtnText.length() - 1, dateBtnText.length(), "v");
                 else
                     adjustedDateBtnText.replace(dateBtnText.length() - 1, dateBtnText.length(), "^");
@@ -243,7 +207,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     }
 
     private void setupListviewAndAdapter() {
-        vacationAdapter = new VacationListAdapter();
+        vacationAdapter = new VacationListAdapter(vacationList);
         vacationListView = (ListView) view.findViewById(R.id.vacation_overview_list_view);
         vacationListView.setAdapter(vacationAdapter);
         vacationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -277,11 +241,9 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         if (query.isEmpty()) {
             vacationAdapter.clear();
             populateVacationList();
-            setupListviewAndAdapter();
         }
         return false;
     }
-
 
     public interface OnListItemSelectedListener {
         public void onItemSelected(Vacation vacation);
@@ -289,8 +251,8 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     private class VacationListAdapter extends ArrayAdapter<Vacation> implements Filterable {
 
-        public VacationListAdapter() {
-            super(getActivity().getApplicationContext(), R.layout.vacation_item_view, vacationList);
+        public VacationListAdapter(List<Vacation> vacations) {
+            super(getActivity().getApplicationContext(), R.layout.vacation_item_view, vacations);
         }
 
         @Override
@@ -324,6 +286,56 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
             beginDateTxt.setText(formatter.format(currentVacation.getBeginDate().getTime()));
 
             return itemView;
+        }
+    }
+
+    public class DownloadTask extends AsyncTask<String, Integer, Boolean>{
+        private ProgressDialog progressDialog;
+        private Context currentContext = null;
+
+        public DownloadTask(Context context){
+            currentContext = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(getActivity(), getResources().getString(R.string.getting_vacations), getResources().getString(R.string.please_wait), true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean o) {
+            setupListviewAndAdapter();
+            progressDialog.dismiss();
+            super.onPostExecute(o);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            //Is er internet?
+            if (NetworkingMethods.isNetworkAvailable(getActivity().getApplicationContext())) {
+                //Er is internet. Haal het van de server afhankelijk of deze DB en de server DB gelijk zijn
+
+                //Is de versie van de db anders dan die op de server?
+                //TODO: Implementeer code voor het checken van versies.
+                if (true) {
+                    //De versie is niet gelijk, haal het van de server
+                    VacationResponse response = null;
+                    response = service.getVacationOverview();
+                    if (response != null && response.getVacations() != null)
+                        vacationList = response.getVacations();
+                    //Vervang de DB door de nieuwe vakanties
+                    storeVacationsInSQLiteDB(vacationList);
+
+                } else {
+                    //De versie is gelijk, haal het uit de android DB
+                    vacationList = getVacationsFromSQLiteDB();
+                }
+            } else {
+                //Er is geen internet, haal de vakanties uit de android DB
+                vacationList = getVacationsFromSQLiteDB();
+            }
+            return true;
         }
     }
 }

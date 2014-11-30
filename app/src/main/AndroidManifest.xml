@@ -67,8 +67,7 @@
         </activity>
         <activity
             android:name=".activities.VacationPhotosActivity"
-            android:label="@string/title_activity_vacation_photos"
-            android:screenOrientation="portrait" >
+            android:label="@string/title_activity_vacation_photos" >
         </activity>
     </application>
 

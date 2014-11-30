@@ -1,6 +1,7 @@
 package hogent.hogentprojecteniii_groep10.main;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ public class Main extends Activity {
     private LinearLayout ll;
     private ImageButton getVacationsBtn, getPhotosBtn, getRegistrationsBtn;
     private final static String TAG = "MAIN";
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,6 @@ public class Main extends Activity {
         getVacationsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent vacationOverviewIntent = new Intent(getApplicationContext(), VacationsListActivity.class);
                 startActivity(vacationOverviewIntent);
             }

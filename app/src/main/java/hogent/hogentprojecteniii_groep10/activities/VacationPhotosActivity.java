@@ -25,6 +25,9 @@ import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -152,6 +155,10 @@ public class VacationPhotosActivity extends Activity {
 
         public ImageAdapter(Context c) {
             mContext = c;
+
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+            .build();
+            ImageLoader.getInstance().init(config);
         }
 
         public int getCount() {
@@ -170,19 +177,22 @@ public class VacationPhotosActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             DisplayMetrics dm = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(dm);
-            int screenWidth = dm.widthPixels;
-
-            ImageView imageView;
+            final ImageView imageView;
             if (convertView == null) {  // if it's not recycled, initialize some attributes
                 imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(screenWidth / 3, screenWidth / 3));
+                imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(8, 8, 8, 8);
+                imageView.setPadding(4, 4, 4, 4);
             } else {
                 imageView = (ImageView) convertView;
             }
-            new DownloadImageTask(imageView)
-                    .execute(new ArrayList<String>(thumbnail_url_maps.values()).get(position));
+            //new DownloadImageTask(imageView).execute(new ArrayList<String>(thumbnail_url_maps.values()).get(position));
+            ImageLoader.getInstance().loadImage(new ArrayList<String>(thumbnail_url_maps.values()).get(position), new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    imageView.setImageBitmap(loadedImage);
+                }
+            });
 
             return imageView;
         }

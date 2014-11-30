@@ -16,9 +16,6 @@ public interface RestService {
     @GET("/users/{user}/repos")
     List<Response> listRepos(@Path("user") String user);
 
-    @GET("/data/2.5/weather")
-    WeerOverzichtVoorbeeld getWeerOverzicht(@Query("q") String stadEnLand);
-
     @GET("/vacation")
     VacationResponse getVacationOverview();
 

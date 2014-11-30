@@ -118,5 +118,7 @@
     <string name="joetz_image_description">Joetz image</string>
     <string name="error_invalid_telephonenumber">Foutief telefoonnummer</string>
     <string name="error_invalid_rrn">Geen geldig rijsregisternummer</string>
+    <string name="getting_vacations">Vakanties ophalen</string>
+    <string name="please_wait">Even geduld aub</string>
 
 </resources>

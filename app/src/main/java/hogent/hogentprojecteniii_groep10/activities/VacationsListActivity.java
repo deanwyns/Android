@@ -1,10 +1,12 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -110,5 +112,4 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
         }
         mSearchView.setOnQueryTextListener(fragmentItemsList);
     }
-
 }
