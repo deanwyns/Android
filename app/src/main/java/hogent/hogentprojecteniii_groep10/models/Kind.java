@@ -3,27 +3,36 @@ package hogent.hogentprojecteniii_groep10.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Fabrice on 21/11/2014.
  */
 public class Kind implements Parcelable{
 
+    @SerializedName("lastName")
     private String naam;
+    @SerializedName("firstName")
     private String voornaam;
+    @SerializedName("nrn")
     private String rrn;
+    @SerializedName("streetName")
     private String straat;
+    @SerializedName("houseNumber")
     private String huisnummer;
+    @SerializedName("city")
     private String stad;
-    private String postcode;
+    /*@SerializedName("lastName")
+    private String postcode;*/
 
-    public Kind(String naam, String voornaam, String rrn, String straat, String huisnummer, String stad, String postcode) {
+    public Kind(String naam, String voornaam, String rrn, String straat, String huisnummer, String stad/*, String postcode*/) {
         this.naam = naam;
         this.voornaam = voornaam;
         this.rrn = rrn;
         this.straat = straat;
         this.huisnummer = huisnummer;
         this.stad = stad;
-        this.postcode = postcode;
+        //this.postcode = postcode;
     }
 
     public String getNaam() {
@@ -50,9 +59,9 @@ public class Kind implements Parcelable{
         return stad;
     }
 
-    public String getPostcode() {
+   /*public String getPostcode() {
         return postcode;
-    }
+    }*/
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -62,7 +71,7 @@ public class Kind implements Parcelable{
         dest.writeString(straat);
         dest.writeString(huisnummer);
         dest.writeString(stad);
-        dest.writeString(postcode);
+        //dest.writeString(postcode);
     }
 
     private Kind() {
@@ -78,7 +87,7 @@ public class Kind implements Parcelable{
             kind.straat = source.readString();
             kind.huisnummer = source.readString();
             kind.stad = source.readString();
-            kind.postcode = source.readString();
+            //kind.postcode = source.readString();
 
             return kind;
         }

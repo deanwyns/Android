@@ -1,12 +1,15 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -42,6 +45,7 @@ public class AddChildActivity extends FragmentActivity {
     private EditText mNaamView, mVoornaamView, mRrnView, mStraatView, mHuisnummerView, mPostcodeView, mStadView;
     private Button mToevoegenButton;
     private UserAddChildTask mAuthTask = null;
+    private boolean isNaamValid, isVoornaamValid, isRrnValid, isHuisnummerValid, isZipCodeValid, isStraatValid, isStadValid;
 
 
     @Override
@@ -69,10 +73,217 @@ public class AddChildActivity extends FragmentActivity {
             }
         });
 
+        mStadView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                boolean isValidKey = keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+                boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
+
+                if ((isValidAction || isValidKey)&& isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid){
+                    attemptAdd();
+                }
+                return false;
+            }
+        });
+
+        mNaamView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isNaamValid = !s.toString().isEmpty();
+                changeButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mVoornaamView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isVoornaamValid = !s.toString().isEmpty();
+                changeButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mRrnView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isRrnValid(s.toString());
+                changeButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mPostcodeView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isZipCodeValid(s.toString());
+                changeButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mHuisnummerView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isHuisnummerValid = !s.toString().isEmpty();
+                changeButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mStadView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isStadValid = !s.toString().isEmpty();
+                changeButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mStraatView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                isStraatValid = !s.toString().isEmpty();
+                changeButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+    }
+
+    private void isRrnValid(String rrn){
+        if (rrn.length()==11) {
+            isRrnValid = true;
+            /*int rrnNumber = Integer.parseInt(rrn.substring(0, 8));
+            int modulo = rrnNumber % 97;
+
+            return ((97 - modulo)-Integer.parseInt(rrn.substring(9)))==0;*/
+        }else
+            isRrnValid =  false;
+
+    }
+
+    private void isZipCodeValid(String zipCode){
+        String zipCoderegex;
+        Pattern pattern;
+        // Regex for a valid email address
+        zipCoderegex = "[1-9]\\d{3}";
+        // Compare the regex with the email address
+        pattern = Pattern.compile(zipCoderegex);
+        Matcher matcher = pattern.matcher(zipCode);
+
+        isZipCodeValid =  matcher.find();
+    }
+
+    private void changeButtonState(){
+        if (isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid){
+            mToevoegenButton.setEnabled(true);
+        }else{
+            mToevoegenButton.setEnabled(false);
+
+            if (isHuisnummerValid)
+                mHuisnummerView.setTextColor(Color.rgb(80, 200, 120));
+            else
+                mHuisnummerView.setTextColor(Color.RED);
+
+            if (isNaamValid)
+                mNaamView.setTextColor(Color.rgb(80, 200, 120));
+            else
+                mNaamView.setTextColor(Color.RED);
+
+            if (isVoornaamValid)
+                mVoornaamView.setTextColor(Color.rgb(80, 200, 120));
+            else
+                mVoornaamView.setTextColor(Color.RED);
+
+            if (isRrnValid)
+                mRrnView.setTextColor(Color.rgb(80, 200, 120));
+            else
+                mRrnView.setTextColor(Color.RED);
+
+            if (isZipCodeValid)
+                mPostcodeView.setTextColor(Color.rgb(80, 200, 120));
+            else
+                mPostcodeView.setTextColor(Color.RED);
+
+            if (isStadValid)
+                mStadView.setTextColor(Color.rgb(80, 200, 120));
+            else
+                mStadView.setTextColor(Color.RED);
+
+            if (isStraatValid)
+                mStraatView.setTextColor(Color.rgb(80, 200, 120));
+            else
+                mStraatView.setTextColor(Color.RED);
+
+        }
+
     }
 
     public void attemptAdd() {
-        resetErrors();
 
         String naam = mNaamView.getText().toString();
         String voornaam = mVoornaamView.getText().toString();
@@ -82,69 +293,12 @@ public class AddChildActivity extends FragmentActivity {
         String postcode = mPostcodeView.getText().toString();
         String stad = mStadView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
+        Kind child = new Kind(naam, voornaam, rrn, straat, huisnummer,stad/*, postcode*/);
 
-        if (TextUtils.isEmpty(naam)) {
-            mNaamView.setError(getString(R.string.error_field_required));
-            focusView = mNaamView;
-            cancel = true;
-        }
+        mAuthTask = new UserAddChildTask(child);
+        mAuthTask.execute((Void) null);
 
-        if (TextUtils.isEmpty(voornaam)) {
-            mVoornaamView.setError(getString(R.string.error_field_required));
-            focusView = mVoornaamView;
-            cancel = true;
-        }
 
-        if (TextUtils.isEmpty(rrn)) {
-            mRrnView.setError(getString(R.string.error_field_required));
-            focusView = mRrnView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(straat)){
-            mStraatView.setError(getString(R.string.error_field_required));
-            focusView = mStraatView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(huisnummer)) {
-            mHuisnummerView.setError(getString(R.string.error_field_required));
-            focusView = mHuisnummerView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(postcode)) {
-            mPostcodeView.setError(getString(R.string.error_field_required));
-            focusView = mPostcodeView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(stad)) {
-            mStadView.setError(getString(R.string.error_field_required));
-            focusView = mStadView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            focusView.requestFocus();
-        } else {
-            Kind kind = new Kind(naam,voornaam,rrn, straat,huisnummer, stad, postcode);
-            mAuthTask = new UserAddChildTask(kind);
-            mAuthTask.execute((Void) null);
-        }
-
-    }
-
-    public void resetErrors() {
-        mNaamView.setError(null);
-        mVoornaamView.setError(null);
-        mRrnView.setError(null);
-        mStadView.setError(null);
-        mStraatView.setError(null);
-        mHuisnummerView.setError(null);
-        mPostcodeView.setError(null);
     }
 
     public class UserAddChildTask extends AsyncTask<Void, Void, Boolean> {
@@ -159,15 +313,7 @@ public class AddChildActivity extends FragmentActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
 
-            Map<String, String> addChildParamMap = new HashMap<String, String>();
-            addChildParamMap.put("firstName", mKind.getVoornaam());
-            addChildParamMap.put("lastName", mKind.getNaam());
-            addChildParamMap.put("streetName", mKind.getStraat());
-            addChildParamMap.put("houseNumber", mKind.getHuisnummer());
-            addChildParamMap.put("city", mKind.getStad());
-            addChildParamMap.put("nrn", mKind.getRrn());
-
-            sendAddChildRequest(addChildParamMap);
+            sendAddChildRequest(mKind);
             return true;
         }
 
@@ -182,20 +328,20 @@ public class AddChildActivity extends FragmentActivity {
             }
         }
 
-        private void sendAddChildRequest(Map<String, String> addChildParamMap){
+        private void sendAddChildRequest(Kind mKind){
 
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
             RestAdapter restAdapter = new RestAdapter.Builder()
+
                     .setEndpoint("http://lloyd.deanwyns.me/api")
-                    .setConverter(new GsonConverter(gson))
                     .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
+
             RestService service = restAdapter.create(RestService.class);
 
             Callback<String> kind = new Callback<String>() {
                 @Override
-                public void success(String gebruiker, Response response) {
-                    //Log.i(TAG, gebruiker.toString());
+                public void success(String kind, Response response) {
+                    //Log.i(TAG, kind.toString());
                     response.getBody();
                     Toast.makeText(getBaseContext(), "Toegevoegd", Toast.LENGTH_SHORT).show();
                 }
@@ -207,7 +353,7 @@ public class AddChildActivity extends FragmentActivity {
                 }
 
             };
-            service.addChild(addChildParamMap);
+            service.addChild(mKind, kind);
         }
 
         @Override

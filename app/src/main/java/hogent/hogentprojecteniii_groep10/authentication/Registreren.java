@@ -476,10 +476,8 @@ public class Registreren extends Activity {
 
         private void sendSignUpRequest(Map<String, String> signupParamMap){
 
-            //Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint("http://lloyd.deanwyns.me/api")
-                    //.setConverter(new GsonConverter(gson))
                     .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
             RestService service = restAdapter.create(RestService.class);

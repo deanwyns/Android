@@ -48,7 +48,9 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/rrn"/>
+                android:hint="@string/rrn"
+                android:inputType="numberDecimal"
+                android:digits="0123456789"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -94,7 +96,8 @@
                 android:background="@drawable/custom_button"
                 android:textColor="@android:color/white"
                 android:text="@string/toevoegen"
-                android:id="@+id/toevoegen_btn_add_child" />
+                android:id="@+id/toevoegen_btn_add_child"
+                android:enabled="false"/>
 
         </LinearLayout>
     </ScrollView>
