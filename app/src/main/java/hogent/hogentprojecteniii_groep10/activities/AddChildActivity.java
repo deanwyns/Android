@@ -1,6 +1,9 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -10,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -30,7 +34,10 @@ import java.util.regex.Pattern;
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
 import hogent.hogentprojecteniii_groep10.fragments.VacationDetailFragment;
+import hogent.hogentprojecteniii_groep10.helpers.RestClient;
+import hogent.hogentprojecteniii_groep10.helpers.SessionRequestInterceptor;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
+import hogent.hogentprojecteniii_groep10.main.Main;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
@@ -42,6 +49,7 @@ import retrofit.converter.GsonConverter;
 
 
 public class AddChildActivity extends FragmentActivity {
+
     private EditText mNaamView, mVoornaamView, mRrnView, mStraatView, mHuisnummerView, mPostcodeView, mStadView;
     private Button mToevoegenButton;
     private UserAddChildTask mAuthTask = null;
@@ -56,7 +64,7 @@ public class AddChildActivity extends FragmentActivity {
         mNaamView = (EditText) findViewById(R.id.lastname_add_child);
         mVoornaamView = (EditText) findViewById(R.id.firstname_add_child);
         mRrnView = (EditText) findViewById(R.id.rrn_add_child);
-        mStraatView = (EditText) findViewById(R.id.naam_vader);
+        mStraatView = (EditText) findViewById(R.id.straat_add_child);
         mHuisnummerView = (EditText) findViewById(R.id.huisnummer_add_child);
         mPostcodeView = (EditText) findViewById(R.id.postcode_add_child);
         mStadView = (EditText) findViewById(R.id.stad_add_child);
@@ -230,7 +238,7 @@ public class AddChildActivity extends FragmentActivity {
         String zipCoderegex;
         Pattern pattern;
         // Regex for a valid email address
-        zipCoderegex = "[1-9]\\d{3}";
+        zipCoderegex = "[1-9]\\d{3}$";
         // Compare the regex with the email address
         pattern = Pattern.compile(zipCoderegex);
         Matcher matcher = pattern.matcher(zipCode);
@@ -238,49 +246,51 @@ public class AddChildActivity extends FragmentActivity {
         isZipCodeValid =  matcher.find();
     }
 
+    private void setErrors(){
+        if (isHuisnummerValid)
+            mHuisnummerView.setTextColor(Color.rgb(80, 200, 120));
+        else
+            mHuisnummerView.setTextColor(Color.RED);
+
+        if (isNaamValid)
+            mNaamView.setTextColor(Color.rgb(80, 200, 120));
+        else
+            mNaamView.setTextColor(Color.RED);
+
+        if (isVoornaamValid)
+            mVoornaamView.setTextColor(Color.rgb(80, 200, 120));
+        else
+            mVoornaamView.setTextColor(Color.RED);
+
+        if (isRrnValid)
+            mRrnView.setTextColor(Color.rgb(80, 200, 120));
+        else
+            mRrnView.setTextColor(Color.RED);
+
+        if (isZipCodeValid)
+            mPostcodeView.setTextColor(Color.rgb(80, 200, 120));
+        else
+            mPostcodeView.setTextColor(Color.RED);
+
+        if (isStadValid)
+            mStadView.setTextColor(Color.rgb(80, 200, 120));
+        else
+            mStadView.setTextColor(Color.RED);
+
+        if (isStraatValid)
+            mStraatView.setTextColor(Color.rgb(80, 200, 120));
+        else
+            mStraatView.setTextColor(Color.RED);
+    }
+
     private void changeButtonState(){
         if (isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid){
             mToevoegenButton.setEnabled(true);
-        }else{
+            setErrors();
+        }else {
             mToevoegenButton.setEnabled(false);
-
-            if (isHuisnummerValid)
-                mHuisnummerView.setTextColor(Color.rgb(80, 200, 120));
-            else
-                mHuisnummerView.setTextColor(Color.RED);
-
-            if (isNaamValid)
-                mNaamView.setTextColor(Color.rgb(80, 200, 120));
-            else
-                mNaamView.setTextColor(Color.RED);
-
-            if (isVoornaamValid)
-                mVoornaamView.setTextColor(Color.rgb(80, 200, 120));
-            else
-                mVoornaamView.setTextColor(Color.RED);
-
-            if (isRrnValid)
-                mRrnView.setTextColor(Color.rgb(80, 200, 120));
-            else
-                mRrnView.setTextColor(Color.RED);
-
-            if (isZipCodeValid)
-                mPostcodeView.setTextColor(Color.rgb(80, 200, 120));
-            else
-                mPostcodeView.setTextColor(Color.RED);
-
-            if (isStadValid)
-                mStadView.setTextColor(Color.rgb(80, 200, 120));
-            else
-                mStadView.setTextColor(Color.RED);
-
-            if (isStraatValid)
-                mStraatView.setTextColor(Color.rgb(80, 200, 120));
-            else
-                mStraatView.setTextColor(Color.RED);
-
+            setErrors();
         }
-
     }
 
     public void attemptAdd() {
@@ -293,50 +303,72 @@ public class AddChildActivity extends FragmentActivity {
         String postcode = mPostcodeView.getText().toString();
         String stad = mStadView.getText().toString();
 
-        Kind child = new Kind(naam, voornaam, rrn, straat, huisnummer,stad/*, postcode*/);
+        Kind child = new Kind(naam, voornaam, rrn, straat, huisnummer,stad, postcode);
 
         mAuthTask = new UserAddChildTask(child);
         mAuthTask.execute((Void) null);
-
 
     }
 
     public class UserAddChildTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Kind mKind;
+        private RestClient restClient;
+        private ProgressDialog progressDialog;
 
         public UserAddChildTask(Kind kind) {
             this.mKind =kind;
 
+            SharedPreferences sharedPref =
+                    getApplication().
+                            getSharedPreferences(getString(R.string.authorization_preference_file),
+                                    Context.MODE_PRIVATE);
+            String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
+            restClient = new RestClient(token);
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(AddChildActivity.this, getResources().getString(R.string.title_login), getResources().getString(R.string.please_wait), true);
+            super.onPreExecute();
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
 
-            sendAddChildRequest(mKind);
+            Map<String, String> addChildParamMap = new HashMap<String, String>();
+
+            addChildParamMap.put("firstName", mKind.getFirstName());
+            addChildParamMap.put("lastName", mKind.getLastName());
+            addChildParamMap.put("streetName", mKind.getStreetName());
+            addChildParamMap.put("houseNumber", mKind.getHouseNumber());
+            addChildParamMap.put("city", mKind.getCity());
+            addChildParamMap.put("postalCode", mKind.getPostalCode());
+            addChildParamMap.put("nrn", mKind.getNrn());
+
+            sendAddChildRequest(addChildParamMap);
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
+            progressDialog.dismiss();
 
             if (success) {
-                Intent vacationSignUp = new Intent(getApplicationContext(), VacationSignupActivity.class);
+                /*Intent vacationSignUp = new Intent(getApplicationContext(), VacationSignupActivity.class);
+                startActivity(vacationSignUp);*/
+                finish();
+            }
+            else {
+                Intent vacationSignUp = new Intent(getApplicationContext(), Main.class);
                 startActivity(vacationSignUp);
                 finish();
             }
         }
 
-        private void sendAddChildRequest(Kind mKind){
-
-            RestAdapter restAdapter = new RestAdapter.Builder()
-
-                    .setEndpoint("http://lloyd.deanwyns.me/api")
-                    .setLogLevel(RestAdapter.LogLevel.FULL)
-                    .build();
-
-            RestService service = restAdapter.create(RestService.class);
+        private void sendAddChildRequest(Map <String, String> addChildParamMap){
 
             Callback<String> kind = new Callback<String>() {
                 @Override
@@ -348,12 +380,11 @@ public class AddChildActivity extends FragmentActivity {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    error.printStackTrace();
-                    error.getCause();
+
                 }
 
             };
-            service.addChild(mKind, kind);
+            restClient.getRestService().addChild(addChildParamMap, kind);
         }
 
         @Override

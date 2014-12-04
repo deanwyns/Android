@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +34,7 @@ import java.util.regex.Pattern;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.helpers.NetworkingMethods;
+import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
 import retrofit.RestAdapter;
@@ -160,7 +162,7 @@ public class Login extends Activity {
         String password = mPasswordView.getText().toString();
 
             //mProgressView.setVisibility(View.VISIBLE);
-            showProgress(true);
+            //showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
 
@@ -241,10 +243,19 @@ public class Login extends Activity {
 
         private final String mEmail;
         private final String mPassword;
+        private ProgressDialog progressDialog;
+        private RestClient restClient = new RestClient();
 
         public UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(Login.this, getResources().getString(R.string.title_login), getResources().getString(R.string.please_wait), true);
+            super.onPreExecute();
         }
 
         @Override
@@ -264,13 +275,14 @@ public class Login extends Activity {
 
         private boolean sendLoginRequest(final Map<String, String> loginParameterMap) {
 
-            RestAdapter restAdapter = new RestAdapter.Builder()
+            /*RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint("http://lloyd.deanwyns.me/api")
                     .build();
-            RestService service = restAdapter.create(RestService.class);
+            RestService service = restAdapter.create(RestService.class);*/
+
             LoginToken loginToken;
             try {
-                loginToken = service.login(loginParameterMap);
+                loginToken = restClient.getRestService().login(loginParameterMap);
                 if (loginToken != null) {
                     SharedPreferences sharedPref = getApplication()
                             .getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
@@ -289,7 +301,8 @@ public class Login extends Activity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
+            progressDialog.dismiss();
+            //showProgress(false);
             if (success) {
                 finish();
             } else {
@@ -301,7 +314,8 @@ public class Login extends Activity {
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            showProgress(false);
+            progressDialog.dismiss();
+            //showProgress(false);
         }
     }
 }

@@ -29,7 +29,7 @@ public interface RestService {
     void register(@FieldMap Map<String, String> options, Callback<String> callback);
 
     @FormUrlEncoded
-    @POST("/me/children")
-    void addChild(@Body Kind kind, Callback<String> callback);
+    @POST("/user/me/children")
+    void addChild(@FieldMap Map<String, String> options, Callback<String> callback);
 
 }

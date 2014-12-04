@@ -69,6 +69,13 @@
             android:name=".activities.VacationPhotosActivity"
             android:label="@string/title_activity_vacation_photos" >
         </activity>
+
+        <activity
+            android:name=".activities.AddChildActivity"
+            android:label="@string/title_activity_add_child"
+            android:parentActivityName=".activities.VacationSignupActivity">
+        </activity>
+
     </application>
 
 </manifest>

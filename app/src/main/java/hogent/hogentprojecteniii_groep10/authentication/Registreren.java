@@ -4,14 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -20,23 +19,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
-import hogent.hogentprojecteniii_groep10.models.Ouder;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.converter.GsonConverter;
 
 /**
  * Created by Fabrice on 6/11/2014.
@@ -433,11 +428,18 @@ public class Registreren extends Activity {
 
         private final Gebruiker mGebruiker;
         private final String passwordConfirmed;
+        private ProgressDialog progressDialog;
+        private RestClient restClient = new RestClient();
 
         public UserRegisterTask(Gebruiker gebruiker, String passwordConfirmed) {
            this.mGebruiker=gebruiker;
-            this.passwordConfirmed=passwordConfirmed;
+           this.passwordConfirmed=passwordConfirmed;
+        }
 
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(Registreren.this, getResources().getString(R.string.title_registreren), getResources().getString(R.string.please_wait), true);
+            super.onPreExecute();
         }
 
         @Override
@@ -463,47 +465,41 @@ public class Registreren extends Activity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
+            //showProgress(false);
+            progressDialog.dismiss();
             if (success) {
                 Intent loginIntent = new Intent(getApplicationContext(), Login.class);
                 startActivity(loginIntent);
                 finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
             }
+
         }
 
         private void sendSignUpRequest(Map<String, String> signupParamMap){
 
-            RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint("http://lloyd.deanwyns.me/api")
-                    .setLogLevel(RestAdapter.LogLevel.FULL)
-                    .build();
-            RestService service = restAdapter.create(RestService.class);
-
             Callback<String> gebruiker = new Callback<String>() {
                 @Override
                 public void success(String gebruiker, Response response) {
-                    //Log.i(TAG, gebruiker.toString());
                     response.getBody();
                     Toast.makeText(getBaseContext(), "Geregistreerd", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    error.printStackTrace();
 
+                    error.printStackTrace();
+                    Toast.makeText(getBaseContext(), error.getResponse().toString(), Toast.LENGTH_SHORT).show();
                 }
 
             };
-            service.register(signupParamMap, gebruiker);
+            restClient.getRestService().register(signupParamMap, gebruiker);
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            showProgress(false);
+            progressDialog.dismiss();
+            //showProgress(false);
         }
     }
  }

@@ -8,105 +8,107 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Fabrice on 21/11/2014.
  */
-public class Kind implements Parcelable{
+
+public class Kind implements Parcelable {
 
     @SerializedName("lastName")
-    private String naam;
+    private String lastName;
     @SerializedName("firstName")
-    private String voornaam;
+    private String firstName;
     @SerializedName("nrn")
-    private String rrn;
+    private String nrn;
     @SerializedName("streetName")
-    private String straat;
+    private String streetName;
     @SerializedName("houseNumber")
-    private String huisnummer;
+    private String houseNumber;
     @SerializedName("city")
-    private String stad;
-    /*@SerializedName("lastName")
-    private String postcode;*/
+    private String city;
+    @SerializedName("postalCode")
+    private String postalCode;
 
-    public Kind(String naam, String voornaam, String rrn, String straat, String huisnummer, String stad/*, String postcode*/) {
-        this.naam = naam;
-        this.voornaam = voornaam;
-        this.rrn = rrn;
-        this.straat = straat;
-        this.huisnummer = huisnummer;
-        this.stad = stad;
-        //this.postcode = postcode;
+    public Kind(String naam, String voornaam, String rrn, String straat, String huisnummer, String stad, String postcode) {
+        this.lastName = naam;
+        this.firstName = voornaam;
+        this.nrn = rrn;
+        this.streetName = straat;
+        this.houseNumber = huisnummer;
+        this.city = stad;
+        this.postalCode = postcode;
     }
 
-    public String getNaam() {
-        return naam;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getVoornaam() {
-        return voornaam;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getRrn() {
-        return rrn;
+    public String getNrn() {
+        return nrn;
     }
 
-    public String getStraat() {
-        return straat;
+    public String getStreetName() {
+        return streetName;
     }
 
-    public String getHuisnummer() {
-        return huisnummer;
+    public String getHouseNumber() {
+        return houseNumber;
     }
 
-    public String getStad() {
-        return stad;
+    public String getCity() {
+        return city;
     }
 
-   /*public String getPostcode() {
-        return postcode;
-    }*/
+
+    public String getPostalCode() {
+        return postalCode;
+    }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(naam);
-        dest.writeString(voornaam);
-        dest.writeString(rrn);
-        dest.writeString(straat);
-        dest.writeString(huisnummer);
-        dest.writeString(stad);
-        //dest.writeString(postcode);
+        dest.writeString(lastName);
+        dest.writeString(firstName);
+        dest.writeString(nrn);
+        dest.writeString(streetName);
+        dest.writeString(houseNumber);
+        dest.writeString(city);
+        dest.writeString(postalCode);
     }
 
-    private Kind() {
+        protected Kind(Parcel in) {
+            lastName = in.readString();
+            firstName = in.readString();
+            nrn = in.readString();
+            streetName = in.readString();
+            houseNumber = in.readString();
+            city = in.readString();
+            postalCode = in.readString();
+        }
 
+
+
+        @SuppressWarnings("unused")
+        public static final Parcelable.Creator<Kind> CREATOR = new Parcelable.Creator<Kind>() {
+            @Override
+            public Kind createFromParcel(Parcel in) {
+                return new Kind(in);
+            }
+
+            @Override
+            public Kind[] newArray(int size) {
+                return new Kind[size];
+            }
+        };
+
+    @Override
+    public String toString() {
+        return this.firstName + " " + this.lastName;
     }
-
-    public static final Parcelable.Creator<Kind> CREATOR = new Parcelable.Creator<Kind>() {
-        public Kind createFromParcel(Parcel source) {
-            Kind kind = new Kind();
-            kind.naam = source.readString();
-            kind.voornaam = source.readString();
-            kind.rrn = source.readString();
-            kind.straat = source.readString();
-            kind.huisnummer = source.readString();
-            kind.stad = source.readString();
-            //kind.postcode = source.readString();
-
-            return kind;
-        }
-
-        @Override
-        public Kind[] newArray(int size) {
-            return new Kind[size];
-        }
-
-    };
 
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public String toString() {
-        return this.voornaam + " " + this.naam;
     }
 
 }
