@@ -3,6 +3,7 @@ package hogent.hogentprojecteniii_groep10.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -72,6 +73,14 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.vacation_billing, menu);
+        if( getActionBar() != null)
+            getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        return true;
     }
 
     private boolean validateTextFields() {

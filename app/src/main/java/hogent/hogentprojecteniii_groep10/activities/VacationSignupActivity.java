@@ -27,7 +27,7 @@ public class VacationSignupActivity extends Activity {
 
     private Button addChildToAccountBtn, goToBillingBtn, addChildSpinnerBtn;
     private LinearLayout childrenSpinnerLayout;
-    private Spinner firstChildSpinner;
+    //private Spinner firstChildSpinner;
     private List<Spinner> spinnerList = new ArrayList<Spinner>();
 
     private Gebruiker[] tempArray;
@@ -45,9 +45,8 @@ public class VacationSignupActivity extends Activity {
         goToBillingBtn = (Button) findViewById(R.id.go_to_billing_btn);
         addChildSpinnerBtn = (Button) findViewById(R.id.add_child_spinner_btn);
         childrenSpinnerLayout = (LinearLayout) findViewById(R.id.linear_layout_children_spinners);
-        firstChildSpinner  = (Spinner) findViewById(R.id.first_child_spinner);
-
-        spinnerList.add(firstChildSpinner);
+        //firstChildSpinner  = (Spinner) findViewById(R.id.first_child_spinner);
+        //spinnerList.add(firstChildSpinner);
 
         Gebruiker child1 = new Gebruiker("email", "pass", "000", "Kind1", "Kind1", "000", "ouder1", "ouder2", "000");
         Gebruiker child2 = new Gebruiker("email2", "pass2", "000", "Kind2", "Kind2", "000", "ouder1", "ouder2", "000");
@@ -56,7 +55,13 @@ public class VacationSignupActivity extends Activity {
 
         adapter = new ArrayAdapter<Gebruiker>(getApplicationContext(), android.R.layout.simple_spinner_item, tempArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        firstChildSpinner.setAdapter(adapter);
+        //firstChildSpinner.setAdapter(adapter);
+
+        //Vervanging van spinner uit XML omdat je niet zomaar themes & styles kan toepassen in code
+        Spinner childSpinner = new Spinner(getApplicationContext(), null, android.R.attr.spinnerStyle);
+        spinnerList.add(childSpinner);
+        childSpinner.setAdapter(adapter);
+        childrenSpinnerLayout.addView(childSpinner);
 
         setUpListeners();
     }
