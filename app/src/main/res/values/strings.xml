@@ -3,7 +3,7 @@
 
     <string name="app_name">Joetz Vakanties</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Instellingen</string>
     <string name="nieuwsoverzicht">Nieuwsoverzicht</string>
     <string name="newsfeed">Foto\'s van jou zijn toegevoegd aan actiekamp\nJoetz is cool!\nNog een hoogtepunt</string>
     <string name="title_activity_vacation_overview">Vakanties</string>
@@ -129,5 +129,9 @@
     <string name="naam">Naam</string>
     <string name="find_monitor">Monitor zoeken</string>
     <string name="monitor_not_found">De monitor is niet gevonden.</string>
+    <string name="title_activity_main_settings">Instellingen</string>
+    <string name="pref_title_logged_in_as_child">Ingelogd als kind</string>
+    <string name="pref_summary_logged_in_as_child">Als kind zie je niet alle zaken in de app.</string>
+    <string name="specific_vavaction_more_information">Indien u meer informatie wilt, gelieve de app in oudermodus te bekijken! Klik hier om te veranderen!</string>
 
 </resources>

@@ -62,6 +62,10 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case(R.id.action_settings):
+                Intent settings = new Intent(getApplicationContext(), MainSettingsActivity.class);
+                startActivity(settings);
+                return true;
             case(android.R.id.home):
                 finish();
                 //overridePendingTransition(R.anim.slide_leave, R.anim.slide_enter);

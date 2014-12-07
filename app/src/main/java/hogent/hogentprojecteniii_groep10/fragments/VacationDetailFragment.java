@@ -1,17 +1,23 @@
 package hogent.hogentprojecteniii_groep10.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.activities.MainSettingsActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationPhotosActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationSignupActivity;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
@@ -25,7 +31,6 @@ public class VacationDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         vacation = (Vacation) getArguments().getParcelable("SpecificVacation");
-
 
     }
 
@@ -84,7 +89,43 @@ public class VacationDetailFragment extends Fragment {
                 vacation.getOneBmMemberCost(), getResources().getString(R.string.beideOudersLidBM), vacation.getTwoBmMemberCost()));
         vacationTaxDeductableTextView.setText((vacation.isTaxDeductable()==1 ? R.string.ja : R.string.nee));
 
+
+        //Zaken verbergen als ingelogd als kind
+        TextView taxDeductableTitle = (TextView) view.findViewById(R.id.specific_vacation_tax_deductable_title);
+        TextView priceTitle = (TextView) view.findViewById(R.id.specific_vacation_price_title);
+        TextView discountPriceTitle = (TextView) view.findViewById(R.id.specific_vacation_discount_price_title);
+        TextView moreInformationLbl = (TextView) view.findViewById(R.id.specific_vacation_more_information);
+
+        moreInformationLbl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settings = new Intent(getActivity().getApplicationContext(), MainSettingsActivity.class);
+                startActivity(settings);
+            }
+        });
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean loggedInAsChild = sharedPref.getBoolean(MainSettingsActivity.LOGGED_IN_AS_CHILD, false);
+        if(loggedInAsChild){
+            makeTextViewsVisible(moreInformationLbl);
+            makeTextViewsGone(vacationDiscountPriceTextView, vacationPriceTextView, vacationTaxDeductableTextView, taxDeductableTitle, priceTitle, discountPriceTitle);
+        }else{
+            makeTextViewsGone(moreInformationLbl);
+            makeTextViewsVisible(vacationDiscountPriceTextView, vacationPriceTextView, vacationTaxDeductableTextView, taxDeductableTitle, priceTitle, discountPriceTitle);
+        }
+
         return view;
+    }
+
+    //Kan ook in 1 methode, maar dit vind ik duidelijker
+    private void makeTextViewsVisible(TextView... textViews) {
+        for(TextView textView : textViews)
+            textView.setVisibility(View.VISIBLE);
+    }
+
+    private void makeTextViewsGone(TextView... textViews) {
+        for(TextView textView : textViews)
+            textView.setVisibility(View.GONE);
     }
 
     public static VacationDetailFragment newInstance(Vacation vacation) {

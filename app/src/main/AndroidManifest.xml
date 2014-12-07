@@ -77,7 +77,12 @@
         <activity
             android:name=".activities.FindMonitorActivity"
             android:label="@string/title_activity_find_monitor"
-            android:parentActivityName=".main.Main">
+            android:parentActivityName=".main.Main" >
+        </activity>
+        <activity
+            android:name=".activities.MainSettingsActivity"
+            android:label="@string/title_activity_main_settings"
+            android:parentActivityName=".activities.VacationsListActivity" >
         </activity>
     </application>
 

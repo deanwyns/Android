@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.activities.FindMonitorActivity;
+import hogent.hogentprojecteniii_groep10.activities.MainSettingsActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
 
@@ -107,7 +108,8 @@ public class Main extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent settings = new Intent(getApplicationContext(), MainSettingsActivity.class);
+            startActivity(settings);
         } else if (id == R.id.action_login) {
             Intent login = new Intent(getApplicationContext(), Login.class);
             startActivity(login);

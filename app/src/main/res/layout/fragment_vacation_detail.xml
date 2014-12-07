@@ -205,6 +205,12 @@
                 android:text="Placeholder text"
                 android:id="@+id/specific_vacation_tax_deductable_text" />
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/specific_vavaction_more_information"
+                android:id="@+id/specific_vacation_more_information" />
+
 
             <LinearLayout
                 android:orientation="horizontal"
