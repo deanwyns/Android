@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.activities.FindMonitorActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
 
@@ -110,6 +111,9 @@ public class Main extends Activity {
         } else if (id == R.id.action_login) {
             Intent login = new Intent(getApplicationContext(), Login.class);
             startActivity(login);
+        } else if (id == R.id.action_find_monitor){
+            Intent findMonitor = new Intent(getApplicationContext(), FindMonitorActivity.class);
+            startActivity(findMonitor);
         }
         return super.onOptionsItemSelected(item);
     }

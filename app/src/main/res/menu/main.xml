@@ -6,8 +6,12 @@
         android:icon="@drawable/ic_action_accounts"
         android:title="@string/action_login"
         android:showAsAction="ifRoom" />
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <!--<item android:id="@+id/action_settings"-->
+        <!--android:title="@string/action_settings"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:showAsAction="never" />-->
+    <item android:id="@+id/action_find_monitor"
+        android:title="@string/find_monitor"
         android:orderInCategory="100"
         android:showAsAction="never" />
 </menu>

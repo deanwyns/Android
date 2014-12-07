@@ -69,13 +69,16 @@
             android:name=".activities.VacationPhotosActivity"
             android:label="@string/title_activity_vacation_photos" >
         </activity>
-
         <activity
             android:name=".activities.AddChildActivity"
             android:label="@string/title_activity_add_child"
-            android:parentActivityName=".activities.VacationSignupActivity">
+            android:parentActivityName=".activities.VacationSignupActivity" >
         </activity>
-
+        <activity
+            android:name=".activities.FindMonitorActivity"
+            android:label="@string/title_activity_find_monitor"
+            android:parentActivityName=".main.Main">
+        </activity>
     </application>
 
 </manifest>

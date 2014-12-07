@@ -122,5 +122,12 @@
     <string name="please_wait">Even geduld aub</string>
     <string name="title_activity_add_child">Kind Toevoegen</string>
     <string name="action_logout">Uitloggen</string>
+    <string name="title_activity_find_monitor">Zoek een begeleider</string>
+    <string name="monitor_name">Naam</string>
+    <string name="search">Zoeken!</string>
+    <string name="find_monitor_help">Geef een deel of de volledige naam in van de monitor die je wilt zoeken.\nDruk daarna op zoeken!</string>
+    <string name="naam">Naam</string>
+    <string name="find_monitor">Monitor zoeken</string>
+    <string name="monitor_not_found">De monitor is niet gevonden.</string>
 
 </resources>
