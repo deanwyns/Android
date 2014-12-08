@@ -24,6 +24,10 @@ import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
+/**
+ * Laat toe om betalingsgegevens in te vullen tijdens het inschrijven.
+ * Implementeert textwatcher om controle te doen op de gegevens.
+ */
 public class VacationBillingActivity extends Activity implements TextWatcher {
 
     private Vacation selectedVacation;
@@ -31,6 +35,10 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
     private EditText streetAndHousenumberTxt, postalCodeAndCityTxt, firstnameTxt, nameTxt;
     private Button goToBillingOverviewBtn;
 
+    /**
+     * Initialiseert de activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +83,11 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
 
     }
 
+    /**
+     * Zal het menu aanmaken van deze activity
+     * @param menu het menu dat wordt aangepast
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vacation_billing, menu);
@@ -83,6 +96,10 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
         return true;
     }
 
+    /**
+     * Zal de textfields valideren en fouten weergeven.
+     * @return true als alle velden correct zijn ingevuld
+     */
     private boolean validateTextFields() {
         Pattern postalCodeAndCityPattern = Pattern.compile("^[1-9][0-9]{3} [a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$");
         Matcher postalCodeAndCityMatcher = postalCodeAndCityPattern.matcher(postalCodeAndCityTxt.getText().toString());
@@ -114,14 +131,32 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
     }
 
 
+    /**
+     * Standaard implementatie van de interface. Wordt niet gebruikt.
+     * @param s
+     * @param start
+     * @param count
+     * @param after
+     */
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
     }
 
+    /**
+     * Standaard implementatie van de interface. Wordt niet gebruikt.
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
     }
 
+    /**
+     * Zal na elke text verandering de textfields controleren.
+     * @param s de waarde die verandert werd.
+     */
     @Override
     public void afterTextChanged(Editable s) {
         validateTextFields();
