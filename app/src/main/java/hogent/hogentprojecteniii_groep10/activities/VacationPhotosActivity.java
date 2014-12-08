@@ -3,6 +3,7 @@ package hogent.hogentprojecteniii_groep10.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -31,13 +32,17 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
+import hogent.hogentprojecteniii_groep10.helpers.RestClient;
+import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 public class VacationPhotosActivity extends Activity {
@@ -47,6 +52,7 @@ public class VacationPhotosActivity extends Activity {
     private HashMap<String, String> thumbnail_url_maps;
     private Vacation vacation;
     private SliderLayout sliderShow;
+    private List<Photo> photoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +61,21 @@ public class VacationPhotosActivity extends Activity {
         vacation = (Vacation) getIntent().getParcelableExtra("SpecificVacation");
         sliderShow = (SliderLayout) findViewById(R.id.photo_slider);
 
-        full_image_url_maps = new LinkedHashMap<String, String>();
-        full_image_url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        full_image_url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        full_image_url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        full_image_url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+        try {
+            photoList = new DownloadFotoUrlsTask().execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
+
+        full_image_url_maps = new LinkedHashMap<String, String>();
         thumbnail_url_maps = new LinkedHashMap<String, String>();
-        thumbnail_url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        thumbnail_url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        thumbnail_url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        thumbnail_url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+        for(Photo p : photoList){
+            full_image_url_maps.put(Long.toString(p.getId()), p.getFullsize());
+            thumbnail_url_maps.put(Long.toString(p.getId()), p.getThumbnail());
+        }
 
         createBaseSliderShow();
 
@@ -86,7 +96,7 @@ public class VacationPhotosActivity extends Activity {
         TextSliderView textSliderView = new TextSliderView(this);
         textSliderView
                 .description(new ArrayList<String>(thumbnail_url_maps.keySet()).get(position))
-                .image(new ArrayList<String>(thumbnail_url_maps.values()).get(position));
+                .image(new ArrayList<String>(full_image_url_maps.values()).get(position));
         sliderShow.addSlider(textSliderView);
     }
 
@@ -125,28 +135,12 @@ public class VacationPhotosActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+    public class DownloadFotoUrlsTask extends AsyncTask<Void, Void, List<Photo>> {
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+        @Override
+        protected List<Photo> doInBackground(Void... params) {
+            RestClient restClient = new RestClient();
+            return restClient.getRestService().getPhotosForVacation(vacation.getId());
         }
     }
 
