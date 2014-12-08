@@ -7,7 +7,13 @@ import android.content.SharedPreferences;
 
 import hogent.hogentprojecteniii_groep10.R;
 
+/**
+ * Om de inlogtoken te verwijderen bij elke applicatiestart, is er een custom applicatie starter klasse.
+ */
 public class VacationApplication extends Application {
+    /**
+     * De methode die de activity creëert.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -15,6 +21,10 @@ public class VacationApplication extends Application {
         clearAccessToken();
     }
 
+    /**
+     * Bij het opstarten van de applicatie zal de token verwijderd worden.
+     * Hierdoor zullen er geen oude tokens in de applicatie zitten.
+     */
     private void clearAccessToken() {
         SharedPreferences sharedPref = this
                 .getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);

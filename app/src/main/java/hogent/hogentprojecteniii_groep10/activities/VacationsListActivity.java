@@ -22,13 +22,21 @@ import hogent.hogentprojecteniii_groep10.fragments.VacationDetailFragment;
 import hogent.hogentprojecteniii_groep10.fragments.VacationsListFragment;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
-
+/**
+ * De activity die een lijst van vakanties zal tonen.
+ * Wordt opgevuld met een fragment (VaationListFragment).
+ * Onderdeel van het master/detail overzicht.
+ */
 public class VacationsListActivity extends FragmentActivity implements VacationsListFragment.OnListItemSelectedListener {
     private boolean isTwoPane = false;
     private SearchView mSearchView;
     private VacationsListFragment fragmentItemsList;
     public static final int FILTER_OPTION_REQUEST = 1;
 
+    /**
+     * Zal de activity opvullen met het acivity_vacations_list xml bestand.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +44,10 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
         determinePaneLayout();
     }
 
+    /**
+     * Bepaald of het een tablet of een smartphone is.
+     * Zal het itemListFragment al initialiseren.
+     */
     private void determinePaneLayout() {
         FrameLayout fragmentItemDetail = (FrameLayout) findViewById(R.id.flDetailContainer);
         if (fragmentItemDetail != null) {
@@ -44,8 +56,11 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
         fragmentItemsList = (VacationsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentVacationsList);
     }
 
-
-
+    /**
+     * Zal het menu aanmaken van deze activity.
+     * @param menu het menu dat wordt aangepast
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -59,6 +74,11 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
         return true;
     }
 
+    /**
+     * Bepaald de actie die wordt uitgevoerd bij het uitvoeren van een menu item
+     * @param item het item waarop geklikt is
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -80,6 +100,11 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
     }
 
 
+    /**
+     * Afhankelijk van of het een tablet is, zal het detail venster getoond worden.
+     * Indien het geen tablet is, zal de activity gestart worden bij het klikken op een vakantie.
+     * @param vacation de vakantie waarop geklikt is
+     */
     @Override
     public void onItemSelected(Vacation vacation) {
         if (isTwoPane) { // single activity with list and detail
@@ -98,6 +123,11 @@ public class VacationsListActivity extends FragmentActivity implements Vacations
         }
     }
 
+    /**
+     * Methode om te kunnen zoeken in de lijst van vakanties.
+     * Standaard implementatie zoals in de documentatie.
+     * @param searchItem het icoon dat search toont
+     */
     private void setupSearchView(MenuItem searchItem) {
         searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 

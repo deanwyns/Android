@@ -15,6 +15,10 @@ import java.util.List;
 
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
+/**
+ * Zal de databank aanmaken, openen en sluiten.
+ * Bewerkingen op de databank zal ook hier gebeuren.
+ */
 public class VacationDataSource {
     private SQLiteDatabase database;
     private SQLiteHelper dbHelper;
@@ -34,18 +38,31 @@ public class VacationDataSource {
             SQLiteHelper.COLUMN_TWO_MEMBER_COST,
             SQLiteHelper.COLUMN_TAX_DEDUCTABLE};
 
+
     public VacationDataSource(Context context) {
         dbHelper = new SQLiteHelper(context);
     }
 
+    /**
+     * Opent de database
+     * @throws SQLException
+     */
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
+    /**
+     * Sluit de database
+     */
     public void close() {
         dbHelper.close();
     }
 
+    /**
+     * Zal een vakantie toevoegen aan de databank
+     * @param vacation de vakantie die toegevoegd zal worden
+     * @return de vakantie die is toegevoegd
+     */
     public Vacation createVacation(Vacation vacation) {
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
@@ -76,6 +93,10 @@ public class VacationDataSource {
         return newVacation;
     }
 
+    /**
+     * Verwijdert een vakantie uit de databank
+     * @param vacation de vakantie die zal worden verwijderd
+     */
     public void deleteVacation(Vacation vacation) {
         long id = vacation.getId();
         System.out.println("Vacation deleted with id: " + id);
@@ -83,6 +104,10 @@ public class VacationDataSource {
                 + " = " + id, null);
     }
 
+    /**
+     * Geeft alle vakanties uit de databank terug
+     * @return alle vakanties uit de databank
+     */
     public List<Vacation> getAllVacations() {
         List<Vacation> vacations = new ArrayList<Vacation>();
 
@@ -100,6 +125,11 @@ public class VacationDataSource {
         return vacations;
     }
 
+    /**
+     * Hulpmethode om een vakantie uit een vursor te halen.
+     * @param cursor de cursor waar de vakantie wordt opgehaald
+     * @return de opgehaalde vakantie
+     */
     private Vacation cursorToVacation(Cursor cursor) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 

@@ -12,11 +12,18 @@ import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.fragments.VacationDetailFragment;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
-
+/**
+ * De activity die een specifieke vakantie zal tonen met een fragment.
+ */
 public class VacationDetailActivity extends FragmentActivity {
     private Vacation vacation;
     private VacationDetailFragment fragmentVacationDetail;
 
+    /**
+     * De creatie van deze activity. Zal een vakantie halen uit de parcellable en in de vacationDetailFragment steken.
+     * Waarna deze in de activity wordt geplaatst via fragmenttransaction.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +39,11 @@ public class VacationDetailActivity extends FragmentActivity {
         }
     }
 
+    /**
+     * Bepaald de actie die wordt uitgevoerd bij het uitvoeren van een menu item
+     * @param item het item waarop is geklikt
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -42,6 +54,12 @@ public class VacationDetailActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Maakt het menu op basis van specific_vacation_view xml.
+     * Zal ook het icoon verwijderen en de titel aanpassen.
+     * @param menu het menu dat aangepast wordt.
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.specific_vacation_view, menu);

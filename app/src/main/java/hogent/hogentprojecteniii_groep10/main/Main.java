@@ -19,7 +19,9 @@ import hogent.hogentprojecteniii_groep10.activities.MainSettingsActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
 
-
+/**
+ * De eerste activity die zal gestart worden. Dit toont het hoofdvenster.
+ */
 public class Main extends Activity {
 
     private LinearLayout ll;
@@ -27,6 +29,10 @@ public class Main extends Activity {
     private final static String TAG = "MAIN";
     private ProgressDialog progress;
 
+    /**
+     * Maakt het initiële scherm aan van de applicatie
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,10 @@ public class Main extends Activity {
 
     }
 
+    /**
+     * Afhankelijk van het ingelogd zijn worden er knoppen verborgen
+     * @param isLoggedIn bepaald of knoppen verborgen of getoond moeten worden.
+     */
     private void showButtonsForLoggedIn(boolean isLoggedIn) {
         if(!isLoggedIn){
             getPhotosBtn.setVisibility(View.INVISIBLE);
@@ -53,13 +63,19 @@ public class Main extends Activity {
         }
     }
 
-
+    /**
+     * Indien de applicatie verder gaat, moet er gekeken worden of de token nog niet verlopen is.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         showButtonsForLoggedIn(readLoginData());
     }
 
+    /**
+     * Kijkt of er een token aanwezig is, dus of er ingelogd is of niet.
+     * @return true als er een token bestaat, dus ingelogd is.
+     */
     private boolean readLoginData() {
         boolean isLoggedIn;
         SharedPreferences sharedPref = getApplication()
@@ -69,6 +85,9 @@ public class Main extends Activity {
         return isLoggedIn;
     }
 
+    /**
+     * Bereid de listeners voor, voor de knoppen.
+     */
     private void setupListeners() {
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +113,11 @@ public class Main extends Activity {
         });
     }
 
+    /**
+     * Geeft de activity een menu
+     * @param menu het menu dat de activity zal opvullen
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -101,6 +125,11 @@ public class Main extends Activity {
         return true;
     }
 
+    /**
+     * Bepaald de actie dat er gebeurt bij het klikken op een item in het menu.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

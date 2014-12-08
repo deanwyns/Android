@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Laat toe om vakanties op te slaan en te lezen indien er geen internet aanwezig is.
+ */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_VACATIONS = "vacations";
@@ -28,7 +31,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table "
+    private static final String TABLE_CREATE = "create table "
             + TABLE_VACATIONS + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_TITLE + " text not null,"
@@ -51,11 +54,21 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Zal de tabel aanmaken met behulp van het TABLE_CREATE statement
+     * @param db de databank waarop het statement zal uitgevoerd worden.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DATABASE_CREATE);
+        db.execSQL(TABLE_CREATE);
     }
 
+    /**
+     * Indien de databank geüpgrade wordt, zal de oude versie verwijderd worden en een nieuwe gemaakt worden.
+     * @param db de databank waarop het statement zal uitgevoerd worden.
+     * @param oldVersion de oude versie van de databank
+     * @param newVersion de nieuwe versie van de databank
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(SQLiteHelper.class.getName(),

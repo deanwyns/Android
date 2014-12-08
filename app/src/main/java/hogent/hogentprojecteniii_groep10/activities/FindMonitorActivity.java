@@ -25,6 +25,9 @@ import java.util.List;
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 
+/**
+ * De activity die een bepaalde monitor zal vinden op basis van een gegeven naam.
+ */
 public class FindMonitorActivity extends Activity {
 
     private EditText findMonitorTxt;
@@ -43,6 +46,10 @@ public class FindMonitorActivity extends Activity {
                     new Gebruiker("email4", "pass", "0474685148", "naam4", "voornaam4", "?", "?", "?", "?"))
     );
 
+    /**
+     * Vult de view op bij het aanmaken van de activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +71,10 @@ public class FindMonitorActivity extends Activity {
         });
     }
 
+    /**
+     * Zal de lijst aanmaken op basis van de monitoren.
+     * Wanneer er op een monitor geklikt wordt zal er een dialog getoond worden.
+     */
     private void setupListView() {
         adapter = new ArrayAdapter<Gebruiker>(this, android.R.layout.simple_list_item_1, android.R.id.text1, monitorList);
         monitorListView.setAdapter(adapter);
@@ -79,6 +90,10 @@ public class FindMonitorActivity extends Activity {
         });
     }
 
+    /**
+     * Zal de monitoren van de server ophalen en in de lijst plaatsen.
+     * @param searchedValue de parameter waarop gezocht moet worden op de server
+     */
     private void getMonitorsFromServer(String searchedValue) {
         monitorList.clear();
 
@@ -99,6 +114,12 @@ public class FindMonitorActivity extends Activity {
 
     }
 
+    /**
+     * Zal het menu aanmaken op basis van de find_monitor xml.
+     * Zal ook het icoon verwijderen.
+     * @param menu het menu dat wordt opgevuld
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.find_monitor, menu);
@@ -107,9 +128,17 @@ public class FindMonitorActivity extends Activity {
         return true;
     }
 
+    /**
+     * Een klasse die een custom dialog zal tonen.
+     */
     public static class ShowMonitorDialogFragment extends DialogFragment {
         private Gebruiker monitor;
 
+        /**
+         * De methode die de dialog zal maken en opvullen op basis van een monitor.
+         * @param savedInstanceState
+         * @return het aangemaakte dialoog
+         */
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             monitor = getArguments().getParcelable("monitor");

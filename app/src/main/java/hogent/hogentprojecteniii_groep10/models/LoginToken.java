@@ -2,6 +2,9 @@ package hogent.hogentprojecteniii_groep10.models;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * De token die het inloggen voorstelt. Verkregen van de server.
+ */
 public class LoginToken {
     @SerializedName("access_token")
     private String accessToken;

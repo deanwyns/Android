@@ -22,11 +22,19 @@ import hogent.hogentprojecteniii_groep10.activities.VacationPhotosActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationSignupActivity;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
+/**
+ * Het fragment dat een specifieke vakantie zal voorstellen.
+ */
 public class VacationDetailFragment extends Fragment {
 
     private Vacation vacation;
     private Button registerButton, photosButton;
 
+    /**
+     * Zal de vakantie als parcelable uit de argumenten halen.
+     * Deze is meegegeven uit het listfragment nadat er op een vakantie is geklikt.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +42,13 @@ public class VacationDetailFragment extends Fragment {
 
     }
 
+    /**
+     * Zal de interface van de specifieke vakantie opbouwen
+     * @param inflater instantieert de xml voor een view object
+     * @param container
+     * @param savedInstanceState
+     * @return de view die gemaakt werd
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vacation_detail, container, false);
@@ -117,17 +132,31 @@ public class VacationDetailFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Zal bepaalde textview zichtbaar maken
+     * @param textViews de textviews die zichtbaar gemaakt moeten worden
+     */
     //Kan ook in 1 methode, maar dit vind ik duidelijker
     private void makeTextViewsVisible(TextView... textViews) {
         for(TextView textView : textViews)
             textView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Zal bepaalde textviews onzichtbaar maken
+     * @param textViews de textviews die onzichtbaar gemaakt moeten worden
+     */
     private void makeTextViewsGone(TextView... textViews) {
         for(TextView textView : textViews)
             textView.setVisibility(View.GONE);
     }
 
+    /**
+     * Bij het maken van een fragment zal de vakantie geplaatst worden in de bundle
+     * Dit wordt gebruikt bij de activity van deze fragment
+     * @param vacation de vakantie die in de bundle zal gestoken worden
+     * @return de fragment met een vakantie in de arguments
+     */
     public static VacationDetailFragment newInstance(Vacation vacation) {
         VacationDetailFragment vacFragment = new VacationDetailFragment();
         Bundle mBundle = new Bundle();

@@ -7,6 +7,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * De klasse die een vakantie voorstelt in de applicatie.
+ * Is Parcelable om doorgave mogelijk te maken tussen activities.
+ */
 public class Vacation implements Parcelable {
 
     private long id;
@@ -41,11 +45,6 @@ public class Vacation implements Parcelable {
         this.oneBmMemberCost = oneBmMemberCost;
         this.twoBmMemberCost = twoBmMemberCost;
         this.taxDeductable = taxDeductable;
-    }
-
-    //"Basic" constructor
-    public Vacation(long id, String title, String description, String promoText, String location, Date beginDate, Date endDate) {
-        this(id, title, description, promoText, location, beginDate, endDate, 0, 0, null, 0, 0.0, 0.0, 0.0, 0);
     }
 
     public long getId() {
@@ -109,6 +108,11 @@ public class Vacation implements Parcelable {
     }
 
 
+    /**
+     * Maakt het mogelijk om vacation in een parcel te steken.
+     * @param dest is de parcel waarin vacation terecht komt
+     * @param flags
+     */
     //Parcellable is sneller dan serializable wanneer we objecten doorgeven in intents.
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -132,9 +136,15 @@ public class Vacation implements Parcelable {
         dest.writeByte((byte) (taxDeductable==1 ? 1 : 0));
     }
 
+    /**
+     * Lege private constructor is nodig bij het maken van parcellables
+     */
     private Vacation() {
     }
 
+    /**
+     * Maakt het lezen van een vacation uit een parcel mogelijk
+     */
     public static final Parcelable.Creator<Vacation> CREATOR = new Creator<Vacation>() {
         public Vacation createFromParcel(Parcel source) {
             Vacation vacation = new Vacation();
@@ -161,6 +171,10 @@ public class Vacation implements Parcelable {
         }
     };
 
+    /**
+     * Nodig voor elke parcellable. In 99% van de gevallen is return 0 goed.
+     * @return
+     */
     @Override
     public int describeContents() {
         return 0;

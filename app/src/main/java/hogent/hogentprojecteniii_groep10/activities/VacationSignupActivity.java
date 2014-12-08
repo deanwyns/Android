@@ -22,7 +22,9 @@ import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
-
+/**
+ * De activity die zal toelaten om kinderen in te schrijven in een vakantie.
+ */
 public class VacationSignupActivity extends Activity {
 
     private Button addChildToAccountBtn, goToBillingBtn, addChildSpinnerBtn;
@@ -34,6 +36,10 @@ public class VacationSignupActivity extends Activity {
     private ArrayAdapter<Gebruiker> adapter;
     private Vacation vacation;
 
+    /**
+     * Zal het scherm initialiseren
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +72,9 @@ public class VacationSignupActivity extends Activity {
         setUpListeners();
     }
 
+    /**
+     * Zal listeners toevoegen op de knoppen.
+     */
     private void setUpListeners() {
         addChildSpinnerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +115,11 @@ public class VacationSignupActivity extends Activity {
     }
 
 
-
+    /**
+     * Zal het menu aanmaken van deze activity
+     * @param menu het menu dat wordt aangepast
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vacation_signup, menu);

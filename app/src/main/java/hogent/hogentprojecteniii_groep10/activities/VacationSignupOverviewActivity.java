@@ -22,6 +22,9 @@ import hogent.hogentprojecteniii_groep10.main.Main;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
+/**
+ * Een laatste overzicht die de gegevens toont die ingevuld zijn bij een inschrijving.
+ */
 public class VacationSignupOverviewActivity extends Activity {
 
     private Vacation selectedVacation;
@@ -35,6 +38,11 @@ public class VacationSignupOverviewActivity extends Activity {
     private Button cancelBtn, signupBtn;
 
 
+    /**
+     * Initialiseert de activity.
+     * Zal alle gegevens uit de bundels halen die uit de vorige activites waren opgemaakt.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +106,11 @@ public class VacationSignupOverviewActivity extends Activity {
         });
     }
 
+    /**
+     * Zal het menu aanmaken van deze activity
+     * @param menu het menu dat wordt aangepast
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vacation_signup_overview, menu);

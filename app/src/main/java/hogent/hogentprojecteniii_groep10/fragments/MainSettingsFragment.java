@@ -11,8 +11,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import hogent.hogentprojecteniii_groep10.R;
 
+/**
+ * Het fragment voor main settings
+ */
 public class MainSettingsFragment extends PreferenceFragment {
 
+    /**
+     * Oncreate zal de preferences opvullen op basis van het xml bestand main_settings
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

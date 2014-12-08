@@ -1,6 +1,7 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,19 +42,26 @@ import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
+import hogent.hogentprojecteniii_groep10.helpers.NetworkingMethods;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
+/**
+ * De activity die foto's zal tonen van een kamp
+ */
 public class VacationPhotosActivity extends Activity {
 
-    //Temp tot Laracasa mij links kan geven
     private HashMap<String, String> full_image_url_maps;
     private HashMap<String, String> thumbnail_url_maps;
     private Vacation vacation;
     private SliderLayout sliderShow;
-    private List<Photo> photoList;
+    private List<Photo> photoList = new ArrayList<Photo>();
 
+    /**
+     * De methode die het venster zal maken en de foto url's downloaden.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +70,10 @@ public class VacationPhotosActivity extends Activity {
         sliderShow = (SliderLayout) findViewById(R.id.photo_slider);
 
         try {
-            photoList = new DownloadFotoUrlsTask().execute().get();
+            if(NetworkingMethods.isNetworkAvailable(getApplicationContext()))
+                photoList = new DownloadFotoUrlsTask().execute().get();
+            else
+                Toast.makeText(this, getResources().getString(R.string.no_internet_available), Toast.LENGTH_LONG).show();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -73,8 +84,8 @@ public class VacationPhotosActivity extends Activity {
         full_image_url_maps = new LinkedHashMap<String, String>();
         thumbnail_url_maps = new LinkedHashMap<String, String>();
         for(Photo p : photoList){
-            full_image_url_maps.put(Long.toString(p.getId()), p.getFullsize());
-            thumbnail_url_maps.put(Long.toString(p.getId()), p.getThumbnail());
+            full_image_url_maps.put(p.getTitle(), p.getFullsize());
+            thumbnail_url_maps.put(p.getTitle(), p.getThumbnail());
         }
 
         createBaseSliderShow();
@@ -90,6 +101,10 @@ public class VacationPhotosActivity extends Activity {
 
     }
 
+    /**
+     * Indien er op een thumbnail wordt geklikt, zal via deze methode de foto getoond worden in het scherm
+     * @param position de positie van de afbeelding waar op werd geklikt
+     */
     private void showImageInSliderShow(int position) {
         sliderShow.stopAutoCycle();
         sliderShow.removeAllSliders();
@@ -100,6 +115,9 @@ public class VacationPhotosActivity extends Activity {
         sliderShow.addSlider(textSliderView);
     }
 
+    /**
+     * Start een nieuwe slideshow van alle foto's.
+     */
     private void createBaseSliderShow() {
         sliderShow.removeAllSliders();
         sliderShow.startAutoCycle();
@@ -112,6 +130,11 @@ public class VacationPhotosActivity extends Activity {
         }
     }
 
+    /**
+     * Zal de menubar maken op basis van vacation_photos xml
+     * @param menu het menu dat wordt opgevuld
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vacation_photos, menu);
@@ -124,6 +147,11 @@ public class VacationPhotosActivity extends Activity {
         return true;
     }
 
+    /**
+     * Bepaald de actie die wordt uitgevoerd als er op een menu item geklikt wordt.
+     * @param item het item waarop werd geklikt
+     * @return bepaald hoe verdere menu processing wordt afgehandeld
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -135,8 +163,17 @@ public class VacationPhotosActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * De klasse die foto url's zal downloaden via RetroFit.
+     * Zal deze teruggeven zodra hij klaar is.
+     */
     public class DownloadFotoUrlsTask extends AsyncTask<Void, Void, List<Photo>> {
 
+        /**
+         * Haalt de foto url's op van de server voor de huidige vakantie
+         * @param params zal niks zijn
+         * @return de foto url's van de server
+         */
         @Override
         protected List<Photo> doInBackground(Void... params) {
             RestClient restClient = new RestClient();
@@ -144,9 +181,16 @@ public class VacationPhotosActivity extends Activity {
         }
     }
 
+    /**
+     * De custom adapter om een gridview op te vullen met afbeeldingen.
+     */
     private class ImageAdapter extends BaseAdapter {
         private Context mContext;
 
+        /**
+         * Zal de context in deze klasse gebruiken en zal de universal image loader initialiseren.
+         * @param c
+         */
         public ImageAdapter(Context c) {
             mContext = c;
 
@@ -155,19 +199,44 @@ public class VacationPhotosActivity extends Activity {
             ImageLoader.getInstance().init(config);
         }
 
+        /**
+         * Bepaalde hoeveel afbeeldingen er zijn
+         * @return
+         */
+        @Override
         public int getCount() {
             return thumbnail_url_maps.size();
         }
 
+        /**
+         * Standaard methode die overridden moet worden
+         * @param position
+         * @return
+         */
+        @Override
         public Object getItem(int position) {
             return null;
         }
 
+        /**
+         * Standaard methode die overridden moet worden.
+         * @param position
+         * @return
+         */
+        @Override
         public long getItemId(int position) {
             return 0;
         }
 
-        // create a new ImageView for each item referenced by the Adapter
+        /**
+         * Zal een imageView aanmaken voor elk item in de adapter.
+         * De afbeeldingen worden asynchroon geladen via de universal image loader.
+         * @param position de positie van de huidige afbeelding
+         * @param convertView de oude view om te hergebruiken
+         * @param parent de ouder waarop deze view geplaatst wordt
+         * @return de view met de afbeelding
+         */
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             DisplayMetrics dm = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(dm);
