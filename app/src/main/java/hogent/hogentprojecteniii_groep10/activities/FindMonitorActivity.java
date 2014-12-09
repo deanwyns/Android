@@ -24,6 +24,7 @@ import java.util.List;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
+import hogent.hogentprojecteniii_groep10.models.Monitor;
 
 /**
  * De activity die een bepaalde monitor zal vinden op basis van een gegeven naam.
@@ -34,16 +35,16 @@ public class FindMonitorActivity extends Activity {
     private Button findMonitorBtn;
     private ListView monitorListView;
     private TextView findMonitorHelpLbl;
-    private ArrayAdapter<Gebruiker> adapter;
-    private List<Gebruiker> monitorList = new ArrayList<Gebruiker>();
+    private ArrayAdapter<Monitor> adapter;
+    private List<Monitor> monitorList = new ArrayList<Monitor>();
 
     //Zal opgevuld worden van de server als de back-end ooit wordt gemaakt.
-    private List<Gebruiker> existingMonitorsList = new ArrayList<Gebruiker>(
+    private List<Monitor> existingMonitorsList = new ArrayList<Monitor>(
             //Ik hoop dat de begeleider dit ook niet moet invullen? Zijn oudergegevens?
-            Arrays.asList(new Gebruiker("email1", "pass", "0474685148", "naam1", "voornaam1", "?", "?", "?", "?"),
-                    new Gebruiker("email2", "pass", "0474685148", "naam2", "voornaam2", "?", "?", "?", "?"),
-                    new Gebruiker("email3", "pass", "0474685148", "naam3", "voornaam3", "?", "?", "?", "?"),
-                    new Gebruiker("email4", "pass", "0474685148", "naam4", "voornaam4", "?", "?", "?", "?"))
+            Arrays.asList(new Monitor("email1", "pass", "0474685148", "naam1", "voornaam1"),
+                    new Monitor("email2", "pass", "0474685148", "naam2", "voornaam2"),
+                    new Monitor("email3", "pass", "0474685148", "naam3", "voornaam3"),
+                    new Monitor("email4", "pass", "0474685148", "naam4", "voornaam4"))
     );
 
     /**
@@ -76,7 +77,7 @@ public class FindMonitorActivity extends Activity {
      * Wanneer er op een monitor geklikt wordt zal er een dialog getoond worden.
      */
     private void setupListView() {
-        adapter = new ArrayAdapter<Gebruiker>(this, android.R.layout.simple_list_item_1, android.R.id.text1, monitorList);
+        adapter = new ArrayAdapter<Monitor>(this, android.R.layout.simple_list_item_1, android.R.id.text1, monitorList);
         monitorListView.setAdapter(adapter);
         monitorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -97,7 +98,7 @@ public class FindMonitorActivity extends Activity {
     private void getMonitorsFromServer(String searchedValue) {
         monitorList.clear();
 
-        for(Gebruiker g : existingMonitorsList){
+        for(Monitor g : existingMonitorsList){
             if(g.getNaam().toLowerCase().contains(searchedValue.toLowerCase()) || g.getVoornaam().toLowerCase().contains(searchedValue.toLowerCase()) ||
                     g.getEmailadres().toLowerCase().contains(searchedValue.toLowerCase()))
                 monitorList.add(g);
@@ -132,7 +133,7 @@ public class FindMonitorActivity extends Activity {
      * Een klasse die een custom dialog zal tonen.
      */
     public static class ShowMonitorDialogFragment extends DialogFragment {
-        private Gebruiker monitor;
+        private Monitor monitor;
 
         /**
          * De methode die de dialog zal maken en opvullen op basis van een monitor.

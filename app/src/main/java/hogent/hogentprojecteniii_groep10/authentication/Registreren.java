@@ -28,13 +28,14 @@ import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
+import hogent.hogentprojecteniii_groep10.models.Ouder;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 /**
- * Created by Fabrice on 6/11/2014.
+ * Activity om een nieuwe account aan te maken als ouder
  */
 public class Registreren extends Activity {
 
@@ -45,9 +46,11 @@ public class Registreren extends Activity {
     private boolean isTelnrValid, isEmailValid, isPasswordValid, isVoornaamMoederValid, isNaamMoederValid,
     isRrnMoederValid, isBevestigPasswordValid, isNaamVaderValid=true, isVoornaamVaderValid=true,
             isRrnVaderValid=true;
-    private View mProgressView;
-    private View mRegisterFormView;
 
+    /**
+     *  Initialiseert het scherm
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,13 +67,15 @@ public class Registreren extends Activity {
         mPasswordView = (EditText) findViewById(R.id.registreer_password);
         mRegistrerenButton = (Button) findViewById(R.id.sign_up);
         mBevestigPasswordView = (EditText) findViewById(R.id.bevestig_password);
-        mRegisterFormView = findViewById(R.id.register_form);
-        mProgressView = findViewById(R.id.register_progress);
-        //mCancelButton = (Button)findViewById(R.id.btnCancel_register);
 
         setUpListeners();
     }
 
+    /**
+     * Voegt Listeners toe aan de knoppen en de EditText velden
+     * en stelt het gedrag in van de enter knop op het android toetsenbord
+     *
+     */
     private void setUpListeners() {
         mRegistrerenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +83,10 @@ public class Registreren extends Activity {
                 attemptRegistration();
             }
         });
-
+        /**
+         *  Als de inhoud van de tekstvelden ongeldig is doet de enterknop op het toetsenbord bij het laatste
+         *  tekstveld niets anders zal de registratie gestart worden
+        */
         mRrnVaderView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -92,6 +100,9 @@ public class Registreren extends Activity {
                 return false;
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mPasswordView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -106,6 +117,9 @@ public class Registreren extends Activity {
 
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mVoornaamMoederView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -120,6 +134,9 @@ public class Registreren extends Activity {
 
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mNaamMoederView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -134,6 +151,9 @@ public class Registreren extends Activity {
 
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mRrnMoederView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -148,6 +168,9 @@ public class Registreren extends Activity {
 
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mTelNrView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -162,6 +185,9 @@ public class Registreren extends Activity {
 
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mEmailView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -176,7 +202,9 @@ public class Registreren extends Activity {
 
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mBevestigPasswordView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -192,6 +220,11 @@ public class Registreren extends Activity {
 
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         * De gegevens van de vader zijn niet verplicht dus hebben die tekstvelden geen invloud op de
+         * geldigheid, maar als 1 tekstveld van de vader ingevuld is moeten de rest ook ingevuld zijn
+         */
         mNaamVaderView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -214,6 +247,9 @@ public class Registreren extends Activity {
 
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mVoornaamVaderView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -239,6 +275,9 @@ public class Registreren extends Activity {
 
             }
         });
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mRrnVaderView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -268,6 +307,10 @@ public class Registreren extends Activity {
 
     }
 
+    /**
+     *Wanneer geen van de tekstvelden van de vader ingevuld zijn worden de booleans ervoor op
+     * true gezet zodat ze geen invloed hebben op het verdere verloop
+     */
     public void changeValidityGegevensVader(){
         if (mNaamVaderView.getText().toString().isEmpty()
                 && mVoornaamVaderView.getText().toString().isEmpty()
@@ -278,6 +321,10 @@ public class Registreren extends Activity {
         }
     }
 
+    /**
+     *Maakt een ouder object aan met de gegevens uit de tekstvelden en geeft dit door
+     * naar de asynchrone taak om te registreren
+     */
     public void attemptRegistration() {
 
         String email = mEmailView.getText().toString();
@@ -290,14 +337,17 @@ public class Registreren extends Activity {
         String voornaamVader = mVoornaamVaderView.getText().toString();
         String rrnVader = mRrnVaderView.getText().toString();
         String telNr = mTelNrView.getText().toString();
-        showProgress(true);
 
-            Gebruiker gebruiker = new Gebruiker(email,password,telNr, naamMoeder,voornaamMoeder, rrnMoeder,  voornaamVader,naamVader, rrnVader);
-            mAuthTask = new UserRegisterTask(gebruiker, password2);
+            Ouder ouder = new Ouder(email,password,telNr, naamMoeder,voornaamMoeder, rrnMoeder,  voornaamVader,naamVader, rrnVader);
+            mAuthTask = new UserRegisterTask(ouder, password2);
             mAuthTask.execute((Void) null);
 
     }
 
+    /**
+     *Kijkt of het ingegeven telefoonnummer een geldig belgisch telefoonnummer is
+     * @param telnr
+     */
     private void isTelNrValid(String telnr){
         String telnrRegex;
         Pattern patternTelnr;
@@ -308,6 +358,10 @@ public class Registreren extends Activity {
         isTelnrValid =  matcher.find();
     }
 
+    /**
+     * Kijkt of het ingegeven emailadres een geldig emailadres is
+     * @param email
+     */
     private void isEmailValid(String email) {
         String emailRegEx;
         Pattern pattern;
@@ -320,25 +374,47 @@ public class Registreren extends Activity {
         isEmailValid =  matcher.find() && !email.isEmpty();
     }
 
+    /**
+     *Kijkt of de tekst in het wachtwoord tekstveld overeenkomt met de tekst in het
+     * bevestig wachtwoord tekstveld
+     * @param pw1
+     * @param pw2
+     */
     private void passwordsMatch(String pw1, String pw2) {
         isBevestigPasswordValid =  pw1.equals(pw2);
     }
 
+    /**
+     * Kijkt of de tekst in het rrn tekstveld een geldig
+     * rijksregisternummer is
+     * @param rrn
+     * @return
+     */
     private boolean isRrnValid(String rrn){
         if (rrn.length()==11) {
-            return true;
-            /*int rrnNumber = Integer.parseInt(rrn.substring(0, 8));
+            int rrnNumber = Integer.parseInt(rrn.substring(0,9));
             int modulo = rrnNumber % 97;
-
-            return ((97 - modulo)-Integer.parseInt(rrn.substring(9)))==0;*/
+            int checkSum = Integer.parseInt(rrn.substring(9,11));
+            if (Integer.compare(modulo, 97-checkSum)==0)
+                return true;
+            else
+                return false;
         }else
             return false;
     }
 
+    /**
+     * Kijkt of de tekst in het wachtwoord tekstvenster overeenkomt met de opgelegde regels
+     * @param password
+     */
     private void isPasswordValid(String password) {
-        isPasswordValid =  !password.isEmpty();
+        isPasswordValid =  password.length()==6;
     }
 
+    /**
+     * Stelt het errorfield in van de tekstvelden afhankelijk van de geldigheid van de tekstvelden
+     * verwijdert het veld wanneer de gegevens geldig zijn
+     */
     public void setErrors(){
         if (isTelnrValid && isEmailValid && isPasswordValid
                 && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid
@@ -378,6 +454,10 @@ public class Registreren extends Activity {
 
     }
 
+    /**
+     * Als alle velden correct gevalideerd zijn zal de knop om te registreren ge-enabled worden
+     * anders zal de knop disabled worden
+     */
     private void changeButtonState(){
         if (isTelnrValid && isEmailValid && isPasswordValid
                 && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid
@@ -389,83 +469,71 @@ public class Registreren extends Activity {
         setErrors();
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            //mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-           // mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
+    /**
+     * De asynchrone task om de registratie uit te voeren
+     */
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final Gebruiker mGebruiker;
+        private final Ouder mOuder;
         private final String passwordConfirmed;
         private ProgressDialog progressDialog;
         private RestClient restClient = new RestClient();
 
-        public UserRegisterTask(Gebruiker gebruiker, String passwordConfirmed) {
-           this.mGebruiker=gebruiker;
+        /**
+         *
+         * @param ouder
+         * @param passwordConfirmed
+         */
+        public UserRegisterTask(Ouder ouder, String passwordConfirmed) {
+           this.mOuder=ouder;
            this.passwordConfirmed=passwordConfirmed;
         }
 
+        /**
+         * Voordat de task gestart wordt zal er een dialog getoond worden
+         */
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(Registreren.this, getResources().getString(R.string.title_registreren), getResources().getString(R.string.please_wait), true);
             super.onPreExecute();
         }
 
+        /**
+         * De parameter map die meegegeven zal worden met het HTTP request naar de server
+         * zal hier opgevuld worden en meegegeven worden naar de functie die het
+         * request zal versturen
+         * @param voids
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Void... voids) {
 
             Map<String, String> signUpParamMap = new HashMap<String, String>();
 
-            signUpParamMap.put("email", mGebruiker.getEmailadres());
-            signUpParamMap.put("password", mGebruiker.getPassword());
+            signUpParamMap.put("email", mOuder.getEmailadres());
+            signUpParamMap.put("password", mOuder.getPassword());
             signUpParamMap.put("password_confirmed", passwordConfirmed);
-            signUpParamMap.put("phone_number", mGebruiker.getTelNr());
-            signUpParamMap.put("first_name_mother", mGebruiker.getVoornaam());
-            signUpParamMap.put("last_name_mother", mGebruiker.getNaam());
-            signUpParamMap.put("nrn_mother", mGebruiker.getRrnMoeder());
-            signUpParamMap.put("first_name_father", mGebruiker.getVoornaamOuder2());
-            signUpParamMap.put("last_name_father",  mGebruiker.getNaamOuder2());
-            signUpParamMap.put("nrn_father", mGebruiker.getRrnVader());
+            signUpParamMap.put("phone_number", mOuder.getTelNr());
+            signUpParamMap.put("first_name_mother", mOuder.getVoornaam());
+            signUpParamMap.put("last_name_mother", mOuder.getNaam());
+            signUpParamMap.put("nrn_mother", mOuder.getRrnMoeder());
+            signUpParamMap.put("first_name_father", mOuder.getVoornaamVader());
+            signUpParamMap.put("last_name_father",  mOuder.getNaamVader());
+            signUpParamMap.put("nrn_father", mOuder.getRrnVader());
 
             sendSignUpRequest(signUpParamMap);
             return true;
         }
 
+        /**
+         * Na de task zal het dialog verdwijnen, de asynchrone task gestopt worden
+         * Als het registreren succesvol is zal de login activity gestart worden en
+         * de huidige activity gestopt worden
+         * @param success is true als het registreren succesvol is zoniet false
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            //showProgress(false);
             progressDialog.dismiss();
             if (success) {
                 Intent loginIntent = new Intent(getApplicationContext(), Login.class);
@@ -475,6 +543,11 @@ public class Registreren extends Activity {
 
         }
 
+        /**
+         *  Zal het http request naar de server versturen en afhankelijk van of het registreren
+         *  wel of niet succesvol was de succes functie of failure functie aanroepen
+         * @param signupParamMap de map die de gegevens van de te registreren ouder bevat
+         */
         private void sendSignUpRequest(Map<String, String> signupParamMap){
 
             Callback<String> gebruiker = new Callback<String>() {
@@ -486,7 +559,6 @@ public class Registreren extends Activity {
 
                 @Override
                 public void failure(RetrofitError error) {
-
                     error.printStackTrace();
                     Toast.makeText(getBaseContext(), error.getResponse().toString(), Toast.LENGTH_SHORT).show();
                 }
@@ -495,11 +567,14 @@ public class Registreren extends Activity {
             restClient.getRestService().register(signupParamMap, gebruiker);
         }
 
+        /**
+         * Wanneer er geannuleerd wordt wordt de asynchrone task geannuleerd en
+         * zal het dialog verdwijnen
+         */
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             progressDialog.dismiss();
-            //showProgress(false);
         }
     }
  }

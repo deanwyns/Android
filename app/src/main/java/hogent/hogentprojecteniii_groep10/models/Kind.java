@@ -88,7 +88,6 @@ public class Kind implements Parcelable {
 
 
 
-        @SuppressWarnings("unused")
         public static final Parcelable.Creator<Kind> CREATOR = new Parcelable.Creator<Kind>() {
             @Override
             public Kind createFromParcel(Parcel in) {

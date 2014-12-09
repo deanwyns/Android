@@ -47,7 +47,9 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
-
+/**
+ * Activity om een kind toe te voegen aan een account
+ */
 public class AddChildActivity extends FragmentActivity {
 
     private EditText mNaamView, mVoornaamView, mRrnView, mStraatView, mHuisnummerView, mPostcodeView, mStadView;
@@ -55,7 +57,10 @@ public class AddChildActivity extends FragmentActivity {
     private UserAddChildTask mAuthTask = null;
     private boolean isNaamValid, isVoornaamValid, isRrnValid, isHuisnummerValid, isZipCodeValid, isStraatValid, isStadValid;
 
-
+    /**
+     * Initialiseert het scherm
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +77,11 @@ public class AddChildActivity extends FragmentActivity {
 
         setUpListeners();
     }
-
+    /**
+     * Voegt Listeners toe aan de knoppen en de EditText velden
+     * en stelt het gedrag in van de enter knop op het android toetsenbord
+     *
+     */
     private void setUpListeners() {
         mToevoegenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,20 +89,24 @@ public class AddChildActivity extends FragmentActivity {
                 attemptAdd();
             }
         });
-
+        /**
+         *  Als de inhoud van de tekstvelden ongeldig is doet de enterknop op het toetsenbord bij het laatste
+         *  tekstveld niets anders zal de registratie gestart worden
+         */
         mStadView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 boolean isValidKey = keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER;
                 boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
-
                 if ((isValidAction || isValidKey)&& isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid){
                     attemptAdd();
                 }
                 return false;
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mNaamView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -111,7 +124,9 @@ public class AddChildActivity extends FragmentActivity {
 
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mVoornaamView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -129,7 +144,9 @@ public class AddChildActivity extends FragmentActivity {
 
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mRrnView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -147,7 +164,9 @@ public class AddChildActivity extends FragmentActivity {
 
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mPostcodeView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -165,7 +184,9 @@ public class AddChildActivity extends FragmentActivity {
 
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mHuisnummerView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -183,7 +204,9 @@ public class AddChildActivity extends FragmentActivity {
 
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mStadView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -201,7 +224,9 @@ public class AddChildActivity extends FragmentActivity {
 
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mStraatView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -222,18 +247,26 @@ public class AddChildActivity extends FragmentActivity {
 
     }
 
-    private void isRrnValid(String rrn){
-        if (rrn.length()==11) {
-            isRrnValid = true;
-            /*int rrnNumber = Integer.parseInt(rrn.substring(0, 8));
+    /**
+     *  Kijkt of  de tekst in het rrn tekstveld een geldig
+     * rijksregisternummer is
+     * @param rrn
+     */
+    private void isRrnValid(String rrn) {
+        isRrnValid = false;
+        if (rrn.length() == 11) {
+            int rrnNumber = Integer.parseInt(rrn.substring(0, 9));
             int modulo = rrnNumber % 97;
-
-            return ((97 - modulo)-Integer.parseInt(rrn.substring(9)))==0;*/
-        }else
-            isRrnValid =  false;
-
+            int checkSum = Integer.parseInt(rrn.substring(9, 11));
+            isRrnValid = (Integer.compare(modulo, 97 - checkSum) == 0);
+        }
     }
 
+    /**
+     * Kijkt of  de tekst in het postcode tekstveld een geldige
+     * postcode is
+     * @param zipCode
+     */
     private void isZipCodeValid(String zipCode){
         String zipCoderegex;
         Pattern pattern;
@@ -246,6 +279,9 @@ public class AddChildActivity extends FragmentActivity {
         isZipCodeValid =  matcher.find();
     }
 
+    /**
+     * Verandert de tekstkleur afhankelijk van de overeenstemmende booleans
+     */
     private void setErrors(){
         if (isHuisnummerValid)
             mHuisnummerView.setTextColor(Color.rgb(80, 200, 120));
@@ -283,6 +319,10 @@ public class AddChildActivity extends FragmentActivity {
             mStraatView.setTextColor(Color.RED);
     }
 
+    /**
+     * Als alle velden correct gevalideerd zijn zal de knop om het kind toe te voegen
+     * ge-enabled worden anders zal de knop disabled blijven
+     */
     private void changeButtonState(){
         if (isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid){
             mToevoegenButton.setEnabled(true);
@@ -292,7 +332,10 @@ public class AddChildActivity extends FragmentActivity {
             setErrors();
         }
     }
-
+    /**
+     *Maakt een kind object aan met de gegevens uit de tekstvelden en geeft dit door
+     * naar de asynchrone taak om het kind teo te voegen
+     */
     public void attemptAdd() {
 
         String naam = mNaamView.getText().toString();
@@ -310,12 +353,20 @@ public class AddChildActivity extends FragmentActivity {
 
     }
 
+    /**
+     * De asynchrone task om het kind toe te voegen
+     */
     public class UserAddChildTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Kind mKind;
         private RestClient restClient;
         private ProgressDialog progressDialog;
 
+        /**
+         * Constructor van de asynchrone task. Haalt hier het token op van de ingelogde gebruiker
+         * om mee te kunnen geven in de header van het http request
+         * @param kind
+         */
         public UserAddChildTask(Kind kind) {
             this.mKind =kind;
 
@@ -327,13 +378,22 @@ public class AddChildActivity extends FragmentActivity {
             restClient = new RestClient(token);
 
         }
-
+        /**
+         * Voordat de task gestart wordt zal er een dialog getoond worden
+         */
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(AddChildActivity.this, getResources().getString(R.string.title_login), getResources().getString(R.string.please_wait), true);
             super.onPreExecute();
         }
 
+        /**
+         * De parameter map die meegegeven zal worden met het HTTP request naar de server
+         * zal hier opgevuld worden en meegegeven worden naar de functie die het
+         * request zal versturen
+         * @param voids
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Void... voids) {
 
@@ -351,29 +411,32 @@ public class AddChildActivity extends FragmentActivity {
             return true;
         }
 
+        /**
+         * Na de task zal het dialog verdwijnen, de asynchrone task gestopt worden
+         * Als het kind toevoegen succesvol is zal naar de parent activity gegaan worden en
+         * de huidige activity gestopt worden
+         * @param success is true als het het kind toevoegen succesvol is zoniet false
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             progressDialog.dismiss();
 
             if (success) {
-                /*Intent vacationSignUp = new Intent(getApplicationContext(), VacationSignupActivity.class);
-                startActivity(vacationSignUp);*/
-                finish();
-            }
-            else {
-                Intent vacationSignUp = new Intent(getApplicationContext(), Main.class);
-                startActivity(vacationSignUp);
                 finish();
             }
         }
 
+        /**
+         * Zal het http request naar de server versturen en afhankelijk van of het kind toegevoegd
+         *  is of niet de succes functie of failure functie aanroepen
+         * @param addChildParamMap
+         */
         private void sendAddChildRequest(Map <String, String> addChildParamMap){
 
             Callback<String> kind = new Callback<String>() {
                 @Override
                 public void success(String kind, Response response) {
-                    //Log.i(TAG, kind.toString());
                     response.getBody();
                     Toast.makeText(getBaseContext(), "Toegevoegd", Toast.LENGTH_SHORT).show();
                 }
@@ -386,7 +449,10 @@ public class AddChildActivity extends FragmentActivity {
             };
             restClient.getRestService().addChild(addChildParamMap, kind);
         }
-
+        /**
+         * Wanneer er geannuleerd wordt wordt de asynchrone task geannuleerd en
+         * zal het dialog verdwijnen
+         */
         @Override
         protected void onCancelled() {
             mAuthTask = null;

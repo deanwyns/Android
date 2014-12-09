@@ -54,9 +54,9 @@ public class VacationSignupActivity extends Activity {
         //firstChildSpinner  = (Spinner) findViewById(R.id.first_child_spinner);
         //spinnerList.add(firstChildSpinner);
 
-        Gebruiker child1 = new Gebruiker("email", "pass", "000", "Kind1", "Kind1", "000", "ouder1", "ouder2", "000");
-        Gebruiker child2 = new Gebruiker("email2", "pass2", "000", "Kind2", "Kind2", "000", "ouder1", "ouder2", "000");
-        Gebruiker child3 = new Gebruiker("email3", "pass3", "000", "Kind3", "Kind3", "000", "ouder1", "ouder2", "000");
+        Gebruiker child1 = new Gebruiker("email", "pass", "000", "Kind1", "Kind1");
+        Gebruiker child2 = new Gebruiker("email2", "pass2", "000", "Kind2", "Kind2");
+        Gebruiker child3 = new Gebruiker("email3", "pass3", "000", "Kind3", "Kind3");
         tempArray = new Gebruiker[]{child1, child2, child3};
 
         adapter = new ArrayAdapter<Gebruiker>(getApplicationContext(), android.R.layout.simple_spinner_item, tempArray);

@@ -1,13 +1,14 @@
 package hogent.hogentprojecteniii_groep10.models;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
-
-public class Gebruiker implements Parcelable {
-
+/**
+ * De klasse die een Gebruiker voorstelt in de applicatie.
+ * Is Parcelable om doorgave mogelijk te maken tussen activities.
+ */
+public class Gebruiker implements Parcelable{
 
     @SerializedName("email")
     private String emailadres;
@@ -19,37 +20,14 @@ public class Gebruiker implements Parcelable {
     private String naam;
     @SerializedName("last_name_mother")
     private String voornaam;
-    @SerializedName("nrn_mother")
-    private String rrnMoeder;
-    @SerializedName("first_name_father")
-    private String voornaamOuder2;
-    @SerializedName("last_name_father")
-    private String naamOuder2;
-    @SerializedName("nrn_father")
-    private String rrnVader;
 
-    public Gebruiker(String emailadres, String password, String telNr, String naam, String voornaam, String rrnMoeder, String voornaamOuder2, String naamOuder2, String rrnVader) {
+    public Gebruiker(String emailadres, String password, String telNr, String naam, String voornaam) {
         this.emailadres = emailadres;
         this.password = password;
         this.telNr = telNr;
         this.naam = naam;
         this.voornaam = voornaam;
-        this.rrnMoeder = rrnMoeder;
-        this.voornaamOuder2 = voornaamOuder2;
-        this.naamOuder2 = naamOuder2;
-        this.rrnVader = rrnVader;
     }
-
-
-
-    /*public Gebruiker(String naam, String voornaam, String telNr, String emailadres, String password, String passwordConfirmed) {
-        this.naam = naam;
-        this.voornaam = voornaam;
-        this.telNr = telNr;
-        this.emailadres = emailadres;
-        this.password=password;
-        this.passwordConfirmed=passwordConfirmed;
-    }*/
 
     public String getNaam() {
         return naam;
@@ -71,22 +49,37 @@ public class Gebruiker implements Parcelable {
         return password;
     }
 
-    public String getRrnMoeder() {
-        return rrnMoeder;
+    @Override
+    public String toString() {
+        return this.voornaam + " " + this.naam;
     }
 
-    public String getVoornaamOuder2() {
-        return voornaamOuder2;
+    /**
+     * Constructor voor gebruiker die als parameter een parcel object meekrijgt
+     * en die het parcel object uitleest om een gebruiker aan te maken
+     * @param in de parcel die meegegeven wordt en die de gegevens van de gebruiker bevat
+     */
+    protected Gebruiker(Parcel in) {
+        emailadres = in.readString();
+        password = in.readString();
+        telNr = in.readString();
+        naam = in.readString();
+        voornaam = in.readString();
+    }
+    /**
+     * Nodig voor elke parcellable. In 99% van de gevallen is return 0 goed.
+     * @return
+     */
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public String getNaamOuder2() {
-        return naamOuder2;
-    }
-
-    public String getRrnVader() {
-        return rrnVader;
-    }
-
+    /**
+     * Maakt het mogelijk om gebruiker in een parcel te steken
+     * @param dest is de parcel waarin de gebruiker terechtkomt
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(emailadres);
@@ -94,45 +87,20 @@ public class Gebruiker implements Parcelable {
         dest.writeString(telNr);
         dest.writeString(naam);
         dest.writeString(voornaam);
-        dest.writeString(rrnMoeder);
-        dest.writeString(voornaamOuder2);
-        dest.writeString(naamOuder2);
-        dest.writeString(rrnVader);
     }
-
-    private Gebruiker() {
-
-    }
-
-    public static final Parcelable.Creator<Gebruiker> CREATOR = new Creator<Gebruiker>() {
-        public Gebruiker createFromParcel(Parcel source) {
-            Gebruiker gebruiker = new Gebruiker();
-            gebruiker.emailadres = source.readString();
-            gebruiker.password = source.readString();
-            gebruiker.telNr = source.readString();
-            gebruiker.naam = source.readString();
-            gebruiker.voornaam = source.readString();
-            gebruiker.rrnMoeder = source.readString();
-            gebruiker.voornaamOuder2 = source.readString();
-            gebruiker.naamOuder2 = source.readString();
-            gebruiker.rrnVader = source.readString();
-            return gebruiker;
+    /**
+     * Maakt het lezen van een gebruiker uit een parcel mogelijk
+     * Gebruikt een constructor van gebruiker die als parameter een parcel object meekrijgt
+     */
+    public static final Parcelable.Creator<Gebruiker> CREATOR = new Parcelable.Creator<Gebruiker>() {
+        @Override
+        public Gebruiker createFromParcel(Parcel in) {
+            return new Gebruiker(in);
         }
 
         @Override
         public Gebruiker[] newArray(int size) {
             return new Gebruiker[size];
         }
-
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public String toString() {
-        return this.voornaam + " " + this.naam;
-    }
 }

@@ -1,33 +1,26 @@
 package hogent.hogentprojecteniii_groep10.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Fabrice on 7/11/2014.
- */
-public class Ouder {
+public class Ouder extends Gebruiker{
 
     @SerializedName("rrn_mother")
     private String rrnMoeder;
     @SerializedName("rrn_father")
     private String rrnVader;
     @SerializedName("last_name_father")
-    private String naamOuder2;
+    private String naamVader;
     @SerializedName("first_name_father")
-    private String voornaamOuder2;
+    private String voornaamVader;
 
-/*
-    public Ouder(String naam, String voornaam, String rrnMoeder, String naamOuder2, String voornaamOuder2, String rrnVader,String telNr, String emailadres, String password, String passwordConfirmed ) {
-        super(naam, voornaam, telNr, emailadres, password, passwordConfirmed);
+    public Ouder(String naam, String voornaam, String rrnMoeder, String naamVader, String voornaamVader, String rrnVader,String telNr, String emailadres, String password) {
+        super(emailadres, password, telNr, naam, voornaam);
         this.rrnMoeder = rrnMoeder;
         this.rrnVader = rrnVader;
-        this.naamOuder2 = naamOuder2;
-        this.voornaamOuder2 = voornaamOuder2;
-    }
-
-    public Ouder(String naam, String voornaam,String rrnMoeder, String password, String passwordConfirmed, String telNr, String emailadres){
-        super(naam, voornaam, telNr, emailadres, password, passwordConfirmed);
-        this.rrnMoeder = rrnMoeder;
+        this.naamVader = naamVader;
+        this.voornaamVader = voornaamVader;
     }
 
     public String getRrnMoeder() {
@@ -38,12 +31,59 @@ public class Ouder {
         return rrnVader;
     }
 
-    public String getNaamOuder2() {
-        return naamOuder2;
+    public String getNaamVader() {
+        return naamVader;
     }
 
-    public String getVoornaamOuder2() {
-        return voornaamOuder2;
+    public String getVoornaamVader() {
+        return voornaamVader;
     }
-       */
+
+    /**
+     * Constructor voor ouder die als parameter een parcel object meekrijgt
+     * en die het parcel object uitleest en een ouder object aanmaakt
+     * @param in de parcel die meegegeven wordt en de gegevens van de ouder bevat
+     */
+    protected Ouder(Parcel in) {
+        super(in);
+        rrnMoeder = in.readString();
+        rrnVader = in.readString();
+        naamVader = in.readString();
+        voornaamVader = in.readString();
+    }
+    /**
+     * Nodig voor elke parcellable. In 99% van de gevallen is return 0 goed.
+     * @return
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     *
+     * @param dest is de parcel waarin de ouder terechtkomt
+     * @param flags
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(rrnMoeder);
+        dest.writeString(rrnVader);
+        dest.writeString(naamVader);
+        dest.writeString(voornaamVader);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Ouder> CREATOR = new Parcelable.Creator<Ouder>() {
+        @Override
+        public Ouder createFromParcel(Parcel in) {
+            return new Ouder(in);
+        }
+
+        @Override
+        public Ouder[] newArray(int size) {
+            return new Ouder[size];
+        }
+    };
 }
