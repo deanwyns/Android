@@ -26,10 +26,20 @@ public interface RestService {
     @POST("/access_token")
     LoginToken login(@FieldMap Map<String, String> options);
 
+    /**
+     * Zal een ouder registreren op de server
+     * @param options de gegevens die de server nodig heeft om een gebruiker aan te maken
+     * @param callback
+     */
     @FormUrlEncoded
     @POST("/user")
     void register(@FieldMap Map<String, String> options, Callback<String> callback);
 
+    /**
+     * Zal een kind aanmaken op de server
+     * @param options de gegevens die de server nodig heeft om een kind aan te maken
+     * @param callback
+     */
     @FormUrlEncoded
     @POST("/user/me/children")
     void addChild(@FieldMap Map<String, String> options, Callback<String> callback);

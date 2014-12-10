@@ -4,7 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Fabrice on 9/12/2014.
+ * De klasse die een Monitor voorstelt in de applicatie.
+ * Is Parcelable om doorgave mogelijk te maken tussen activities.
  */
 public class Monitor extends Gebruiker {
 

@@ -6,9 +6,9 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Fabrice on 21/11/2014.
+ * De klasse die een Kind voorstelt in de applicatie.
+ * Is Parcelable om doorgave mogelijk te maken tussen activities.
  */
-
 public class Kind implements Parcelable {
 
     @SerializedName("lastName")
@@ -65,6 +65,11 @@ public class Kind implements Parcelable {
         return postalCode;
     }
 
+    /**
+     * Maakt het mogelijk om kind in een parcel te steken
+     * @param dest is de parcel waarin het kind terechtkomt
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(lastName);
@@ -75,7 +80,11 @@ public class Kind implements Parcelable {
         dest.writeString(city);
         dest.writeString(postalCode);
     }
-
+    /**
+     * Constructor voor Kind die als parameter een parcel object meekrijgt
+     * en die het parcel object uitleest om een kind aan te maken
+     * @param in de parcel die meegegeven wordt en die de gegevens van de monitor bevat
+     */
         protected Kind(Parcel in) {
             lastName = in.readString();
             firstName = in.readString();
@@ -87,7 +96,10 @@ public class Kind implements Parcelable {
         }
 
 
-
+    /**
+     * Maakt het lezen van een kind uit een parcel mogelijk
+     * Gebruikt een constructor van kind die als parameter een parcel object meekrijgt
+     */
         public static final Parcelable.Creator<Kind> CREATOR = new Parcelable.Creator<Kind>() {
             @Override
             public Kind createFromParcel(Parcel in) {
@@ -104,7 +116,10 @@ public class Kind implements Parcelable {
     public String toString() {
         return this.firstName + " " + this.lastName;
     }
-
+    /**
+     * Nodig voor elke parcellable. In 99% van de gevallen is return 0 goed.
+     * @return
+     */
     @Override
     public int describeContents() {
         return 0;

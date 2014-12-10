@@ -7,7 +7,7 @@ import hogent.hogentprojecteniii_groep10.R;
 import retrofit.RequestInterceptor;
 
 /**
- * Created by Fabrice on 2/12/2014.
+ * Hulpklasse om een header toe te voegen aan de URL van het http request
  */
 public class SessionRequestInterceptor implements RequestInterceptor {
 
@@ -17,6 +17,10 @@ public class SessionRequestInterceptor implements RequestInterceptor {
         this.token = token;
     }
 
+    /**
+     * Voegt een authorization header toe aan het request als de gebruiker ingelogd is
+     * @param request
+     */
     @Override
     public void intercept(RequestFacade request) {
         if(!this.token.equals("") ||this.token!= null)

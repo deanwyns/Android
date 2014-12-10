@@ -9,13 +9,17 @@ import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import retrofit.RestAdapter;
 
 /**
- * Created by Fabrice on 2/12/2014.
+ * De hulpklasse om de restService aan te maken
  */
 public class RestClient {
 
     private static final String BASE_URL = "http://lloyd.deanwyns.me/api";
     private RestService restService;
 
+    /**
+     * Als de gebruiker ingelogd moet zijn zal hier het token naar de interceptor gestuurd worden
+     * @param token
+     */
     public RestClient(String token){
 
         RestAdapter restAdapter = new RestAdapter.Builder()

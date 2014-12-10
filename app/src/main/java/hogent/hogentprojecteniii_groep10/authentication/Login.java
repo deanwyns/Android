@@ -40,6 +40,9 @@ import hogent.hogentprojecteniii_groep10.models.LoginToken;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
+/**
+ * Activity om in te loggen
+ */
 public class Login extends Activity {
     private final static String TAG = "Login";
     private final static String GRANT_TYPE = "password";
@@ -48,13 +51,15 @@ public class Login extends Activity {
 
     private EditText mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
-    private Button mEmailSignInButton, mSignUpButton, mCancelButton;
+    private Button mEmailSignInButton, mSignUpButton;
     private UserLoginTask mAuthTask = null;
     private boolean emailValid;
     private boolean passwordValid;
 
+    /**
+     * Initialiseert het scherm
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +70,15 @@ public class Login extends Activity {
         mPasswordView = (EditText) findViewById(R.id.passWord);
         mEmailSignInButton = (Button) findViewById(R.id.btnLogIn);
         mSignUpButton = (Button) findViewById(R.id.btnSignUp);
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-        mCancelButton = (Button) findViewById(R.id.btnCancel_login);
         mEmailSignInButton.setEnabled(false);
 
         setUpListeners();
     }
 
+    /**
+     * Voegt Listeners toe aan de knoppen en de EditText velden
+     * en stelt het gedrag in van de enter knop op het android toetsenbord
+     */
     private void setUpListeners() {
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +93,10 @@ public class Login extends Activity {
                 onSignUpClicked();
             }
         });
-
+        /**
+         *  Als de inhoud van de tekstvelden ongeldig is doet de enter knop op het toetsenbord bij het laatste
+         *  tekstveld niets anders zal de registratie gestart worden
+         */
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -100,7 +109,9 @@ public class Login extends Activity {
                 return false;
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mPasswordView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -116,7 +127,9 @@ public class Login extends Activity {
 
             }
         });
-
+        /**
+         * Valideert de inhoud van het tekstveld wanneer het verandert
+         */
         mEmailView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
@@ -137,11 +150,18 @@ public class Login extends Activity {
         });
     }
 
+    /**
+     * Gaat naar de registreren activity
+     */
     private void onSignUpClicked() {
         Intent registrerenIntent = new Intent(getApplicationContext(), Registreren.class);
         startActivity(registrerenIntent);
     }
 
+    /**
+     * Kijkt of het netwerk beschikbaar is en als er internetverbinding is zal de poging om in
+     * te loggen starten
+     */
     private void onLoginClicked() {
         if (!NetworkingMethods.isNetworkAvailable(getApplicationContext())) {
             Toast.makeText(getBaseContext(), "No network connection", Toast.LENGTH_SHORT).show();
@@ -151,9 +171,7 @@ public class Login extends Activity {
     }
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * Doet een login poging met de ingegeven waarden van het formulier
      */
     public void attemptLogin() {
 
@@ -161,13 +179,14 @@ public class Login extends Activity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-            //mProgressView.setVisibility(View.VISIBLE);
-            //showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
 
     }
-
+    /**
+     * Kijkt of de tekst een geldig emailadres is
+     * @param email
+     */
     private void isEmailValid(String email) {
         String emailRegEx;
         Pattern pattern;
@@ -179,11 +198,17 @@ public class Login extends Activity {
 
         emailValid =  matcher.find();
     }
-
+    /**
+     * Kijkt of de tekst overeenkomt met de opgelegde regels voor wachtwoord
+     * @param password
+     */
     private void isPasswordValid(String password) {
         passwordValid =  !TextUtils.isEmpty(password);
     }
-
+    /**
+     * Als alle velden correct gevalideerd zijn zal de knop om te registreren ge-enabled worden
+     * anders zal de knop disabled worden. Bij de ongeldige velden komt ook een errorfield te staan
+     */
     private void changeButtonState(){
         if (emailValid && passwordValid){
             mEmailSignInButton.setEnabled(true);
@@ -198,46 +223,7 @@ public class Login extends Activity {
     }
 
     /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            //mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            //mCancelButton.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * Stelt de asynchrone task voor om in te kunnen loggen
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -246,18 +232,31 @@ public class Login extends Activity {
         private ProgressDialog progressDialog;
         private RestClient restClient = new RestClient();
 
+        /**
+         *
+         * @param email
+         * @param password
+         */
         public UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
 
         }
-
+        /**
+         * Voordat de task gestart wordt zal er een dialog getoond worden
+         */
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(Login.this, getResources().getString(R.string.title_login), getResources().getString(R.string.please_wait), true);
             super.onPreExecute();
         }
-
+        /**
+         * De parameter map die meegegeven zal worden met het HTTP request naar de server
+         * zal hier opgevuld worden en meegegeven worden naar de functie die het
+         * request zal versturen
+         * @param params
+         * @return
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
 
@@ -272,13 +271,13 @@ public class Login extends Activity {
             return sendLoginRequest(loginParameterMap);
 
         }
-
+        /**
+         *  Zal het http request naar de server versturen en afhankelijk van of het inloggen
+         *  wel of niet succesvol was zal het logintoken dat van de server komt
+         *  opgeslaan worden in de sharedpreferences
+         * @param loginParameterMap de map die de gegevens van de in te loggen gebruiker bevat
+         */
         private boolean sendLoginRequest(final Map<String, String> loginParameterMap) {
-
-            /*RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint("http://lloyd.deanwyns.me/api")
-                    .build();
-            RestService service = restAdapter.create(RestService.class);*/
 
             LoginToken loginToken;
             try {
@@ -297,12 +296,16 @@ public class Login extends Activity {
             }
             return false;
         }
-
+        /**
+         * Na de task zal het dialog verdwijnen, de asynchrone task gestopt worden
+         * Als het inloggen succesvol is zal naar de parent activity teruggegaan worden
+         * anders zal een errorfield ingesteld worden
+         * @param success is true als het registreren succesvol is zoniet false
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             progressDialog.dismiss();
-            //showProgress(false);
             if (success) {
                 finish();
             } else {
@@ -310,12 +313,14 @@ public class Login extends Activity {
                 mPasswordView.requestFocus();
             }
         }
-
+        /**
+         * Wanneer er geannuleerd wordt wordt de asynchrone task geannuleerd en
+         * zal het dialog verdwijnen
+         */
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             progressDialog.dismiss();
-            //showProgress(false);
         }
     }
 }

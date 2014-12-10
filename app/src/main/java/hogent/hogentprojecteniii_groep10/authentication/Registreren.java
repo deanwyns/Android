@@ -359,7 +359,7 @@ public class Registreren extends Activity {
     }
 
     /**
-     * Kijkt of het ingegeven emailadres een geldig emailadres is
+     * Kijkt of de tekst een geldig emailadres is
      * @param email
      */
     private void isEmailValid(String email) {
@@ -395,10 +395,7 @@ public class Registreren extends Activity {
             int rrnNumber = Integer.parseInt(rrn.substring(0,9));
             int modulo = rrnNumber % 97;
             int checkSum = Integer.parseInt(rrn.substring(9,11));
-            if (Integer.compare(modulo, 97-checkSum)==0)
-                return true;
-            else
-                return false;
+            return (Integer.compare(modulo, 97-checkSum)==0);
         }else
             return false;
     }
@@ -408,7 +405,7 @@ public class Registreren extends Activity {
      * @param password
      */
     private void isPasswordValid(String password) {
-        isPasswordValid =  password.length()==6;
+        isPasswordValid =  password.length()>= 6;
     }
 
     /**

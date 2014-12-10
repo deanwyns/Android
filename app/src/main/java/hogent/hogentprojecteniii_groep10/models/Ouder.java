@@ -3,7 +3,10 @@ package hogent.hogentprojecteniii_groep10.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
-
+/**
+ * De klasse die een Ouder voorstelt in de applicatie.
+ * Is Parcelable om doorgave mogelijk te maken tussen activities.
+ */
 public class Ouder extends Gebruiker{
 
     @SerializedName("rrn_mother")
@@ -61,7 +64,8 @@ public class Ouder extends Gebruiker{
     }
 
     /**
-     *
+     * Maakt het mogelijk om ouder in een parcel te steken, roept de writeToParcel methode aan
+     * in Gebruiker
      * @param dest is de parcel waarin de ouder terechtkomt
      * @param flags
      */
@@ -74,7 +78,10 @@ public class Ouder extends Gebruiker{
         dest.writeString(voornaamVader);
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * Maakt het lezen van een ouder uit een parcel mogelijk
+     * Gebruikt een constructor van ouder die als parameter een parcel object meekrijgt
+     */
     public static final Parcelable.Creator<Ouder> CREATOR = new Parcelable.Creator<Ouder>() {
         @Override
         public Ouder createFromParcel(Parcel in) {

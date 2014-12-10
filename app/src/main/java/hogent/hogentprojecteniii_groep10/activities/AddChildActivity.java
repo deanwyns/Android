@@ -80,7 +80,6 @@ public class AddChildActivity extends FragmentActivity {
     /**
      * Voegt Listeners toe aan de knoppen en de EditText velden
      * en stelt het gedrag in van de enter knop op het android toetsenbord
-     *
      */
     private void setUpListeners() {
         mToevoegenButton.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +89,7 @@ public class AddChildActivity extends FragmentActivity {
             }
         });
         /**
-         *  Als de inhoud van de tekstvelden ongeldig is doet de enterknop op het toetsenbord bij het laatste
+         *  Als de inhoud van de tekstvelden ongeldig is doet de enter knop op het toetsenbord bij het laatste
          *  tekstveld niets anders zal de registratie gestart worden
          */
         mStadView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
