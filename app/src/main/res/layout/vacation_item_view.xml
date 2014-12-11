@@ -7,7 +7,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/vacation_icon"
-        android:src="@drawable/biking"
+        android:src="@drawable/joetz"
         android:longClickable="false"
         android:layout_margin="5px" />
 
@@ -41,4 +41,14 @@
         android:id="@+id/vacation_begindate_lbl"
         android:layout_below="@+id/vacation_title_lbl"
         android:layout_alignStart="@+id/vacation_title_lbl" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:drawableStart="@drawable/thumbsup"
+        android:id="@+id/vacation_likes_lbl"
+        android:layout_below="@+id/vacation_begindate_lbl"
+        android:layout_alignStart="@+id/vacation_begindate_lbl" />
 </RelativeLayout>

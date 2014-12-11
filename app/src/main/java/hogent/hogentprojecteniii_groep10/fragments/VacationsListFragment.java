@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +21,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,11 +38,14 @@ import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.helpers.NetworkingMethods;
+import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
+import hogent.hogentprojecteniii_groep10.models.Category;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import hogent.hogentprojecteniii_groep10.persistence.VacationDataSource;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -58,6 +69,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
      * Zal het de restadapter en de vacationDataSource initialiseren.
      * De view zelf wordt opgebouwd in de onCreateView.
      * Dit omdat er gebruik gemaakt wordt van een master/detail overzicht.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -65,6 +77,9 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         super.onCreate(savedInstanceState);
         vacationDataSource = new VacationDataSource(getActivity().getApplicationContext());
         prepareRestAdapter();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getActivity())
+                .build();
+        ImageLoader.getInstance().init(config);
     }
 
     /**
@@ -81,7 +96,8 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     /**
      * De view wordt gemaakt op basis van het fragment_vacations_list xml bestand.
-     * @param inflater instantieert de xml voor een view object
+     *
+     * @param inflater           instantieert de xml voor een view object
      * @param container
      * @param savedInstanceState
      * @return de view die gemaakt werd
@@ -105,6 +121,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     /**
      * Zal eerst de databank verwijderen en daarna een nieuwe databank maken en de vakanties daarin plaatsen.
+     *
      * @param vacationList de vakanties die worden opgeslagen
      */
     private void storeVacationsInSQLiteDB(List<Vacation> vacationList) {
@@ -118,6 +135,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     /**
      * Zal alle vakanties uit de databank halen
+     *
      * @return de vakanties die opgehaald zijn uit de databank
      */
     private List<Vacation> getVacationsFromSQLiteDB() {
@@ -145,9 +163,10 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     /**
      * Deze methode zal opgeroepen worden nadat StartActivityForResult is opgeroepen met betrekking tot een filter.
+     *
      * @param requestCode de code die gebruikt werd om een activity te identificeren
-     * @param resultCode de code die aangeeft of de activity juist is afgehandeld
-     * @param data de data die is meegegeven door de activity
+     * @param resultCode  de code die aangeeft of de activity juist is afgehandeld
+     * @param data        de data die is meegegeven door de activity
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -172,8 +191,9 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     /**
      * Zal filteren op leeftijden.
+     *
      * @param startAge de minimum leeftijd voor een kind voor een bepaalde vakantie
-     * @param endAge de maximum leeftijd voor een kind voor een bepaalde vakantie
+     * @param endAge   de maximum leeftijd voor een kind voor een bepaalde vakantie
      */
     private void filterOnAges(int startAge, int endAge) {
         List<Vacation> filteredVacationList = new ArrayList<Vacation>();
@@ -190,6 +210,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     /**
      * Onderdeel van de search functie.
      * De activity (VacationsListActivity) moet onListItemSelectedListener implementeren.
+     *
      * @param activity
      */
     @Override
@@ -278,6 +299,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     /**
      * Vangt queries op van de searchfunctie
+     *
      * @param query de zoekquery
      * @return true als de query is afgehandeld door de listener
      */
@@ -288,6 +310,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     /**
      * Zal filteren op titel volgens de gegeven query van onQueryTextSubmit.
+     *
      * @param query de query waarop gezocht wordt
      */
     private void filterOnTitle(String query) {
@@ -303,6 +326,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
     /**
      * Indien de query verandert en de tekst is leeg, zal de volledige lijst getoond worden.
+     *
      * @param query de query waarop gezocht wordt
      * @return
      */
@@ -325,6 +349,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
         /**
          * De constructor die de adapter zal aanmaken.
+         *
          * @param vacations de vakanties die de lijst zullen opvullen
          */
         public VacationListAdapter(List<Vacation> vacations) {
@@ -333,9 +358,10 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
         /**
          * Zal de view opmaken van elke vakantie.
-         * @param position de positie van de huidige view
+         *
+         * @param position    de positie van de huidige view
          * @param convertView de oude view om te hergebruiken
-         * @param parent de ouder waarop deze view geplaatst wordt
+         * @param parent      de ouder waarop deze view geplaatst wordt
          * @return de view met de vakantie
          */
         @Override
@@ -350,40 +376,88 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
             Vacation currentVacation = vacationList.get(position);
 
             //Afbeelding opzetten
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.vacation_icon);
+            final ImageView imageView = (ImageView) itemView.findViewById(R.id.vacation_icon);
             //Het zou makkelijker zijn om een id in de model te steken en op basis daarvan de afbeelding te selecteren.
-            if (currentVacation.getTitle().startsWith("Fiets"))
-                imageView.setImageResource(R.drawable.biking);
-            else if (currentVacation.getTitle().startsWith("Zwem"))
-                imageView.setImageResource(R.drawable.swimming);
-            else
-                imageView.setImageResource(R.drawable.sports);
+
+            int currentCategoryId = currentVacation.getCategory_id();
+
+            Category currentCategory = null;
+            new CategoryDownloadTask(currentCategoryId, imageView).execute();
 
             //Verder de view opvullen
             TextView titleTxt = (TextView) itemView.findViewById(R.id.vacation_title_lbl);
             titleTxt.setText(currentVacation.getTitle());
+
             TextView descTxt = (TextView) itemView.findViewById(R.id.vacation_desc_lbl);
             descTxt.setText(currentVacation.getPromoText());
+
             TextView beginDateTxt = (TextView) itemView.findViewById(R.id.vacation_begindate_lbl);
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             beginDateTxt.setText(formatter.format(currentVacation.getBeginDate().getTime()));
+
+            TextView likeTxt = (TextView) itemView.findViewById(R.id.vacation_likes_lbl);
+            likeTxt.setText(Integer.toString(currentVacation.getLikes()));
 
             return itemView;
         }
     }
 
     /**
+     * Bij een vakantie hoort een categorie en een afbeelding voor die categorie.
+     * Deze asynctask zal de categorie downloaden en de bijhorende afbeelding laden.
+     */
+    public class CategoryDownloadTask extends AsyncTask<Void, Void, Category> {
+        private int categoryId;
+        private ImageView imageView;
+
+        public CategoryDownloadTask(int id, ImageView imageView) {
+            super();
+            this.categoryId = id;
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected void onPostExecute(Category currentCategory) {
+            super.onPostExecute(currentCategory);
+//
+//            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+//            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+//
+            if (currentCategory != null)
+                ImageLoader.getInstance().loadImage(currentCategory.getPhotoUrl(), new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        imageView.setImageBitmap(loadedImage);
+                    }
+                });
+
+        }
+
+        protected Category doInBackground(Void... params) {
+            try {
+                RestClient restClient = new RestClient();
+                return restClient.getRestService().getSpecificCategory(categoryId);
+            } catch (RetrofitError e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+    }
+
+    /**
      * Een AsyncTask die de vakanties zal downloaden van de server.
      */
-    public class VacationDownloadTask extends AsyncTask<String, Integer, Boolean>{
+    public class VacationDownloadTask extends AsyncTask<String, Integer, Void> {
         private ProgressDialog progressDialog;
         private Context currentContext = null;
 
         /**
          * De constructor die de context meekrijgt
+         *
          * @param context de applicatiecontext
          */
-        public VacationDownloadTask(Context context){
+        public VacationDownloadTask(Context context) {
             currentContext = context;
         }
 
@@ -398,10 +472,11 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
         /**
          * Na het downloaden zal de adapter ingesteld worden en de progressdialog verwijderd worden.
+         *
          * @param o geef terug of de download geslaagd is
          */
         @Override
-        protected void onPostExecute(Boolean o) {
+        protected void onPostExecute(Void o) {
             setupListviewAndAdapter();
             progressDialog.dismiss();
             super.onPostExecute(o);
@@ -410,35 +485,44 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         /**
          * Download de vakanties van de server als er internet is.
          * Haalt ze uit de databank indien er geen internet is.
+         *
          * @param params eventuele parameters die konden meegegeven worden
          * @return true als de download geslaagd is
          */
         @Override
-        protected Boolean doInBackground(String... params) {
-            //Is er internet?
-            if (NetworkingMethods.isNetworkAvailable(getActivity().getApplicationContext())) {
-                //Er is internet. Haal het van de server afhankelijk of deze DB en de server DB gelijk zijn
+        protected Void doInBackground(String... params) {
+            try {
+                //Is er internet?
+                if (NetworkingMethods.isNetworkAvailable(getActivity().getApplicationContext())) {
+                    //Er is internet. Haal het van de server afhankelijk of deze DB en de server DB gelijk zijn
 
-                //Is de versie van de db anders dan die op de server?
-                //TODO: Implementeer code voor het checken van versies.
-                if (true) {
-                    //De versie is niet gelijk, haal het van de server
-                    VacationResponse response;
-                    response = service.getVacationOverview();
-                    if (response != null && response.getVacations() != null)
-                        vacationList = response.getVacations();
-                    //Vervang de DB door de nieuwe vakanties
-                    storeVacationsInSQLiteDB(vacationList);
-
+                    //Is de versie van de db anders dan die op de server?
+                    //TODO: Implementeer code voor het checken van versies.
+                    if (true) {
+                        //De versie is niet gelijk, haal het van de server
+                        VacationResponse response;
+                        response = service.getVacationOverview();
+                        if (response != null && response.getVacations() != null)
+                            vacationList = response.getVacations();
+                        //Vervang de DB door de nieuwe vakanties
+                        storeVacationsInSQLiteDB(vacationList);
+                    } else {
+                        //De versie is gelijk, haal het uit de android DB
+                        vacationList = getVacationsFromSQLiteDB();
+                    }
                 } else {
-                    //De versie is gelijk, haal het uit de android DB
+                    //Er is geen internet, haal de vakanties uit de android DB
                     vacationList = getVacationsFromSQLiteDB();
                 }
-            } else {
-                //Er is geen internet, haal de vakanties uit de android DB
-                vacationList = getVacationsFromSQLiteDB();
+            } catch (RetrofitError error) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getActivity(), "De vakanties konden niet worden opgehaald.", Toast.LENGTH_LONG).show();
+                    }
+                });
+                error.printStackTrace();
             }
-            return true;
+            return null;
         }
     }
 }

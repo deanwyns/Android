@@ -28,6 +28,11 @@ public class Vacation implements Parcelable {
     private double oneBmMemberCost;
     private double twoBmMemberCost;
     private int taxDeductable;
+    private int currentParticipants;
+    private int category_id;
+    private int likes;
+
+
 
     public Vacation(long id, String title, String description, String promoText, String location, Date beginDate, Date endDate, int ageFrom, int ageTo, String transportation, int maxParticipants, double baseCost, double oneBmMemberCost, double twoBmMemberCost, int taxDeductable) {
         this.id = id;
@@ -107,7 +112,17 @@ public class Vacation implements Parcelable {
         return taxDeductable;
     }
 
+    public int getCurrentParticipants() {
+        return currentParticipants;
+    }
 
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
     /**
      * Maakt het mogelijk om vacation in een parcel te steken.
      * @param dest is de parcel waarin vacation terecht komt
@@ -134,6 +149,9 @@ public class Vacation implements Parcelable {
         //Lezen is dan via: boolean = in.readByte() != 0;
         // boolean == true if byte != 0
         dest.writeByte((byte) (taxDeductable==1 ? 1 : 0));
+        dest.writeInt(currentParticipants);
+        dest.writeInt(category_id);
+        dest.writeInt(likes);
     }
 
     /**
@@ -163,6 +181,9 @@ public class Vacation implements Parcelable {
             vacation.oneBmMemberCost = source.readDouble();
             vacation.twoBmMemberCost = source.readDouble();
             vacation.taxDeductable = source.readByte() != 0 ? 1:0;
+            vacation.currentParticipants = source.readInt();
+            vacation.category_id = source.readInt();
+            vacation.likes = source.readInt();
             return vacation;
         }
 

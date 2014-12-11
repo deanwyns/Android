@@ -3,6 +3,7 @@ package hogent.hogentprojecteniii_groep10.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import hogent.hogentprojecteniii_groep10.models.Category;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
 import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
@@ -51,4 +52,19 @@ public interface RestService {
      */
     @GET("/vacation/{vacationId}/photos")
     List<Photo> getPhotosForVacation(@Path("vacationId") long vacationId);
+
+    /**
+     * Haalt alle categorieën op waar vakanties aan gelinkt kunnen zijn.
+     * @return de lijst van bestaande categorieën
+     */
+    @GET("/category")
+    List<Category> getCategories();
+
+    /**
+     * Geeft de categorie terug met dat specifiek id
+     * @param categoryId het id dat gezocht wordt
+     * @return de categorie met bepaald id
+     */
+    @GET("/category/{id}")
+    Category getSpecificCategory(@Path("id") int categoryId);
 }
