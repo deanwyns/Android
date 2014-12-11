@@ -42,7 +42,6 @@ public class VacationDetailActivity extends FragmentActivity {
 
     /**
      * Bepaald de actie die wordt uitgevoerd bij het uitvoeren van een menu item
-     *
      * @param item het item waarop is geklikt
      * @return bepaald hoe verdere menu processing wordt afgehandeld
      */

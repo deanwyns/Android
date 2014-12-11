@@ -18,7 +18,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:src="@drawable/joetz"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -220,7 +221,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:text="@string/go_to_photos_temp"
                     android:id="@+id/specific_vacation_images_btn"
                     android:background="@drawable/custom_button"
@@ -230,7 +231,7 @@
 
                 <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:text="@string/inschrijven"
                     android:id="@+id/specific_vacation_signup_btn"
                     android:drawableStart="@drawable/sign_up"

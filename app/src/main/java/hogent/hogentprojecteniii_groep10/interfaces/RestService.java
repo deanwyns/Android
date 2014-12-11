@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import hogent.hogentprojecteniii_groep10.models.Category;
+import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
 import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
@@ -17,6 +18,14 @@ public interface RestService {
 
     @GET("/vacation")
     VacationResponse getVacationOverview();
+
+    /**
+     * Zal alle foto's in een album teruggeven voor de gegeven vakantie
+     * @param vacationId de id van de vakantie waar foto's van moeten worden opgehaald.
+     * @return een lijst van foto's van die vakantie
+     */
+    @GET("/vacation/{vacationId}/photos")
+    List<Photo> getPhotosForVacation(@Path("vacationId") long vacationId);
 
     /**
      * Zal de logintoken geven die opgehaald wordt van de server
@@ -46,12 +55,12 @@ public interface RestService {
     void addChild(@FieldMap Map<String, String> options, Callback<String> callback);
 
     /**
-     * Zal alle foto's in een album teruggeven voor de gegeven vakantie
-     * @param vacationId de id van de vakantie waar foto's van moeten worden opgehaald.
-     * @return een lijst van foto's van die vakantie
+     * Geeft de lijst van kinderen terug van de huidig ingelogde persoon.
+     * Moet in de header de login token meekregen. Gebeurt hier via een interceptor.
+     * @return de lijst van kinderen van dit account.
      */
-    @GET("/vacation/{vacationId}/photos")
-    List<Photo> getPhotosForVacation(@Path("vacationId") long vacationId);
+    @GET("/user/me/children")
+    List<Kind> getChildren();
 
     /**
      * Haalt alle categorieën op waar vakanties aan gelinkt kunnen zijn.
@@ -67,4 +76,6 @@ public interface RestService {
      */
     @GET("/category/{id}")
     Category getSpecificCategory(@Path("id") int categoryId);
+
+
 }

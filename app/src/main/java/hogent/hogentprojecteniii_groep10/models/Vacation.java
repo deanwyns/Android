@@ -3,9 +3,9 @@ package hogent.hogentprojecteniii_groep10.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * De klasse die een vakantie voorstelt in de applicatie.
@@ -29,9 +29,11 @@ public class Vacation implements Parcelable {
     private double twoBmMemberCost;
     private int taxDeductable;
     private int currentParticipants;
-    private int category_id;
+    @SerializedName("category_id")
+    private int categoryId;
     private int likes;
-
+    @SerializedName("category_photo")
+    private String categoryPhoto;
 
 
     public Vacation(long id, String title, String description, String promoText, String location, Date beginDate, Date endDate, int ageFrom, int ageTo, String transportation, int maxParticipants, double baseCost, double oneBmMemberCost, double twoBmMemberCost, int taxDeductable) {
@@ -116,8 +118,13 @@ public class Vacation implements Parcelable {
         return currentParticipants;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+
+    public String getCategoryPhoto() {
+        return categoryPhoto;
     }
 
     public int getLikes() {
@@ -150,8 +157,9 @@ public class Vacation implements Parcelable {
         // boolean == true if byte != 0
         dest.writeByte((byte) (taxDeductable==1 ? 1 : 0));
         dest.writeInt(currentParticipants);
-        dest.writeInt(category_id);
+        dest.writeInt(categoryId);
         dest.writeInt(likes);
+        dest.writeString(categoryPhoto);
     }
 
     /**
@@ -182,8 +190,9 @@ public class Vacation implements Parcelable {
             vacation.twoBmMemberCost = source.readDouble();
             vacation.taxDeductable = source.readByte() != 0 ? 1:0;
             vacation.currentParticipants = source.readInt();
-            vacation.category_id = source.readInt();
+            vacation.categoryId = source.readInt();
             vacation.likes = source.readInt();
+            vacation.categoryPhoto = source.readString();
             return vacation;
         }
 

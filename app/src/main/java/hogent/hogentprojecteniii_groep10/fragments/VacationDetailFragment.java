@@ -2,6 +2,7 @@ package hogent.hogentprojecteniii_groep10.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.w3c.dom.Text;
 
@@ -89,6 +95,7 @@ public class VacationDetailFragment extends Fragment {
         TextView vacationPriceTextView = (TextView) view.findViewById(R.id.specific_vacation_price_text);
         TextView vacationDiscountPriceTextView = (TextView) view.findViewById(R.id.specific_vacation_discount_price_text);
         TextView vacationTaxDeductableTextView = (TextView) view.findViewById(R.id.specific_vacation_tax_deductable_text);
+        final ImageView bannerView = (ImageView) view.findViewById(R.id.specific_vacation_image);
 
         vacationTitleTextView.setText(vacation.getTitle());
         vacationPromotionalTextTextView.setText(vacation.getPromoText());
@@ -103,6 +110,12 @@ public class VacationDetailFragment extends Fragment {
         vacationDiscountPriceTextView.setText(String.format("%s €%.2f\n%s €%.2f", getResources().getString(R.string.eenOuderLidBM),
                 vacation.getOneBmMemberCost(), getResources().getString(R.string.beideOudersLidBM), vacation.getTwoBmMemberCost()));
         vacationTaxDeductableTextView.setText((vacation.isTaxDeductable()==1 ? R.string.ja : R.string.nee));
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.joetz)
+                .showImageOnFail(R.drawable.joetz)
+                .cacheInMemory(true)
+                .build();
+        ImageLoader.getInstance().displayImage(vacation.getCategoryPhoto(), bannerView, options);
 
 
         //Zaken verbergen als ingelogd als kind

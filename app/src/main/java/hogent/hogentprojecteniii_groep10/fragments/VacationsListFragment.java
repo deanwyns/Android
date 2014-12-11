@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -376,13 +377,14 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
             Vacation currentVacation = vacationList.get(position);
 
             //Afbeelding opzetten
-            final ImageView imageView = (ImageView) itemView.findViewById(R.id.vacation_icon);
-            //Het zou makkelijker zijn om een id in de model te steken en op basis daarvan de afbeelding te selecteren.
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.vacation_icon);
 
-            int currentCategoryId = currentVacation.getCategory_id();
-
-            Category currentCategory = null;
-            new CategoryDownloadTask(currentCategoryId, imageView).execute();
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .showImageOnLoading(R.drawable.joetz)
+                    .showImageOnFail(R.drawable.joetz)
+                    .cacheInMemory(true)
+                    .build();
+            ImageLoader.getInstance().displayImage(currentVacation.getCategoryPhoto(), imageView, options);
 
             //Verder de view opvullen
             TextView titleTxt = (TextView) itemView.findViewById(R.id.vacation_title_lbl);
@@ -400,49 +402,6 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
 
             return itemView;
         }
-    }
-
-    /**
-     * Bij een vakantie hoort een categorie en een afbeelding voor die categorie.
-     * Deze asynctask zal de categorie downloaden en de bijhorende afbeelding laden.
-     */
-    public class CategoryDownloadTask extends AsyncTask<Void, Void, Category> {
-        private int categoryId;
-        private ImageView imageView;
-
-        public CategoryDownloadTask(int id, ImageView imageView) {
-            super();
-            this.categoryId = id;
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected void onPostExecute(Category currentCategory) {
-            super.onPostExecute(currentCategory);
-//
-//            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-//            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//
-            if (currentCategory != null)
-                ImageLoader.getInstance().loadImage(currentCategory.getPhotoUrl(), new SimpleImageLoadingListener() {
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        imageView.setImageBitmap(loadedImage);
-                    }
-                });
-
-        }
-
-        protected Category doInBackground(Void... params) {
-            try {
-                RestClient restClient = new RestClient();
-                return restClient.getRestService().getSpecificCategory(categoryId);
-            } catch (RetrofitError e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
     }
 
     /**
