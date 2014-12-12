@@ -38,6 +38,7 @@ import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.helpers.SessionRequestInterceptor;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.main.Main;
+import hogent.hogentprojecteniii_groep10.models.Address;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
@@ -345,9 +346,10 @@ public class AddChildActivity extends FragmentActivity {
         String postcode = mPostcodeView.getText().toString();
         String stad = mStadView.getText().toString();
 
-        Kind child = new Kind(naam, voornaam, rrn, straat, huisnummer,stad, postcode);
+        Kind child = new Kind(naam, voornaam, rrn, stad);
+        Address adres = new Address(straat, huisnummer,stad, postcode);
 
-        mAuthTask = new UserAddChildTask(child);
+        mAuthTask = new UserAddChildTask(child, adres);
         mAuthTask.execute((Void) null);
 
     }
@@ -358,6 +360,7 @@ public class AddChildActivity extends FragmentActivity {
     public class UserAddChildTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Kind mKind;
+        private final Address mAdres;
         private RestClient restClient;
         private ProgressDialog progressDialog;
 
@@ -366,8 +369,9 @@ public class AddChildActivity extends FragmentActivity {
          * om mee te kunnen geven in de header van het http request
          * @param kind
          */
-        public UserAddChildTask(Kind kind) {
+        public UserAddChildTask(Kind kind, Address adres) {
             this.mKind =kind;
+            this.mAdres = adres;
 
             SharedPreferences sharedPref =
                     getApplication().
@@ -382,7 +386,7 @@ public class AddChildActivity extends FragmentActivity {
          */
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(AddChildActivity.this, getResources().getString(R.string.title_login), getResources().getString(R.string.please_wait), true);
+            progressDialog = ProgressDialog.show(AddChildActivity.this, getResources().getString(R.string.title_activity_add_child), getResources().getString(R.string.please_wait), true);
             super.onPreExecute();
         }
 
@@ -395,18 +399,23 @@ public class AddChildActivity extends FragmentActivity {
          */
         @Override
         protected Boolean doInBackground(Void... voids) {
-
+            Map <String, String> makeAddressMap = new HashMap<String, String>();
             Map<String, String> addChildParamMap = new HashMap<String, String>();
+
+            makeAddressMap.put("street_name",mAdres.getStreetName());
+            makeAddressMap.put("house_number", mAdres.getHouseNumber());
+            makeAddressMap.put("city", mAdres.getCity());
+            makeAddressMap.put("postal_code", mAdres.getPostalCode());
 
             addChildParamMap.put("firstName", mKind.getFirstName());
             addChildParamMap.put("lastName", mKind.getLastName());
-            addChildParamMap.put("streetName", mKind.getStreetName());
-            addChildParamMap.put("houseNumber", mKind.getHouseNumber());
+            /*addChildParamMap.put("streetName", mKind.getStreetName());
+            addChildParamMap.put("houseNumber", mKind.getHouseNumber());*/
             addChildParamMap.put("city", mKind.getCity());
-            addChildParamMap.put("postalCode", mKind.getPostalCode());
+            //addChildParamMap.put("postalCode", mKind.getPostalCode());
             addChildParamMap.put("nrn", mKind.getNrn());
 
-            sendAddChildRequest(addChildParamMap);
+            sendAddChildRequest(addChildParamMap, makeAddressMap);
             return true;
         }
 
@@ -422,8 +431,8 @@ public class AddChildActivity extends FragmentActivity {
             progressDialog.dismiss();
 
             if (success) {
-                finish();
-            }
+                finish();}
+
         }
 
         /**
@@ -431,7 +440,14 @@ public class AddChildActivity extends FragmentActivity {
          *  is of niet de succes functie of failure functie aanroepen
          * @param addChildParamMap
          */
-        private void sendAddChildRequest(Map <String, String> addChildParamMap){
+        private void sendAddChildRequest(Map <String, String> addChildParamMap, Map <String, String> makeAddresParamMap){
+
+            Address adres2 = null;
+            try{
+                adres2 = restClient.getRestService().makeAddress(makeAddresParamMap);
+            }catch (RetrofitError error){
+                error.printStackTrace();
+            }
 
             Callback<String> kind = new Callback<String>() {
                 @Override
@@ -442,11 +458,15 @@ public class AddChildActivity extends FragmentActivity {
 
                 @Override
                 public void failure(RetrofitError error) {
-
+                    error.printStackTrace();
                 }
 
             };
-            restClient.getRestService().addChild(addChildParamMap, kind);
+            if (adres2 != null)
+            restClient.getRestService().addChild(addChildParamMap,adres2.getId(), kind);
+            else
+                mAuthTask = null;
+
         }
         /**
          * Wanneer er geannuleerd wordt wordt de asynchrone task geannuleerd en

@@ -17,23 +17,23 @@ public class Kind implements Parcelable {
     private String firstName;
     @SerializedName("nrn")
     private String nrn;
-    @SerializedName("streetName")
+    /*@SerializedName("streetName")
     private String streetName;
     @SerializedName("houseNumber")
-    private String houseNumber;
+    private String houseNumber;*/
     @SerializedName("city")
     private String city;
-    @SerializedName("postalCode")
-    private String postalCode;
+    /*@SerializedName("postalCode")
+    private String postalCode;*/
 
-    public Kind(String naam, String voornaam, String rrn, String straat, String huisnummer, String stad, String postcode) {
+    public Kind(String naam, String voornaam, String rrn/*, String straat, String huisnummer*/, String stad/*, String postcode*/) {
         this.lastName = naam;
         this.firstName = voornaam;
         this.nrn = rrn;
-        this.streetName = straat;
-        this.houseNumber = huisnummer;
+        /*this.streetName = straat;
+        this.houseNumber = huisnummer;*/
         this.city = stad;
-        this.postalCode = postcode;
+        /*this.postalCode = postcode;*/
     }
 
     public String getLastName() {
@@ -48,22 +48,22 @@ public class Kind implements Parcelable {
         return nrn;
     }
 
-    public String getStreetName() {
+    /*public String getStreetName() {
         return streetName;
     }
 
     public String getHouseNumber() {
         return houseNumber;
     }
-
+*/
     public String getCity() {
         return city;
     }
 
-
+/*
     public String getPostalCode() {
         return postalCode;
-    }
+    }*/
 
     /**
      * Maakt het mogelijk om kind in een parcel te steken
@@ -75,10 +75,10 @@ public class Kind implements Parcelable {
         dest.writeString(lastName);
         dest.writeString(firstName);
         dest.writeString(nrn);
-        dest.writeString(streetName);
-        dest.writeString(houseNumber);
+        /*dest.writeString(streetName);
+        dest.writeString(houseNumber);*/
         dest.writeString(city);
-        dest.writeString(postalCode);
+        /*dest.writeString(postalCode);*/
     }
     /**
      * Constructor voor Kind die als parameter een parcel object meekrijgt
@@ -89,10 +89,10 @@ public class Kind implements Parcelable {
             lastName = in.readString();
             firstName = in.readString();
             nrn = in.readString();
-            streetName = in.readString();
-            houseNumber = in.readString();
+            /*streetName = in.readString();
+            houseNumber = in.readString();*/
             city = in.readString();
-            postalCode = in.readString();
+            /*postalCode = in.readString();*/
         }
 
 

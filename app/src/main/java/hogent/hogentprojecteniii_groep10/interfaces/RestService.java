@@ -3,6 +3,7 @@ package hogent.hogentprojecteniii_groep10.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import hogent.hogentprojecteniii_groep10.models.Address;
 import hogent.hogentprojecteniii_groep10.models.Category;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
@@ -51,8 +52,8 @@ public interface RestService {
      * @param callback
      */
     @FormUrlEncoded
-    @POST("/user/me/children")
-    void addChild(@FieldMap Map<String, String> options, Callback<String> callback);
+    @POST("/user/me/addchild")
+    void addChild(@FieldMap Map<String, String> options,@Field("address_id") Long id , Callback<String> callback);
 
     /**
      * Geeft de lijst van kinderen terug van de huidig ingelogde persoon.
@@ -77,5 +78,9 @@ public interface RestService {
     @GET("/category/{id}")
     Category getSpecificCategory(@Path("id") int categoryId);
 
+
+    @FormUrlEncoded
+    @POST("/address/make")
+    Address makeAddress(@FieldMap Map<String, String> options);
 
 }

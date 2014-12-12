@@ -300,7 +300,7 @@ public class Login extends Activity {
          * Na de task zal het dialog verdwijnen, de asynchrone task gestopt worden
          * Als het inloggen succesvol is zal naar de parent activity teruggegaan worden
          * anders zal een errorfield ingesteld worden
-         * @param success is true als het registreren succesvol is zoniet false
+         * @param success is true als het inloggen succesvol is zoniet false
          */
         @Override
         protected void onPostExecute(final Boolean success) {
