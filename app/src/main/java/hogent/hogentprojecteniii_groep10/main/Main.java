@@ -17,6 +17,7 @@ import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.activities.FindMonitorActivity;
 import hogent.hogentprojecteniii_groep10.activities.MainSettingsActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
+import hogent.hogentprojecteniii_groep10.authentication.HomeScreenActivity;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
 
 /**
@@ -140,7 +141,7 @@ public class Main extends Activity {
             Intent settings = new Intent(getApplicationContext(), MainSettingsActivity.class);
             startActivity(settings);
         } else if (id == R.id.action_login) {
-            Intent login = new Intent(getApplicationContext(), Login.class);
+            Intent login = new Intent(getApplicationContext(), HomeScreenActivity.class);
             startActivity(login);
         } else if (id == R.id.action_find_monitor){
             Intent findMonitor = new Intent(getApplicationContext(), FindMonitorActivity.class);

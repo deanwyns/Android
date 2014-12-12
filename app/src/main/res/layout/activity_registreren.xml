@@ -4,20 +4,16 @@
     android:orientation="vertical">
 
     <ScrollView android:layout_width="match_parent"
-        android:layout_height="match_parent" android:id="@+id/register_form">
+        android:layout_height="match_parent" android:id="@+id/register_form"
+        >
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            >
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/joetz"
-                android:contentDescription="@string/joetz_image_description"/>
+            >
 
             <TextView
                 android:layout_width="match_parent"
@@ -34,7 +30,11 @@
                 android:singleLine="true"
                 android:hint="@string/telNr"
                 android:inputType="numberDecimal"
-                android:digits="0123456789"/>
+                android:digits="0123456789"
+                android:background="@drawable/edittext_top_bg"
+                android:padding="10dp"
+                android:layout_marginTop="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/registreer_email"
@@ -43,7 +43,11 @@
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
                 android:inputType="textEmailAddress"
-                android:hint="@string/email_hint"/>
+                android:hint="@string/email_hint"
+                android:background="@drawable/edittext_default_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/registreer_password"
@@ -52,7 +56,11 @@
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
                 android:inputType="textPassword"
-                android:hint="@string/password_hint"/>
+                android:hint="@string/password_hint"
+                android:background="@drawable/edittext_default_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/bevestig_password"
@@ -60,7 +68,12 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:hint="@string/bevestig_password"/>
+                android:hint="@string/bevestig_password"
+                android:background="@drawable/edittext_bottom_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:layout_marginBottom="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -75,7 +88,11 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:hint="@string/lastname"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:background="@drawable/edittext_top_bg"
+                android:padding="10dp"
+                android:layout_marginTop="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/voornaam_moeder"
@@ -83,7 +100,11 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/firstname"/>
+                android:hint="@string/firstname"
+                android:background="@drawable/edittext_default_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/rrn_moeder"
@@ -93,7 +114,12 @@
                 android:singleLine="true"
                 android:hint="@string/rrn"
                 android:inputType="numberDecimal"
-                android:digits="0123456789"/>
+                android:digits="0123456789"
+                android:background="@drawable/edittext_bottom_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:layout_marginBottom="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -108,7 +134,11 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/lastname"/>
+                android:hint="@string/lastname"
+                android:background="@drawable/edittext_top_bg"
+                android:padding="10dp"
+                android:layout_marginTop="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/voornaam_vader"
@@ -116,7 +146,12 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/firstname"/>
+                android:hint="@string/firstname"
+                android:background="@drawable/edittext_default_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:textColorHint="@color/loginHints"
+                />
 
             <EditText
                 android:id="@+id/rrn_vader"
@@ -126,40 +161,26 @@
                 android:singleLine="true"
                 android:hint="@string/rrn"
                 android:inputType="numberDecimal"
-                android:digits="0123456789"/>
+                android:digits="0123456789"
+                android:textColorHint="@color/loginHints"
+                android:background="@drawable/edittext_bottom_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:layout_marginBottom="4dp"/>
 
             <Button
                 android:id="@+id/sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:layout_margin="4dp"
+                android:layout_margin="0dp"
                 android:text="@string/registreren"
+                style="@style/DefaultButtonText"
+                android:background="@drawable/button_default_bg"
+                android:layout_marginTop="0dp"
                 android:enabled="false"
-                android:background="@drawable/custom_button"
-                android:textColor="@android:color/white"
                 />
-
 
         </LinearLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/btnCancel_register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_margin="4dp"
-        android:visibility="invisible"
-        android:background="@drawable/custom_button"
-        android:textColor="@android:color/white"
-        android:text="@string/cancel"
-        android:layout_gravity="center_vertical"
-        />
-
-    <ProgressBar android:id="@+id/register_progress" style="?android:attr/progressBarStyleLarge"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
 </LinearLayout>

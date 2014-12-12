@@ -126,7 +126,7 @@ public class Registreren extends Activity {
             }
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                isVoornaamMoederValid = s.length()!=0;
+                isVoornaamMoederValid = s.length()!= 0;
                 changeButtonState();
             }
             @Override
@@ -338,7 +338,7 @@ public class Registreren extends Activity {
         String rrnVader = mRrnVaderView.getText().toString();
         String telNr = mTelNrView.getText().toString();
 
-            Ouder ouder = new Ouder(email,password,telNr, naamMoeder,voornaamMoeder, rrnMoeder,  voornaamVader,naamVader, rrnVader);
+            Ouder ouder = new Ouder(naamMoeder,voornaamMoeder,rrnMoeder, naamVader,voornaamVader, rrnVader,  telNr,email, password);
             mAuthTask = new UserRegisterTask(ouder, password2);
             mAuthTask.execute((Void) null);
 
@@ -429,24 +429,54 @@ public class Registreren extends Activity {
         }else{
             if (!isTelnrValid)
                 mTelNrView.setError(getString(R.string.error_invalid_telephonenumber));
+            else
+                mTelNrView.setError(null);
+
             if(!isEmailValid)
                 mEmailView.setError(getString(R.string.error_invalid_email));
+            else
+                mEmailView.setError(null);
+
             if(!isPasswordValid)
                 mPasswordView.setError(getString(R.string.error_invalid_password));
+            else
+                mPasswordView.setError(null);
+
             if (!isVoornaamMoederValid)
                 mVoornaamMoederView.setError(getString(R.string.error_field_required));
+            else
+                mVoornaamMoederView.setError(null);
+
             if(!isNaamMoederValid)
                 mNaamMoederView.setError(getString(R.string.error_field_required));
+            else
+                mNaamMoederView.setError(null);
+
             if(!isRrnMoederValid)
                 mRrnMoederView.setError(getString(R.string.error_invalid_rrn));
+            else
+                mRrnMoederView.setError(null);
+
             if(!isBevestigPasswordValid)
                 mBevestigPasswordView.setError(getString(R.string.error_passwords_different));
+            else
+                mBevestigPasswordView.setError(null);
+
             if(!isRrnVaderValid)
                 mRrnVaderView.setError(getString(R.string.error_invalid_rrn));
+            else
+                mRrnVaderView.setError(null);
+
             if(!isNaamVaderValid)
                 mNaamVaderView.setError(getString(R.string.error_field_required));
+            else
+                mNaamVaderView.setError(null);
+
             if(!isVoornaamVaderValid)
                 mVoornaamVaderView.setError(getString(R.string.error_field_required));
+            else
+                mVoornaamVaderView.setError(null);
+
         }
 
     }
@@ -536,8 +566,11 @@ public class Registreren extends Activity {
                 Intent loginIntent = new Intent(getApplicationContext(), Login.class);
                 startActivity(loginIntent);
                 finish();
+            }else {
+                Toast.makeText(getBaseContext(), "Niet Geregistreerd", Toast.LENGTH_SHORT).show();
+                mEmailView.setError(getString(R.string.error_existing_email));
+                mEmailView.requestFocus();
             }
-
         }
 
         /**
@@ -557,7 +590,7 @@ public class Registreren extends Activity {
                 @Override
                 public void failure(RetrofitError error) {
                     error.printStackTrace();
-                    Toast.makeText(getBaseContext(), error.getResponse().toString(), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getBaseContext(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
                 }
 
             };

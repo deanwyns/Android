@@ -51,7 +51,7 @@ public class Login extends Activity {
 
     private EditText mEmailView;
     private EditText mPasswordView;
-    private Button mEmailSignInButton, mSignUpButton;
+    private Button mEmailSignInButton;
     private UserLoginTask mAuthTask = null;
     private boolean emailValid;
     private boolean passwordValid;
@@ -69,7 +69,7 @@ public class Login extends Activity {
         mEmailView = (EditText) findViewById(R.id.email_address);
         mPasswordView = (EditText) findViewById(R.id.passWord);
         mEmailSignInButton = (Button) findViewById(R.id.btnLogIn);
-        mSignUpButton = (Button) findViewById(R.id.btnSignUp);
+
         mEmailSignInButton.setEnabled(false);
 
         setUpListeners();
@@ -87,12 +87,6 @@ public class Login extends Activity {
             }
         });
 
-        mSignUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSignUpClicked();
-            }
-        });
         /**
          *  Als de inhoud van de tekstvelden ongeldig is doet de enter knop op het toetsenbord bij het laatste
          *  tekstveld niets anders zal de registratie gestart worden

@@ -9,9 +9,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Ouder extends Gebruiker{
 
-    @SerializedName("rrn_mother")
+    @SerializedName("nrn_mother")
     private String rrnMoeder;
-    @SerializedName("rrn_father")
+    @SerializedName("nrn_father")
     private String rrnVader;
     @SerializedName("last_name_father")
     private String naamVader;

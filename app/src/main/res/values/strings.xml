@@ -134,5 +134,9 @@
     <string name="pref_summary_logged_in_as_child">Als kind zie je niet alle zaken in de app.</string>
     <string name="specific_vavaction_more_information">Indien u meer informatie wilt, gelieve de app in oudermodus te bekijken! Klik hier om te veranderen!</string>
     <string name="no_internet_available">U heeft geen internetverbinding</string>
+    <string name="error_existing_email">Account bestaat al</string>
+    <string name="title_activity_activity_home_screen">activity_home_screen</string>
+    <string name="title_activity_home_screen">home_screen</string>
+    <string name="signup_signin">Registreren / Inloggen</string>
 
 </resources>

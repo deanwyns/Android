@@ -14,12 +14,6 @@
             android:padding="10dp"
             >
 
-            <ImageView
-                android:contentDescription="@string/joetz_image_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/joetz"/>
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +26,11 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/firstname"/>
+                android:hint="@string/firstname"
+                android:background="@drawable/edittext_top_bg"
+                android:padding="10dp"
+                android:layout_marginTop="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/lastname_add_child"
@@ -40,7 +38,11 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/lastname"/>
+                android:hint="@string/lastname"
+                android:background="@drawable/edittext_default_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/rrn_add_child"
@@ -50,7 +52,12 @@
                 android:singleLine="true"
                 android:hint="@string/rrn"
                 android:inputType="numberDecimal"
-                android:digits="0123456789"/>
+                android:digits="0123456789"
+                android:background="@drawable/edittext_bottom_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:layout_marginBottom="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -64,7 +71,11 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/straat"/>
+                android:hint="@string/straat"
+                android:background="@drawable/edittext_top_bg"
+                android:padding="10dp"
+                android:layout_marginTop="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/huisnummer_add_child"
@@ -72,7 +83,11 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/huisnummer"/>
+                android:hint="@string/huisnummer"
+                android:background="@drawable/edittext_default_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/postcode_add_child"
@@ -80,7 +95,11 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/postcode"/>
+                android:hint="@string/postcode"
+                android:background="@drawable/edittext_default_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:textColorHint="@color/loginHints"/>
 
             <EditText
                 android:id="@+id/stad_add_child"
@@ -88,15 +107,23 @@
                 android:layout_height="wrap_content"
                 android:imeActionLabel="@string/next"
                 android:singleLine="true"
-                android:hint="@string/stad"/>
+                android:hint="@string/stad"
+                android:background="@drawable/edittext_bottom_bg"
+                android:layout_marginTop="-2dp"
+                android:padding="10dp"
+                android:layout_marginBottom="4dp"
+                android:textColorHint="@color/loginHints"/>
 
             <Button
+                android:id="@+id/toevoegen_btn_add_child"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_button"
-                android:textColor="@android:color/white"
+                android:padding="10dp"
+                android:layout_margin="0dp"
+                android:background="@drawable/button_default_bg"
                 android:text="@string/toevoegen"
-                android:id="@+id/toevoegen_btn_add_child"
+                android:layout_marginTop="0dp"
+                style="@style/DefaultButtonText"
                 android:enabled="false"/>
 
         </LinearLayout>
