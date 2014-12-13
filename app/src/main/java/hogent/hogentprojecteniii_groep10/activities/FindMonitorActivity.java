@@ -40,7 +40,6 @@ public class FindMonitorActivity extends Activity {
 
     //Zal opgevuld worden van de server als de back-end ooit wordt gemaakt.
     private List<Monitor> existingMonitorsList = new ArrayList<Monitor>(
-            //Ik hoop dat de begeleider dit ook niet moet invullen? Zijn oudergegevens?
             Arrays.asList(new Monitor("email1", "pass", "0474685148", "naam1", "voornaam1"),
                     new Monitor("email2", "pass", "0474685148", "naam2", "voornaam2"),
                     new Monitor("email3", "pass", "0474685148", "naam3", "voornaam3"),

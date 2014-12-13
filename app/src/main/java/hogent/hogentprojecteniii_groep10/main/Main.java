@@ -19,6 +19,7 @@ import hogent.hogentprojecteniii_groep10.activities.MainSettingsActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
 import hogent.hogentprojecteniii_groep10.authentication.HomeScreenActivity;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
+import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
 
 /**
  * De eerste activity die zal gestart worden. Dit toont het hoofdvenster.
@@ -70,20 +71,7 @@ public class Main extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        showButtonsForLoggedIn(readLoginData());
-    }
-
-    /**
-     * Kijkt of er een token aanwezig is, dus of er ingelogd is of niet.
-     * @return true als er een token bestaat, dus ingelogd is.
-     */
-    private boolean readLoginData() {
-        boolean isLoggedIn;
-        SharedPreferences sharedPref = getApplication()
-                .getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
-        String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
-        isLoggedIn = !token.equals("No token");
-        return isLoggedIn;
+        showButtonsForLoggedIn(HelperMethods.isLoggedIn(getApplication()));
     }
 
     /**
@@ -108,8 +96,6 @@ public class Main extends Activity {
         getPhotosBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Om de access token te testen. Wordt natuurlijk vervangen door foto's
-                readLoginData();
             }
         });
     }
@@ -127,7 +113,7 @@ public class Main extends Activity {
     }
 
     /**
-     * Bepaald de actie dat er gebeurt bij het klikken op een item in het menu.
+     * Bepaalt de actie dat er gebeurt bij het klikken op een item in het menu.
      * @param item
      * @return
      */

@@ -26,6 +26,7 @@ import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.activities.MainSettingsActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationPhotosActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationSignupActivity;
+import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 /**
@@ -65,22 +66,32 @@ public class VacationDetailFragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent signupActivity = new Intent(getActivity().getApplicationContext(), VacationSignupActivity.class);
-                Bundle mBundle = new Bundle();
-                mBundle.putParcelable("SpecificVacation", vacation);
-                signupActivity.putExtras(mBundle);
-                startActivity(signupActivity);
+                if(!HelperMethods.isNetworkAvailable(getActivity()))
+                    Toast.makeText(getActivity(), getResources().getString(R.string.no_internet_available), Toast.LENGTH_SHORT).show();
+                else if(!HelperMethods.isLoggedIn(getActivity())){
+                    Toast.makeText(getActivity(), getResources().getString(R.string.not_logged_in), Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent signupActivity = new Intent(getActivity().getApplicationContext(), VacationSignupActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putParcelable("SpecificVacation", vacation);
+                    signupActivity.putExtras(mBundle);
+                    startActivity(signupActivity);
+                }
             }
         });
 
         photosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoGallery = new Intent(getActivity().getApplicationContext(), VacationPhotosActivity.class);
-                Bundle mBundle = new Bundle();
-                mBundle.putParcelable("SpecificVacation", vacation);
-                photoGallery.putExtras(mBundle);
-                startActivity(photoGallery);
+                if(!HelperMethods.isNetworkAvailable(getActivity()))
+                    Toast.makeText(getActivity(), getResources().getString(R.string.no_internet_available), Toast.LENGTH_SHORT).show();
+                else{
+                    Intent photoGallery = new Intent(getActivity().getApplicationContext(), VacationPhotosActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putParcelable("SpecificVacation", vacation);
+                    photoGallery.putExtras(mBundle);
+                    startActivity(photoGallery);
+                }
             }
         });
 

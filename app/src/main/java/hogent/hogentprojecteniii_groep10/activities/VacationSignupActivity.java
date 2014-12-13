@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
@@ -100,16 +101,19 @@ public class VacationSignupActivity extends Activity {
         goToBillingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent billingDetails = new Intent(getApplicationContext(), VacationBillingActivity.class);
-                Bundle mBundle = new Bundle();
-                mBundle.putParcelable("SpecificVacation", vacation);
-                Gebruiker[] signedUpChildren = new Gebruiker[spinnerList.size()];
-                for (int i = 0; i < spinnerList.size(); i++){
-                    signedUpChildren[i] = adapter.getItem(i);
-                }
-                mBundle.putParcelableArray("SignedUpChildren", signedUpChildren);
-                billingDetails.putExtras(mBundle);
-                startActivity(billingDetails);
+                if(HelperMethods.isNetworkAvailable(getApplicationContext())){
+                    Intent billingDetails = new Intent(getApplicationContext(), VacationBillingActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putParcelable("SpecificVacation", vacation);
+                    Gebruiker[] signedUpChildren = new Gebruiker[spinnerList.size()];
+                    for (int i = 0; i < spinnerList.size(); i++){
+                        signedUpChildren[i] = adapter.getItem(i);
+                    }
+                    mBundle.putParcelableArray("SignedUpChildren", signedUpChildren);
+                    billingDetails.putExtras(mBundle);
+                    startActivity(billingDetails);
+                }else
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet_available), Toast.LENGTH_SHORT).show();
             }
         });
     }

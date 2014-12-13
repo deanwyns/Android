@@ -1,20 +1,11 @@
 package hogent.hogentprojecteniii_groep10.authentication;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -33,11 +24,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hogent.hogentprojecteniii_groep10.R;
-import hogent.hogentprojecteniii_groep10.helpers.NetworkingMethods;
+import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
-import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
 /**
@@ -157,7 +146,7 @@ public class Login extends Activity {
      * te loggen starten
      */
     private void onLoginClicked() {
-        if (!NetworkingMethods.isNetworkAvailable(getApplicationContext())) {
+        if (!HelperMethods.isNetworkAvailable(getApplicationContext())) {
             Toast.makeText(getBaseContext(), "No network connection", Toast.LENGTH_SHORT).show();
         } else {
             attemptLogin();

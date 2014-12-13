@@ -1,17 +1,12 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +15,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
@@ -31,9 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,8 +31,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.R;
-import hogent.hogentprojecteniii_groep10.authentication.Login;
-import hogent.hogentprojecteniii_groep10.helpers.NetworkingMethods;
+import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
@@ -70,7 +59,7 @@ public class VacationPhotosActivity extends Activity {
         sliderShow = (SliderLayout) findViewById(R.id.photo_slider);
 
         try {
-            if(NetworkingMethods.isNetworkAvailable(getApplicationContext()))
+            if(HelperMethods.isNetworkAvailable(getApplicationContext()))
                 photoList = new DownloadFotoUrlsTask().execute().get();
             else
                 Toast.makeText(this, getResources().getString(R.string.no_internet_available), Toast.LENGTH_LONG).show();

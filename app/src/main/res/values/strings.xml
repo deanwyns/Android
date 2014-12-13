@@ -138,5 +138,6 @@
     <string name="title_activity_activity_home_screen">activity_home_screen</string>
     <string name="title_activity_home_screen">home_screen</string>
     <string name="signup_signin">Registreren / Inloggen</string>
+    <string name="not_logged_in">Je bent niet ingelogd!</string>
 
 </resources>

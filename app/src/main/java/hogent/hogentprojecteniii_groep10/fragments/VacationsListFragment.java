@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +24,6 @@ import com.google.gson.GsonBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,10 +33,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.R;
-import hogent.hogentprojecteniii_groep10.helpers.NetworkingMethods;
-import hogent.hogentprojecteniii_groep10.helpers.RestClient;
+import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
-import hogent.hogentprojecteniii_groep10.models.Category;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import hogent.hogentprojecteniii_groep10.persistence.VacationDataSource;
@@ -452,7 +445,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         protected Void doInBackground(String... params) {
             try {
                 //Is er internet?
-                if (NetworkingMethods.isNetworkAvailable(getActivity().getApplicationContext())) {
+                if (HelperMethods.isNetworkAvailable(getActivity().getApplicationContext())) {
                     //Er is internet. Haal het van de server afhankelijk of deze DB en de server DB gelijk zijn
 
                     //Is de versie van de db anders dan die op de server?
