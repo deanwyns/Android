@@ -219,7 +219,6 @@ public class Login extends Activity {
     private void changeButtonState(){
         if (emailValid && passwordValid){
             mEmailSignInButton.setEnabled(true);
-
         }else{
             mEmailSignInButton.setEnabled(false);
             if (!emailValid)
@@ -237,6 +236,7 @@ public class Login extends Activity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
         editor.apply();
+        finish();
     }
 
     private boolean readLoginData() {
