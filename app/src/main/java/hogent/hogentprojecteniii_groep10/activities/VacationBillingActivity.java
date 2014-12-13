@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
+import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 /**
@@ -31,7 +32,7 @@ import hogent.hogentprojecteniii_groep10.models.Vacation;
 public class VacationBillingActivity extends Activity implements TextWatcher {
 
     private Vacation selectedVacation;
-    private Gebruiker[] signedUpChildren;
+    private Kind[] signedUpChildren;
     private EditText streetAndHousenumberTxt, postalCodeAndCityTxt, firstnameTxt, nameTxt;
     private Button goToBillingOverviewBtn;
 
@@ -47,7 +48,7 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
         selectedVacation = getIntent().getParcelableExtra("SpecificVacation");
         Parcelable[] parcelableArray = getIntent().getParcelableArrayExtra("SignedUpChildren");
         if (parcelableArray != null) {
-            signedUpChildren = Arrays.copyOf(parcelableArray, parcelableArray.length, Gebruiker[].class);
+            signedUpChildren = Arrays.copyOf(parcelableArray, parcelableArray.length, Kind[].class);
         }
 
         firstnameTxt = (EditText) findViewById(R.id.billing_firstname_txt);

@@ -2,6 +2,7 @@ package hogent.hogentprojecteniii_groep10.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import hogent.hogentprojecteniii_groep10.R;
 import retrofit.RequestInterceptor;

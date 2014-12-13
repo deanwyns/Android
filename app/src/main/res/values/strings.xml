@@ -139,5 +139,6 @@
     <string name="title_activity_home_screen">home_screen</string>
     <string name="signup_signin">Registreren / Inloggen</string>
     <string name="not_logged_in">Je bent niet ingelogd!</string>
+    <string name="no_child_selected">U heeft geen kind geselecteerd om in te schrijven!</string>
 
 </resources>

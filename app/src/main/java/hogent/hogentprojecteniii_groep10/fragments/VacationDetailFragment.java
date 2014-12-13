@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.w3c.dom.Text;
@@ -40,6 +41,7 @@ public class VacationDetailFragment extends Fragment {
     /**
      * Zal de vakantie als parcelable uit de argumenten halen.
      * Deze is meegegeven uit het listfragment nadat er op een vakantie is geklikt.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -51,7 +53,8 @@ public class VacationDetailFragment extends Fragment {
 
     /**
      * Zal de interface van de specifieke vakantie opbouwen
-     * @param inflater instantieert de xml voor een view object
+     *
+     * @param inflater           instantieert de xml voor een view object
      * @param container
      * @param savedInstanceState
      * @return de view die gemaakt werd
@@ -66,11 +69,11 @@ public class VacationDetailFragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!HelperMethods.isNetworkAvailable(getActivity()))
+                if (!HelperMethods.isNetworkAvailable(getActivity()))
                     Toast.makeText(getActivity(), getResources().getString(R.string.no_internet_available), Toast.LENGTH_SHORT).show();
-                else if(!HelperMethods.isLoggedIn(getActivity())){
+                else if (!HelperMethods.isLoggedIn(getActivity())) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.not_logged_in), Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Intent signupActivity = new Intent(getActivity().getApplicationContext(), VacationSignupActivity.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putParcelable("SpecificVacation", vacation);
@@ -83,9 +86,9 @@ public class VacationDetailFragment extends Fragment {
         photosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!HelperMethods.isNetworkAvailable(getActivity()))
+                if (!HelperMethods.isNetworkAvailable(getActivity()))
                     Toast.makeText(getActivity(), getResources().getString(R.string.no_internet_available), Toast.LENGTH_SHORT).show();
-                else{
+                else {
                     Intent photoGallery = new Intent(getActivity().getApplicationContext(), VacationPhotosActivity.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putParcelable("SpecificVacation", vacation);
@@ -98,7 +101,7 @@ public class VacationDetailFragment extends Fragment {
         TextView vacationTitleTextView = (TextView) view.findViewById(R.id.specific_vacation_title);
         TextView vacationPromotionalTextTextView = (TextView) view.findViewById(R.id.specific_vacation_promotext_text);
         TextView vacationDescriptionTextView = (TextView) view.findViewById(R.id.specific_vacation_description_text);
-        TextView vacationDestinationTextView = (TextView)view. findViewById(R.id.specific_vacation_destination_text);
+        TextView vacationDestinationTextView = (TextView) view.findViewById(R.id.specific_vacation_destination_text);
         TextView vacationAgeTextView = (TextView) view.findViewById(R.id.specific_vacation_age_text);
         TextView vacationWhenTextView = (TextView) view.findViewById(R.id.specific_vacation_when_text);
         TextView vacationTransportationTextView = (TextView) view.findViewById(R.id.specific_vacation_transportation_text);
@@ -120,12 +123,15 @@ public class VacationDetailFragment extends Fragment {
         vacationPriceTextView.setText(String.format("€%.2f", vacation.getBaseCost()));
         vacationDiscountPriceTextView.setText(String.format("%s €%.2f\n%s €%.2f", getResources().getString(R.string.eenOuderLidBM),
                 vacation.getOneBmMemberCost(), getResources().getString(R.string.beideOudersLidBM), vacation.getTwoBmMemberCost()));
-        vacationTaxDeductableTextView.setText((vacation.isTaxDeductable()==1 ? R.string.ja : R.string.nee));
+        vacationTaxDeductableTextView.setText((vacation.isTaxDeductable() == 1 ? R.string.ja : R.string.nee));
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.joetz)
                 .showImageOnFail(R.drawable.joetz)
                 .cacheInMemory(true)
                 .build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getActivity())
+                .build();
+        ImageLoader.getInstance().init(config);
         ImageLoader.getInstance().displayImage(vacation.getCategoryPhoto(), bannerView, options);
 
 
@@ -145,10 +151,10 @@ public class VacationDetailFragment extends Fragment {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean loggedInAsChild = sharedPref.getBoolean(MainSettingsActivity.LOGGED_IN_AS_CHILD, false);
-        if(loggedInAsChild){
+        if (loggedInAsChild) {
             makeTextViewsVisible(moreInformationLbl);
             makeTextViewsGone(vacationDiscountPriceTextView, vacationPriceTextView, vacationTaxDeductableTextView, taxDeductableTitle, priceTitle, discountPriceTitle);
-        }else{
+        } else {
             makeTextViewsGone(moreInformationLbl);
             makeTextViewsVisible(vacationDiscountPriceTextView, vacationPriceTextView, vacationTaxDeductableTextView, taxDeductableTitle, priceTitle, discountPriceTitle);
         }
@@ -158,26 +164,29 @@ public class VacationDetailFragment extends Fragment {
 
     /**
      * Zal bepaalde textview zichtbaar maken
+     *
      * @param textViews de textviews die zichtbaar gemaakt moeten worden
      */
     //Kan ook in 1 methode, maar dit vind ik duidelijker
     private void makeTextViewsVisible(TextView... textViews) {
-        for(TextView textView : textViews)
+        for (TextView textView : textViews)
             textView.setVisibility(View.VISIBLE);
     }
 
     /**
      * Zal bepaalde textviews onzichtbaar maken
+     *
      * @param textViews de textviews die onzichtbaar gemaakt moeten worden
      */
     private void makeTextViewsGone(TextView... textViews) {
-        for(TextView textView : textViews)
+        for (TextView textView : textViews)
             textView.setVisibility(View.GONE);
     }
 
     /**
      * Bij het maken van een fragment zal de vakantie geplaatst worden in de bundle
      * Dit wordt gebruikt bij de activity van deze fragment
+     *
      * @param vacation de vakantie die in de bundle zal gestoken worden
      * @return de fragment met een vakantie in de arguments
      */
