@@ -84,10 +84,6 @@
             android:label="@string/title_activity_main_settings"
             android:parentActivityName=".activities.VacationsListActivity" >
         </activity>
-        <activity
-            android:name=".authentication.HomeScreenActivity"
-            android:label="@string/signup_signin" >
-        </activity>
     </application>
 
 </manifest>

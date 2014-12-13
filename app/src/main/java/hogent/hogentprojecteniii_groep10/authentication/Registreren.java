@@ -1,13 +1,9 @@
 package hogent.hogentprojecteniii_groep10.authentication;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,11 +22,8 @@ import java.util.regex.Pattern;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
-import hogent.hogentprojecteniii_groep10.interfaces.RestService;
-import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Ouder;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -44,8 +37,8 @@ public class Registreren extends Activity {
     private Button mRegistrerenButton/* mCancelButton*/;
     private UserRegisterTask mAuthTask = null;
     private boolean isTelnrValid, isEmailValid, isPasswordValid, isVoornaamMoederValid, isNaamMoederValid,
-    isRrnMoederValid, isBevestigPasswordValid, isNaamVaderValid=true, isVoornaamVaderValid=true,
-            isRrnVaderValid=true;
+    isRrnMoederValid, isBevestigPasswordValid, isNaamVaderValid, isVoornaamVaderValid,
+            isRrnVaderValid, isParentDataValid;
 
     /**
      *  Initialiseert het scherm
@@ -67,7 +60,7 @@ public class Registreren extends Activity {
         mPasswordView = (EditText) findViewById(R.id.registreer_password);
         mRegistrerenButton = (Button) findViewById(R.id.sign_up);
         mBevestigPasswordView = (EditText) findViewById(R.id.bevestig_password);
-
+        changeValidityParentData();
         setUpListeners();
     }
 
@@ -94,7 +87,9 @@ public class Registreren extends Activity {
                 boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
 
                 if ((isValidAction || isValidKey)&& isTelnrValid && isEmailValid && isPasswordValid
-                        && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid){
+                        && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid
+                        && isNaamVaderValid && isVoornaamVaderValid && isRrnVaderValid
+                        && isBevestigPasswordValid){
                     attemptRegistration();
                 }
                 return false;
@@ -127,6 +122,7 @@ public class Registreren extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
                 isVoornaamMoederValid = s.length()!= 0;
+                changeValidityParentData();
                 changeButtonState();
             }
             @Override
@@ -144,7 +140,9 @@ public class Registreren extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
                 isNaamMoederValid = s.length()!=0;
+                changeValidityParentData();
                 changeButtonState();
+
             }
             @Override
             public void afterTextChanged(Editable editable) {
@@ -161,6 +159,7 @@ public class Registreren extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
                 isRrnMoederValid = isRrnValid(s.toString());
+                changeValidityParentData();
                 changeButtonState();
             }
             @Override
@@ -233,12 +232,8 @@ public class Registreren extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                if(!s.toString().isEmpty()) {
-                    if (mVoornaamVaderView.getText().toString().isEmpty())
-                        isVoornaamVaderValid = false;
-                    isRrnVaderValid=isRrnValid(mRrnVaderView.getText().toString());
-                }
-                changeValidityGegevensVader();
+                isNaamVaderValid = s.length()!=0;
+                changeValidityParentData();
                 changeButtonState();
 
             }
@@ -258,13 +253,8 @@ public class Registreren extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                if(!s.toString().isEmpty()) {
-                    isVoornaamVaderValid=true;
-                    if (mNaamVaderView.getText().toString().isEmpty())
-                        isNaamVaderValid = false;
-                    isRrnVaderValid=isRrnValid(mRrnVaderView.getText().toString());
-                }
-                changeValidityGegevensVader();
+                isVoornaamVaderValid = s.length() != 0;
+                changeValidityParentData();
                 changeButtonState();
 
 
@@ -286,14 +276,10 @@ public class Registreren extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                if(!s.toString().isEmpty()) {
-                    if (mVoornaamVaderView.getText().toString().isEmpty())
-                        isVoornaamVaderValid = false;
-                    if(mNaamVaderView.getText().toString().isEmpty())
-                        isNaamVaderValid = false;
-                    isRrnVaderValid=isRrnValid(mRrnVaderView.getText().toString());
-                }
-                changeValidityGegevensVader();
+
+                    isRrnVaderValid=isRrnValid(s.toString());
+
+                changeValidityParentData();
                 changeButtonState();
 
 
@@ -311,13 +297,21 @@ public class Registreren extends Activity {
      *Wanneer geen van de tekstvelden van de vader ingevuld zijn worden de booleans ervoor op
      * true gezet zodat ze geen invloed hebben op het verdere verloop
      */
-    public void changeValidityGegevensVader(){
-        if (mNaamVaderView.getText().toString().isEmpty()
-                && mVoornaamVaderView.getText().toString().isEmpty()
-                && mRrnVaderView.getText().toString().isEmpty()) {
-            isVoornaamVaderValid = true;
-            isNaamVaderValid = true;
-            isRrnVaderValid = true;
+    public void changeValidityParentData(){
+        isParentDataValid = (isNaamVaderValid && isVoornaamVaderValid && isRrnVaderValid) ||
+                (isNaamMoederValid && isVoornaamMoederValid && isRrnMoederValid);
+
+        if (isNaamMoederValid || isVoornaamMoederValid || isRrnMoederValid){
+                mRrnVaderView.setError(null);
+                mNaamVaderView.setError(null);
+                mVoornaamVaderView.setError(null);
+        }
+
+        if (isNaamVaderValid || isVoornaamVaderValid || isRrnVaderValid){
+            mRrnMoederView.setError(null);
+            mNaamMoederView.setError(null);
+            mVoornaamMoederView.setError(null);
+
         }
     }
 
@@ -442,41 +436,40 @@ public class Registreren extends Activity {
             else
                 mPasswordView.setError(null);
 
-            if (!isVoornaamMoederValid)
-                mVoornaamMoederView.setError(getString(R.string.error_field_required));
-            else
-                mVoornaamMoederView.setError(null);
-
-            if(!isNaamMoederValid)
-                mNaamMoederView.setError(getString(R.string.error_field_required));
-            else
-                mNaamMoederView.setError(null);
-
-            if(!isRrnMoederValid)
-                mRrnMoederView.setError(getString(R.string.error_invalid_rrn));
-            else
-                mRrnMoederView.setError(null);
-
             if(!isBevestigPasswordValid)
                 mBevestigPasswordView.setError(getString(R.string.error_passwords_different));
             else
                 mBevestigPasswordView.setError(null);
 
-            if(!isRrnVaderValid)
-                mRrnVaderView.setError(getString(R.string.error_invalid_rrn));
-            else
-                mRrnVaderView.setError(null);
-
-            if(!isNaamVaderValid)
+            if (!isNaamVaderValid && !isParentDataValid)
                 mNaamVaderView.setError(getString(R.string.error_field_required));
             else
                 mNaamVaderView.setError(null);
 
-            if(!isVoornaamVaderValid)
+            if (!isVoornaamVaderValid && !isParentDataValid)
                 mVoornaamVaderView.setError(getString(R.string.error_field_required));
             else
                 mVoornaamVaderView.setError(null);
 
+            if (!isRrnVaderValid && !isParentDataValid)
+                mRrnVaderView.setError(getString(R.string.error_invalid_rrn));
+            else
+                mRrnVaderView.setError(null);
+
+            if (!isNaamMoederValid && !isParentDataValid)
+                mNaamMoederView.setError(getString(R.string.error_field_required));
+            else
+                mNaamMoederView.setError(null);
+
+            if (!isVoornaamMoederValid && !isParentDataValid)
+                mVoornaamMoederView.setError(getString(R.string.error_field_required));
+            else
+                mVoornaamMoederView.setError(null);
+
+            if (!isRrnMoederValid && !isParentDataValid)
+                mRrnMoederView.setError(getString(R.string.error_invalid_rrn));
+            else
+                mRrnMoederView.setError(null);
         }
 
     }
@@ -487,8 +480,7 @@ public class Registreren extends Activity {
      */
     private void changeButtonState(){
         if (isTelnrValid && isEmailValid && isPasswordValid
-                && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid
-                && isBevestigPasswordValid && isNaamVaderValid && isVoornaamVaderValid && isRrnVaderValid){
+                && isBevestigPasswordValid && isParentDataValid){
             mRegistrerenButton.setEnabled(true);
         }else{
             mRegistrerenButton.setEnabled(false);

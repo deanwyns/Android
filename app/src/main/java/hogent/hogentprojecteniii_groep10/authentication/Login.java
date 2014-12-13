@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +42,8 @@ public class Login extends Activity {
 
     private EditText mEmailView;
     private EditText mPasswordView;
-    private Button mEmailSignInButton;
+    private Button mEmailSignInButton, mSignUpButton, mSignOutButton;
+    private LinearLayout mLogoutForm, mLoginForm;
     private UserLoginTask mAuthTask = null;
     private boolean emailValid;
     private boolean passwordValid;
@@ -58,10 +61,20 @@ public class Login extends Activity {
         mEmailView = (EditText) findViewById(R.id.email_address);
         mPasswordView = (EditText) findViewById(R.id.passWord);
         mEmailSignInButton = (Button) findViewById(R.id.btnLogIn);
-
+        mSignUpButton = (Button) findViewById(R.id.btnSignUp);
+        mSignOutButton = (Button) findViewById(R.id.btnSingOut);
         mEmailSignInButton.setEnabled(false);
+        mLoginForm = (LinearLayout) findViewById(R.id.login_form);
+        mLogoutForm = (LinearLayout) findViewById(R.id.logout_form_buttons);
 
         setUpListeners();
+        showButtonsForLoggedIn(readLoginData());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showButtonsForLoggedIn(readLoginData());
     }
 
     /**
@@ -75,7 +88,18 @@ public class Login extends Activity {
                 onLoginClicked();
             }
         });
-
+        mSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSignUpClicked();
+            }
+        });
+        mSignOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
+            }
+        });
         /**
          *  Als de inhoud van de tekstvelden ongeldig is doet de enter knop op het toetsenbord bij het laatste
          *  tekstveld niets anders zal de registratie gestart worden
@@ -202,6 +226,37 @@ public class Login extends Activity {
             mEmailView.setError(getString(R.string.error_invalid_email));
             if (!passwordValid)
             mPasswordView.setError(getString(R.string.error_field_required));
+        }
+    }
+
+    public void signOut(){
+        SharedPreferences sharedPref = getApplication()
+                .getSharedPreferences(
+                        getString(R.string.authorization_preference_file),
+                        Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
+        editor.apply();
+    }
+
+    private boolean readLoginData() {
+        boolean isLoggedIn;
+        SharedPreferences sharedPref = getApplication()
+                .getSharedPreferences(
+                        getString(R.string.authorization_preference_file),
+                        Context.MODE_PRIVATE);
+        String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
+        isLoggedIn = !token.equals("No token");
+        return isLoggedIn;
+    }
+
+    private void showButtonsForLoggedIn(boolean isLoggedIn) {
+        if(isLoggedIn){
+            mLogoutForm.setVisibility(View.VISIBLE);
+            mLoginForm.setVisibility(View.INVISIBLE);
+        }else{
+            mLogoutForm.setVisibility(View.INVISIBLE);
+            mLoginForm.setVisibility(View.VISIBLE);
         }
     }
 
