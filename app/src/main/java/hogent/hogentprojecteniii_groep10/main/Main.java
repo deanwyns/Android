@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.activities.FindMonitorActivity;
 import hogent.hogentprojecteniii_groep10.activities.MainSettingsActivity;
+import hogent.hogentprojecteniii_groep10.activities.RegistrationsOverviewActivity;
 import hogent.hogentprojecteniii_groep10.activities.VacationsListActivity;
 import hogent.hogentprojecteniii_groep10.authentication.Login;
 import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
@@ -95,6 +96,14 @@ public class Main extends Activity {
         getPhotosBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            }
+        });
+
+        getRegistrationsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent registrationsIntent = new Intent(getApplicationContext(), RegistrationsOverviewActivity.class);
+                startActivity(registrationsIntent);
             }
         });
     }

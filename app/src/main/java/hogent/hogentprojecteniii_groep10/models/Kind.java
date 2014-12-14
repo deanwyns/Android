@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Kind implements Parcelable {
 
+    private long id;
     @SerializedName("lastName")
     private String lastName;
     @SerializedName("firstName")
@@ -34,6 +35,10 @@ public class Kind implements Parcelable {
         this.houseNumber = huisnummer;*/
         this.city = stad;
         /*this.postalCode = postcode;*/
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getLastName() {
@@ -79,6 +84,7 @@ public class Kind implements Parcelable {
         dest.writeString(houseNumber);*/
         dest.writeString(city);
         /*dest.writeString(postalCode);*/
+        dest.writeLong(id);
     }
     /**
      * Constructor voor Kind die als parameter een parcel object meekrijgt
@@ -93,6 +99,7 @@ public class Kind implements Parcelable {
             houseNumber = in.readString();*/
             city = in.readString();
             /*postalCode = in.readString();*/
+            id = in.readLong();
         }
 
 

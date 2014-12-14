@@ -84,6 +84,11 @@
             android:label="@string/title_activity_main_settings"
             android:parentActivityName=".activities.VacationsListActivity" >
         </activity>
+        <activity
+            android:name=".activities.RegistrationsOverviewActivity"
+            android:label="@string/title_activity_registrations_overview"
+            android:parentActivityName=".main.Main">
+        </activity>
     </application>
 
 </manifest>

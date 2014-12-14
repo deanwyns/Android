@@ -9,6 +9,8 @@ import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
 import hogent.hogentprojecteniii_groep10.models.Monitor;
 import hogent.hogentprojecteniii_groep10.models.Photo;
+import hogent.hogentprojecteniii_groep10.models.Registration;
+import hogent.hogentprojecteniii_groep10.models.Vacation;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import retrofit.Callback;
 import retrofit.http.*;
@@ -20,6 +22,14 @@ public interface RestService {
 
     @GET("/vacation")
     VacationResponse getVacationOverview();
+
+    /**
+     * Haalt de vakantie op met bepaald ID
+     * @param vacationId het id van de vakantie
+     * @return de gevonden vakantie
+     */
+    @GET("/vacation/{vacationId}")
+    Vacation getVacation(@Path("vacationId") long vacationId);
 
     /**
      * Zal alle foto's in een album teruggeven voor de gegeven vakantie
@@ -65,6 +75,15 @@ public interface RestService {
     List<Kind> getChildren();
 
     /**
+     * Haalt alle registraties op van een bepaald kind.
+     * Verwacht ook een logintoken met een interceptor
+     * @param childId het id van het kind
+     * @return
+     */
+    @GET("/user/me/{childId}/registrations")
+    List<Registration> getRegistrationsForChild(@Path("childId") long childId);
+
+    /**
      * Haalt alle categorieën op waar vakanties aan gelinkt kunnen zijn.
      * @return de lijst van bestaande categorieën
      */
@@ -92,4 +111,6 @@ public interface RestService {
     @FormUrlEncoded
     @POST("/monitor/search")
     void findMonitors(@Field("search_string") String searchString, Callback<List<Monitor>> callback);
+
+
 }

@@ -133,7 +133,6 @@ public class Vacation implements Parcelable {
         return categoryId;
     }
 
-
     public String getCategoryPhoto() {
         return categoryPhoto;
     }
@@ -141,6 +140,12 @@ public class Vacation implements Parcelable {
     public int getLikes() {
         return likes;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
+
     /**
      * Maakt het mogelijk om vacation in een parcel te steken.
      * @param dest is de parcel waarin vacation terecht komt

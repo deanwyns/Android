@@ -94,12 +94,13 @@ public class VacationSignupActivity extends Activity {
         addChildSpinnerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Spinner childSpinner = new Spinner(getApplicationContext());
                 if(spinnerList.size() < kinderen.length){
                     Spinner childSpinner = new Spinner(getApplicationContext(), null, android.R.attr.spinnerStyle);
                     spinnerList.add(childSpinner);
                     childSpinner.setAdapter(adapter);
                     childrenSpinnerLayout.addView(childSpinner);
+                }else{
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.max_children_achieved), Toast.LENGTH_LONG).show();
                 }
             }
         });

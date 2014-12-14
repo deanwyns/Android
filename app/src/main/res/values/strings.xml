@@ -143,5 +143,7 @@
     <string name="no_space_available">Deze vakantie is helaas al volgeboekt</string>
     <string name="vacation_like_sort_btn">Likes ^</string>
     <string name="name_colon">Naam:</string>
+    <string name="title_activity_registrations_overview">Inschrijvingen</string>
+    <string name="max_children_achieved">Om nog een kind in te schrijven moet u hem/haar eerst aanmaken.\nSelecteer \"Mijn kind staat niet in het lijstje\".</string>
 
 </resources>
