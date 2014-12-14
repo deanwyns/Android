@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,8 +25,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Monitor;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * De activity die een bepaalde monitor zal vinden op basis van een gegeven naam.
@@ -97,21 +103,32 @@ public class FindMonitorActivity extends Activity {
     private void getMonitorsFromServer(String searchedValue) {
         monitorList.clear();
 
-        for(Monitor g : existingMonitorsList){
-            if(g.getNaam().toLowerCase().contains(searchedValue.toLowerCase()) || g.getVoornaam().toLowerCase().contains(searchedValue.toLowerCase()) ||
-                    g.getEmailadres().toLowerCase().contains(searchedValue.toLowerCase()))
-                monitorList.add(g);
-        }
+        SharedPreferences sharedPref = this
+                .getSharedPreferences(this.getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
+        String token = sharedPref.getString(this.getResources().getString(R.string.authorization), "No token");
+        RestClient restClient = new RestClient(token);
+        Callback<List<Monitor>> monitorCallback = new Callback<List<Monitor>>() {
+            @Override
+            public void success(List<Monitor> monitors, Response response) {
+                for(Monitor m : monitors){
+                    monitorList.add(m);
+                    adapter.notifyDataSetChanged();
 
-        adapter.notifyDataSetChanged();
+                    if(!monitorList.isEmpty())
+                        findMonitorHelpLbl.setVisibility(View.INVISIBLE);
+                    else{
+                        findMonitorHelpLbl.setText(getResources().getString(R.string.monitor_not_found));
+                        findMonitorHelpLbl.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
 
-        if(!monitorList.isEmpty())
-            findMonitorHelpLbl.setVisibility(View.INVISIBLE);
-        else{
-            findMonitorHelpLbl.setText(getResources().getString(R.string.monitor_not_found));
-            findMonitorHelpLbl.setVisibility(View.VISIBLE);
-        }
-
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        };
+        restClient.getRestService().findMonitors(searchedValue, monitorCallback);
     }
 
     /**

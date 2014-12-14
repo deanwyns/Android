@@ -73,6 +73,8 @@ public class VacationDetailFragment extends Fragment {
                     Toast.makeText(getActivity(), getResources().getString(R.string.no_internet_available), Toast.LENGTH_SHORT).show();
                 else if (!HelperMethods.isLoggedIn(getActivity())) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.not_logged_in), Toast.LENGTH_SHORT).show();
+                } else if (vacation.getCurrentParticipants() >= vacation.getMaxParticipants()) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.no_space_available), Toast.LENGTH_SHORT).show();
                 } else {
                     Intent signupActivity = new Intent(getActivity().getApplicationContext(), VacationSignupActivity.class);
                     Bundle mBundle = new Bundle();
@@ -119,7 +121,7 @@ public class VacationDetailFragment extends Fragment {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         vacationWhenTextView.setText(String.format("%s - %s", formatter.format(vacation.getBeginDate().getTime()), formatter.format(vacation.getEndDate().getTime())));
         vacationTransportationTextView.setText(vacation.getTransportation());
-        vacationParticipantsTextView.setText(String.format("?/%d", vacation.getMaxParticipants()));
+        vacationParticipantsTextView.setText(String.format("%d/%d", vacation.getCurrentParticipants(), vacation.getMaxParticipants()));
         vacationPriceTextView.setText(String.format("€%.2f", vacation.getBaseCost()));
         vacationDiscountPriceTextView.setText(String.format("%s €%.2f\n%s €%.2f", getResources().getString(R.string.eenOuderLidBM),
                 vacation.getOneBmMemberCost(), getResources().getString(R.string.beideOudersLidBM), vacation.getTwoBmMemberCost()));

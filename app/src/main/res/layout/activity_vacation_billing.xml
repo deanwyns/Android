@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/billing_overview"
-        android:id="@+id/textView"
+        android:id="@+id/billing_title"
         android:gravity="center_horizontal" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/billing_paying_person"
-        android:paddingTop="10px" />
+        android:paddingTop="10dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -30,7 +30,10 @@
         android:inputType="textPersonName"
         android:hint="@string/firstname"
         android:ems="10"
-        android:id="@+id/billing_firstname_txt" />
+        android:id="@+id/billing_firstname_txt"
+        android:background="@drawable/edittext_top_bg"
+        android:padding="10dp"
+        android:layout_marginTop="4dp"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -38,7 +41,11 @@
         android:inputType="textPersonName"
         android:hint="@string/lastname"
         android:ems="10"
-        android:id="@+id/billing_lastname_txt" />
+        android:id="@+id/billing_lastname_txt"
+        android:background="@drawable/edittext_bottom_bg"
+        android:layout_marginTop="-2dp"
+        android:padding="10dp"
+        android:layout_marginBottom="4dp"/>
 
     <TextView
         android:layout_width="fill_parent"
@@ -52,7 +59,10 @@
         android:inputType="textPostalAddress"
         android:ems="10"
         android:hint="@string/street_and_housenumber"
-        android:id="@+id/street_and_housenumber_txt" />
+        android:id="@+id/street_and_housenumber_txt"
+        android:background="@drawable/edittext_top_bg"
+        android:padding="10dp"
+        android:layout_marginTop="4dp"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -60,7 +70,11 @@
         android:inputType="textPostalAddress"
         android:ems="10"
         android:hint="@string/postal_code_and_city"
-        android:id="@+id/postal_code_and_city_txt" />
+        android:id="@+id/postal_code_and_city_txt"
+        android:background="@drawable/edittext_bottom_bg"
+        android:layout_marginTop="-2dp"
+        android:padding="10dp"
+        android:layout_marginBottom="4dp"/>
 
     <Button
         android:layout_width="fill_parent"
@@ -68,5 +82,6 @@
         android:background="@drawable/custom_button"
         android:textColor="@android:color/white"
         android:text="@string/go_to_billing_overview"
-        android:id="@+id/go_to_billing_overview_btn" />
+        android:id="@+id/go_to_billing_overview_btn"
+        android:layout_marginTop="10dp"/>
 </LinearLayout>

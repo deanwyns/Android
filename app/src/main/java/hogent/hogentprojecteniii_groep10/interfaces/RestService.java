@@ -7,6 +7,7 @@ import hogent.hogentprojecteniii_groep10.models.Address;
 import hogent.hogentprojecteniii_groep10.models.Category;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
+import hogent.hogentprojecteniii_groep10.models.Monitor;
 import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import retrofit.Callback;
@@ -83,4 +84,12 @@ public interface RestService {
     @POST("/address/make")
     Address makeAddress(@FieldMap Map<String, String> options);
 
+    /**
+     * Zal een lijst van monitors geven op basis van een bepaalde zoekstring.
+     * @param searchString de zoekstring waarop gezocht wordt
+     * @param callback de callback die wordt uitgevoerd bij het krijgen van een lijst van monitoren
+     */
+    @FormUrlEncoded
+    @POST("/monitor/search")
+    void findMonitors(@Field("search_string") String searchString, Callback<List<Monitor>> callback);
 }

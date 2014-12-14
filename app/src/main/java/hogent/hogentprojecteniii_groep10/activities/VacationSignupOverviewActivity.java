@@ -20,6 +20,7 @@ import java.util.Arrays;
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.main.Main;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
+import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 
 /**
@@ -28,7 +29,7 @@ import hogent.hogentprojecteniii_groep10.models.Vacation;
 public class VacationSignupOverviewActivity extends Activity {
 
     private Vacation selectedVacation;
-    private Gebruiker[] signedUpChildren;
+    private Kind[] signedUpChildren;
     private String streetAndHousenumberTxt, postalCodeAndCityTxt, firstnameTxt, nameTxt;
     private TextView signupOverviewVacationTitleLbl, signupOverviewVacationDateLbl,
             signupOverviewVacationPriceLbl, signupOverviewVacationTotalPriceLbl,
@@ -51,7 +52,7 @@ public class VacationSignupOverviewActivity extends Activity {
         selectedVacation = getIntent().getParcelableExtra("SpecificVacation");
         Parcelable[] parcelableArray = getIntent().getParcelableArrayExtra("SignedUpChildren");
         if (parcelableArray != null) {
-            signedUpChildren = Arrays.copyOf(parcelableArray, parcelableArray.length, Gebruiker[].class);
+            signedUpChildren = Arrays.copyOf(parcelableArray, parcelableArray.length, Kind[].class);
         }
         streetAndHousenumberTxt = getIntent().getStringExtra("streetAndHousenumberTxt");
         postalCodeAndCityTxt = getIntent().getStringExtra("postalCodeAndCityTxt");
@@ -69,18 +70,18 @@ public class VacationSignupOverviewActivity extends Activity {
         cancelBtn = (Button) findViewById(R.id.signup_overview_cancel_btn);
         signupBtn = (Button) findViewById(R.id.signup_overview_signup_btn);
 
-        signupOverviewVacationTitleLbl.append(" " + selectedVacation.getTitle());
+        signupOverviewVacationTitleLbl.setText(selectedVacation.getTitle());
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        signupOverviewVacationDateLbl.append(String.format(" %s - %s", formatter.format(selectedVacation.getBeginDate().getTime()), formatter.format(selectedVacation.getEndDate().getTime())));
-        signupOverviewVacationPriceLbl.append(String.format(" €%.2f", selectedVacation.getBaseCost()));
-        signupOverviewVacationTotalPriceLbl.append(String.format(" €%.2f", selectedVacation.getBaseCost() * signedUpChildren.length));
+        signupOverviewVacationDateLbl.setText(String.format("%s - %s", formatter.format(selectedVacation.getBeginDate().getTime()), formatter.format(selectedVacation.getEndDate().getTime())));
+        signupOverviewVacationPriceLbl.setText(String.format("€%.2f", selectedVacation.getBaseCost()));
+        signupOverviewVacationTotalPriceLbl.setText(String.format("€%.2f", selectedVacation.getBaseCost() * signedUpChildren.length));
         signupOverviewBillingNameLbl.setText(firstnameTxt + " " + nameTxt);
         signupOverviewBillingAddressStreetHousenumberLbl.setText(streetAndHousenumberTxt);
         signupOverviewBillingAddressPostalcodeCityLbl.setText(postalCodeAndCityTxt);
 
-        for(Gebruiker child : signedUpChildren){
+        for(Kind child : signedUpChildren){
             TextView childTextView = new TextView(getApplicationContext());
-            childTextView.setText(child.getVoornaam() + " " + child.getNaam());
+            childTextView.setText(child.getFirstName() + " " + child.getLastName());
             childTextView.setTextColor(Color.BLACK);
             signupOverviewSignupsLinearLayout.addView(childTextView);
         }

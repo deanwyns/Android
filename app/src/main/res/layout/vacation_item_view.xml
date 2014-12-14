@@ -50,5 +50,6 @@
         android:drawableStart="@drawable/thumbsup"
         android:id="@+id/vacation_likes_lbl"
         android:layout_below="@+id/vacation_begindate_lbl"
-        android:layout_alignStart="@+id/vacation_begindate_lbl" />
+        android:layout_alignStart="@+id/vacation_begindate_lbl"
+        android:gravity="center_vertical" />
 </RelativeLayout>

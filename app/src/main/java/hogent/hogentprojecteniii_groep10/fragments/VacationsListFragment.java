@@ -52,8 +52,8 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
     private ListView vacationListView;
     private List<Vacation> vacationList = new ArrayList<Vacation>();
     private OnListItemSelectedListener listener;
-    private boolean titleSortedAscending, dateSortedAscending;
-    private Button sortByTitleBtn, sortByDateBtn;
+    private boolean titleSortedAscending, dateSortedAscending, likesSortedAscending;
+    private Button sortByTitleBtn, sortByDateBtn, sortByLikesBtn;
     private final String ENDPOINT = "http://lloyd.deanwyns.me/api";
     private RestService service;
     public static final int FILTER_OPTION_REQUEST = 1;
@@ -102,6 +102,7 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
         populateVacationList();
         sortByTitleBtn = (Button) view.findViewById(R.id.sort_title_btn);
         sortByDateBtn = (Button) view.findViewById(R.id.sort_date_btn);
+        sortByLikesBtn = (Button) view.findViewById(R.id.sort_like_btn);
         setActionListeners();
         return view;
     }
@@ -268,6 +269,30 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
                     }
                 });
                 dateSortedAscending = !dateSortedAscending;
+                vacationAdapter.notifyDataSetChanged();
+            }
+        });
+        sortByLikesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String likeBtnText = sortByLikesBtn.getText().toString();
+                StringBuilder adjustedLikeBtnText = new StringBuilder(likeBtnText);
+                if (likesSortedAscending)
+                    adjustedLikeBtnText.replace(likeBtnText.length() - 1, likeBtnText.length(), "v");
+                else
+                    adjustedLikeBtnText.replace(likeBtnText.length() - 1, likeBtnText.length(), "^");
+                sortByLikesBtn.setText(adjustedLikeBtnText.toString());
+
+                Collections.sort(vacationList, new Comparator<Vacation>() {
+                    @Override
+                    public int compare(Vacation lhs, Vacation rhs) {
+                        if (!likesSortedAscending)
+                            return lhs.getLikes() - rhs.getLikes();
+                        else
+                            return rhs.getLikes() - lhs.getLikes();
+                    }
+                });
+                likesSortedAscending = !likesSortedAscending;
                 vacationAdapter.notifyDataSetChanged();
             }
         });

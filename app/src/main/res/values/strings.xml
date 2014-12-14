@@ -14,8 +14,8 @@
     <string name="filter_vacations">Filter vakanties</string>
     <string name="action_login">Login</string>
     <string name="title_activity_specific_vacation_view">SpecificVacationView</string>
-    <string name="inschrijven">Ik schrijf me in!</string>
-    <string name="description">Beschrijving</string>
+    <string name="inschrijven">Inschrijven</string>
+    <string name="description">Extra Informatie</string>
     <string name="price">Prijs</string>
     <string name="thumbsup">Rate thumbs up</string>
     <string name="thumbsdown">Rate thumbs down</string>
@@ -25,7 +25,7 @@
     <string name="to_lbl">tot</string>
     <string name="from_lbl">Van</string>
     <string name="search_with_filter">Zoeken!</string>
-    <string name="promotional_text">Korte beschrijving</string>
+    <string name="promotional_text">Beschrijving</string>
     <string name="destination">Bestemming</string>
     <string name="age">Leeftijd</string>
     <string name="when">Wanneer</string>
@@ -88,7 +88,7 @@
     <string name="postal_code_and_city">Postcode Gemeente</string>
     <string name="go_to_billing_overview">Ga naar het gegevensoverzicht</string>
     <string name="wrong_input_on_billing">Gelieve de invoer na te kijken!</string>
-    <string name="title_activity_vacation_signup_overview">VacationSignupOverviewActivity</string>
+    <string name="title_activity_vacation_signup_overview">Overzicht</string>
     <string name="vacation">Vakantie</string>
     <string name="signup_overview_title">Titel: </string>
     <string name="signup_overview_date">Datum: </string>
@@ -130,7 +130,7 @@
     <string name="find_monitor">Monitor zoeken</string>
     <string name="monitor_not_found">De monitor is niet gevonden.</string>
     <string name="title_activity_main_settings">Instellingen</string>
-    <string name="pref_title_logged_in_as_child">Ingelogd als kind</string>
+    <string name="pref_title_logged_in_as_child">Kindermodus</string>
     <string name="pref_summary_logged_in_as_child">Als kind zie je niet alle zaken in de app.</string>
     <string name="specific_vavaction_more_information">Indien u meer informatie wilt, gelieve de app in oudermodus te bekijken! Klik hier om te veranderen!</string>
     <string name="no_internet_available">U heeft geen internetverbinding</string>
@@ -140,5 +140,8 @@
     <string name="signup_signin">Registreren / Inloggen</string>
     <string name="not_logged_in">Je bent niet ingelogd!</string>
     <string name="no_child_selected">U heeft geen kind geselecteerd om in te schrijven!</string>
+    <string name="no_space_available">Deze vakantie is helaas al volgeboekt</string>
+    <string name="vacation_like_sort_btn">Likes ^</string>
+    <string name="name_colon">Naam:</string>
 
 </resources>

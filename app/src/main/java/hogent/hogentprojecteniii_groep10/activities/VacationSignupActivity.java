@@ -179,6 +179,10 @@ public class VacationSignupActivity extends Activity {
                 kinderen[i] = children.get(i);
             }
 
+            //Temp tot back-end eindelijk werkt
+            kinderen = new Kind[1];
+            kinderen[0] = new Kind("De Mei", "Jan", "12365489", "Stad");
+
             setupAdapter();
         }
     }

@@ -34,6 +34,9 @@ public class HelperMethods {
                 .getSharedPreferences(context.getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
         String token = sharedPref.getString(context.getResources().getString(R.string.authorization), "No token");
         isLoggedIn = !token.equals("No token");
+
+        //TODO: nakijken of token nog geldig is
+
         return isLoggedIn;
     }
 }

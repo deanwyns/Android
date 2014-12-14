@@ -18,7 +18,7 @@ public class VacationApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        clearAccessToken();
+        //clearAccessToken();
     }
 
     /**

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
@@ -82,6 +83,23 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
             }
         });
 
+        setupSecretButton();
+    }
+
+    /**
+     * Verborgen 'knop' om snel gegevens te kunnen invoeren tijdens de presentatie
+     */
+    private void setupSecretButton() {
+        TextView betGegevens = (TextView) findViewById(R.id.billing_title);
+        betGegevens.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firstnameTxt.setText("Geert");
+                nameTxt.setText("De Mei");
+                streetAndHousenumberTxt.setText("Stationstraat 12");
+                postalCodeAndCityTxt.setText("9000");
+            }
+        });
     }
 
     /**

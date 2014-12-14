@@ -16,18 +16,29 @@ public class Vacation implements Parcelable {
     private long id;
     private String title;
     private String description;
+    @SerializedName("promo_text")
     private String promoText;
     private String location;
+    @SerializedName("begin_date")
     private Date beginDate;
+    @SerializedName("end_date")
     private Date endDate;
+    @SerializedName("age_from")
     private int ageFrom;
+    @SerializedName("age_to")
     private int ageTo;
     private String transportation;
+    @SerializedName("max_participants")
     private int maxParticipants;
+    @SerializedName("base_cost")
     private double baseCost;
+    @SerializedName("one_bm_member_cost")
     private double oneBmMemberCost;
+    @SerializedName("two_bm_member_cost")
     private double twoBmMemberCost;
+    @SerializedName("tax_deductable")
     private int taxDeductable;
+    @SerializedName("current_participants")
     private int currentParticipants;
     @SerializedName("category_id")
     private int categoryId;
