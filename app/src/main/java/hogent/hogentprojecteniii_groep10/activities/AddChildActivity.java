@@ -409,10 +409,7 @@ public class AddChildActivity extends FragmentActivity {
 
             addChildParamMap.put("firstName", mKind.getFirstName());
             addChildParamMap.put("lastName", mKind.getLastName());
-            /*addChildParamMap.put("streetName", mKind.getStreetName());
-            addChildParamMap.put("houseNumber", mKind.getHouseNumber());*/
             addChildParamMap.put("city", mKind.getCity());
-            //addChildParamMap.put("postalCode", mKind.getPostalCode());
             addChildParamMap.put("nrn", mKind.getNrn());
 
             sendAddChildRequest(addChildParamMap, makeAddressMap);
@@ -442,9 +439,28 @@ public class AddChildActivity extends FragmentActivity {
          */
         private void sendAddChildRequest(Map <String, String> addChildParamMap, Map <String, String> makeAddresParamMap){
 
-            Address adres2 = null;
+            Address adres2;
             try{
                 adres2 = restClient.getRestService().makeAddress(makeAddresParamMap);
+                if (adres2 != null) {
+                    Callback<String> kind = new Callback<String>() {
+                        @Override
+                        public void success(String kind, Response response) {
+                            response.getBody();
+                            Toast.makeText(getBaseContext(), "Toegevoegd", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            error.printStackTrace();
+                        }
+
+                    };
+
+                    restClient.getRestService().addChild(addChildParamMap, adres2.getId(), kind);
+                }
+                else
+                    Log.i("AddChildActivity","FOUTJE");
             }catch (RetrofitError error){
                 error.printStackTrace();
             }
@@ -462,10 +478,8 @@ public class AddChildActivity extends FragmentActivity {
                 }
 
             };
-            if (adres2 != null)
-            restClient.getRestService().addChild(addChildParamMap,adres2.getId(), kind);
-            else
-                mAuthTask = null;
+
+            //restClient.getRestService().addChild(addChildParamMap,adres2.getId(), kind);
 
         }
         /**

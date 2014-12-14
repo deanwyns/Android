@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Address implements Parcelable {
 
-    private long id;
+
     @SerializedName("street_name")
     private String streetName;
     @SerializedName("house_number")
@@ -19,12 +19,17 @@ public class Address implements Parcelable {
     private String city;
     @SerializedName("postal_code")
     private String postalCode;
+    @SerializedName("id")
+    private long id;
 
     public Address(String streetName, String houseNumber, String city, String postalCode) {
         this.streetName = streetName;
         this.houseNumber = houseNumber;
         this.city = city;
         this.postalCode = postalCode;
+    }
+
+    public Address() {
     }
 
     public Address(long id, String streetName, String houseNumber, String city, String postalCode) {
@@ -89,4 +94,15 @@ public class Address implements Parcelable {
             return new Address[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "streetName='" + streetName + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", city='" + city + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }
