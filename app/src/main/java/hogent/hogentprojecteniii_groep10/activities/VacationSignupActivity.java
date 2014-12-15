@@ -70,9 +70,15 @@ public class VacationSignupActivity extends Activity {
         //firstChildSpinner  = (Spinner) findViewById(R.id.first_child_spinner);
         //spinnerList.add(firstChildSpinner);
 
-        new GetChildrenTask().execute();
-
         setUpListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        spinnerList.clear();
+        childrenSpinnerLayout.removeAllViews();
+        new GetChildrenTask().execute();
     }
 
     private void setupAdapter() {
@@ -94,7 +100,7 @@ public class VacationSignupActivity extends Activity {
         addChildSpinnerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(spinnerList.size() < kinderen.length){
+                if(spinnerList != null && kinderen != null && spinnerList.size() < kinderen.length){
                     Spinner childSpinner = new Spinner(getApplicationContext(), null, android.R.attr.spinnerStyle);
                     spinnerList.add(childSpinner);
                     childSpinner.setAdapter(adapter);
@@ -127,7 +133,7 @@ public class VacationSignupActivity extends Activity {
                     mBundle.putParcelable("SpecificVacation", vacation);
                     Kind[] signedUpChildren = new Kind[spinnerList.size()];
                     for (int i = 0; i < spinnerList.size(); i++){
-                        signedUpChildren[i] = adapter.getItem(i);
+                        signedUpChildren[i] = (Kind) spinnerList.get(i).getSelectedItem();
                     }
                     mBundle.putParcelableArray("SignedUpChildren", signedUpChildren);
                     billingDetails.putExtras(mBundle);

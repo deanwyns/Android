@@ -1,6 +1,7 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,19 +20,30 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
+import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import hogent.hogentprojecteniii_groep10.models.ChildrenResponse;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Registration;
 import hogent.hogentprojecteniii_groep10.models.RegistrationsResponse;
+import hogent.hogentprojecteniii_groep10.models.SingleVacationResponse;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
+import retrofit.Callback;
+import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 /**
  * Toont een overzicht van inschrijvingen per kind
@@ -42,6 +54,7 @@ public class RegistrationsOverviewActivity extends Activity {
     private List<Kind> listDataHeader;
     private HashMap<Kind, List<Vacation>> listDataChild;
     private ExpandableListView childVacationListView;
+    private RestClient restClient;
 
     /**
      * Maakt de activity aan
@@ -54,6 +67,15 @@ public class RegistrationsOverviewActivity extends Activity {
         setContentView(R.layout.activity_registrations_overview);
 
         childVacationListView = (ExpandableListView) findViewById(R.id.children_vacations_exp_listview);
+
+
+
+        SharedPreferences sharedPref =
+                getApplication().getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
+        String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
+
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        restClient = new RestClient(token, gson);
 
         prepareListData();
         //prepareDummyListData();
@@ -130,34 +152,31 @@ public class RegistrationsOverviewActivity extends Activity {
     }
 
     public class GetChildrenAndVacationsTask extends AsyncTask<Void, Void, Void> {
-        private RestClient restClient;
+        private ProgressDialog progressDialog;
 
-//        public GetChildrenAndVacationsTask() {
-//            SharedPreferences sharedPref =
-//                    getApplication().
-//                            getSharedPreferences(getString(R.string.authorization_preference_file),
-//                                    Context.MODE_PRIVATE);
-//            String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
-//            restClient = new RestClient(token);
-//
-//        }
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(RegistrationsOverviewActivity.this, getResources().getString(R.string.getting_signups), getResources().getString(R.string.please_wait), true);
+            super.onPreExecute();
+        }
+
+
 
         /**
-         * Hier gebeuren veel requests. Slecht voor het netwerk, maar kan momenteel niet anders.
-         * Werkt ook nog niet genoeg in de back-end.
+         * Haalt kinderen, hun inschrijven en de bijhorende vakanties op uit de back-end.
          *
          * @param voids
          * @return
          */
         @Override
         protected Void doInBackground(Void... voids) {
-            SharedPreferences sharedPref =
-                    getApplication().getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
-            String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
-            restClient = new RestClient(token);
-
-            ChildrenResponse childrenResponse = restClient.getRestService().getChildren();
-            List<Kind> children = childrenResponse.getChildren();
+            List<Kind> children = new ArrayList<Kind>();
+            try{
+                ChildrenResponse childrenResponse = restClient.getRestService().getChildren();
+                children = childrenResponse.getChildren();
+            }catch (RetrofitError error){
+                error.printStackTrace();
+            }
 
             listDataHeader = new ArrayList<Kind>();
             listDataChild = new HashMap<Kind, List<Vacation>>();
@@ -166,15 +185,12 @@ public class RegistrationsOverviewActivity extends Activity {
                 listDataHeader.add(k);
                 List<Vacation> vacationsForChild = new ArrayList<Vacation>();
                 try {
-                    restClient = new RestClient(token);
-
                     RegistrationsResponse registrationsResponse = restClient.getRestService().getRegistrationsForChild(k.getId());
                     List<Registration> registrations = registrationsResponse.getRegistrations();
 
                     for (Registration v : registrations) {
-                        Vacation currentVacation = restClient.getRestService().getVacation(v.getVacationId());
-                        Log.i("RegistrationsOvervview", v.getVacationId() + "");
-                        Log.i("RegistrationsOvervview", currentVacation.getTitle());
+                        SingleVacationResponse currentVacationResponse = restClient.getRestService().getVacation(v.getVacationId());
+                        Vacation currentVacation = currentVacationResponse.getVacation();
                         vacationsForChild.add(currentVacation);
                     }
                     listDataChild.put(k, vacationsForChild);
@@ -190,18 +206,17 @@ public class RegistrationsOverviewActivity extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            progressDialog.dismiss();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     prepareAdapter();
-
                     if (listDataChild.isEmpty())
                         Toast.makeText(getApplicationContext(), "Er zijn geen inschrijvingen!", Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
-
     /**
      * Een ExpandableListAdapter om de vakanties per kind te tonen.
      */

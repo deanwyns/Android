@@ -66,26 +66,6 @@
             android:src="@drawable/vacation" />
 
         <ImageButton
-            android:id="@+id/photo_btn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5px"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:textColor="@android:color/white"
-            android:scaleType="fitCenter"
-            android:src="@drawable/photo" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <ImageButton
             android:id="@+id/registrations_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -96,6 +76,27 @@
             android:textColor="@android:color/white"
             android:scaleType="fitCenter"
             android:src="@drawable/files" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/photo_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5px"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/white"
+            android:scaleType="fitCenter"/>
+
 
         <Button
             android:layout_width="0dip"

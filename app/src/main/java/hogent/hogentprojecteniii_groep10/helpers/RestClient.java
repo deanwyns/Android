@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.interfaces.RestService;
 import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 
 /**
  * De hulpklasse om de restService aan te maken
@@ -25,7 +29,7 @@ public class RestClient {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setRequestInterceptor(new SessionRequestInterceptor(token))
                 .setEndpoint(BASE_URL)
-                //.setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         restService = restAdapter.create(RestService.class);
@@ -35,9 +39,18 @@ public class RestClient {
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(BASE_URL)
-                //.setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
+        restService = restAdapter.create(RestService.class);
+    }
+
+    public RestClient(String token, Gson gson){
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(BASE_URL)
+                .setRequestInterceptor(new SessionRequestInterceptor(token))
+                .setConverter(new GsonConverter(gson))
+                .build();
         restService = restAdapter.create(RestService.class);
     }
 

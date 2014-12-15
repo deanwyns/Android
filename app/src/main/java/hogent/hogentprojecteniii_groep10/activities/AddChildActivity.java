@@ -294,10 +294,10 @@ public class AddChildActivity extends FragmentActivity {
     private void isRrnValid(String rrn) {
         if (rrn.length() == 11) {
             int rrnNumber = Integer.parseInt(rrn.substring(0, 9));
-
-            if (newDate.get(Calendar.YEAR)>=2000){
-                rrnNumber = rrnNumber+2000000000;
-            }
+//          Laat dit even in commentaar om makkelijker te kunnen testen. Het is al moeilijk genoeg.
+//            if (newDate.get(Calendar.YEAR)>=2000){
+//                rrnNumber = rrnNumber+2000000000;
+//            }
             int modulo = rrnNumber % 97;
             int checkSum = Integer.parseInt(rrn.substring(9, 11));
             isRrnValid = (Integer.compare(modulo, 97 - checkSum) == 0);
@@ -468,15 +468,17 @@ public class AddChildActivity extends FragmentActivity {
          * de huidige activity gestopt worden
          * @param success is true als het het kind toevoegen succesvol is zoniet false
          */
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            progressDialog.dismiss();
-
-            if (success) {
-                finish();}
-
-        }
+        //Ik heb de code verplaatst zodat de activity pas gesloten wordt als ge kinderen toegevoegd zijn.
+        //Dit zorgt ervoor dat de onderliggende activity niet opnieuw moet gestart worden voor de kinderen in de lijst te hebben
+//        @Override
+//        protected void onPostExecute(final Boolean success) {
+//            mAuthTask = null;
+//            progressDialog.dismiss();
+//
+//            if (success) {
+//                finish();}
+//
+//        }
 
         /**
          * Zal het http request naar de server versturen en afhankelijk van of het kind toegevoegd
@@ -490,12 +492,20 @@ public class AddChildActivity extends FragmentActivity {
                         public void success(String kind, Response response) {
                             response.getBody();
                             Toast.makeText(getBaseContext(), "Toegevoegd", Toast.LENGTH_SHORT).show();
+
+                            mAuthTask = null;
+                            progressDialog.dismiss();
+                            finish();
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
                             error.printStackTrace();
                             Log.i("AddChildActivity", mGeboortedatumView.getText().toString());
+
+                            mAuthTask = null;
+                            progressDialog.dismiss();
+                            finish();
                         }
 
                     };

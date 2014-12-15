@@ -150,6 +150,7 @@
     <string name="housenumber">Huisnummer</string>
     <string name="city">Gemeente</string>
     <string name="postal_code">Postcode</string>
+    <string name="getting_signups">Registraties worden opgehaald</string>
 
 
 </resources>

@@ -2,6 +2,7 @@ package hogent.hogentprojecteniii_groep10.interfaces;
 
 import java.util.Date;
 
+import com.google.gson.annotations.SerializedName;
 import com.squareup.picasso.Downloader;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import hogent.hogentprojecteniii_groep10.models.MonitorResponse;
 import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.Registration;
 import hogent.hogentprojecteniii_groep10.models.RegistrationsResponse;
+import hogent.hogentprojecteniii_groep10.models.SingleVacationResponse;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import retrofit.Callback;
@@ -41,7 +43,7 @@ public interface RestService {
      * @return de gevonden vakantie
      */
     @GET("/vacation/{vacationId}")
-    Vacation getVacation(@Path("vacationId") long vacationId);
+    SingleVacationResponse getVacation(@Path("vacationId") long vacationId);
 
     /**
      * Zal alle foto's in een album teruggeven voor de gegeven vakantie
