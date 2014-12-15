@@ -114,6 +114,8 @@ public class Registreren extends Activity {
         });
         /**
          * Valideert de inhoud van het tekstveld wanneer het verandert
+         * Wanneer de gevevens van de vader ingevuld zijn moeten de gegevens van de moeder
+         * niet ingevuld zijn
          */
         mVoornaamMoederView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -221,8 +223,8 @@ public class Registreren extends Activity {
         });
         /**
          * Valideert de inhoud van het tekstveld wanneer het verandert
-         * De gegevens van de vader zijn niet verplicht dus hebben die tekstvelden geen invloud op de
-         * geldigheid, maar als 1 tekstveld van de vader ingevuld is moeten de rest ook ingevuld zijn
+         * De gegevens van de vader zijn niet verplicht als de gegevens van de moeder
+         * ingevuld zijn dus hebben die tekstvelden geen invloud op de geldigheid
          */
         mNaamVaderView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -294,8 +296,9 @@ public class Registreren extends Activity {
     }
 
     /**
-     *Wanneer geen van de tekstvelden van de vader ingevuld zijn worden de booleans ervoor op
-     * true gezet zodat ze geen invloed hebben op het verdere verloop
+     *Wanneer één van de tekstvelden van de vader of de moeder ingevuld zijn zullen de errorvelden
+     * van de andere weggaan. En wanneer alle gegevens van de moeder of vader gevalideerd zijn
+     * wordt de boolean op true gezet
      */
     public void changeValidityParentData(){
         isParentDataValid = (isNaamVaderValid && isVoornaamVaderValid && isRrnVaderValid) ||
@@ -340,7 +343,7 @@ public class Registreren extends Activity {
 
     /**
      *Kijkt of het ingegeven telefoonnummer een geldig belgisch telefoonnummer is
-     * @param telnr
+     * @param telnr de te valideren string
      */
     private void isTelNrValid(String telnr){
         String telnrRegex;
@@ -354,7 +357,7 @@ public class Registreren extends Activity {
 
     /**
      * Kijkt of de tekst een geldig emailadres is
-     * @param email
+     * @param email de te valideren string
      */
     private void isEmailValid(String email) {
         String emailRegEx;
@@ -382,7 +385,7 @@ public class Registreren extends Activity {
      * Kijkt of de tekst in het rrn tekstveld een geldig
      * rijksregisternummer is
      * @param rrn
-     * @return
+     * @return een boolean die aangeeft of het een geldig rrn is
      */
     private boolean isRrnValid(String rrn){
         if (rrn.length()==11) {
@@ -396,7 +399,7 @@ public class Registreren extends Activity {
 
     /**
      * Kijkt of de tekst in het wachtwoord tekstvenster overeenkomt met de opgelegde regels
-     * @param password
+     * @param password de te valideren string
      */
     private void isPasswordValid(String password) {
         isPasswordValid =  password.length()>= 6;
@@ -404,7 +407,7 @@ public class Registreren extends Activity {
 
     /**
      * Stelt het errorfield in van de tekstvelden afhankelijk van de geldigheid van de tekstvelden
-     * verwijdert het veld wanneer de gegevens geldig zijn
+     * verwijdert het errorveld wanneer de gegevens geldig zijn
      */
     public void setErrors(){
         if (isTelnrValid && isEmailValid && isPasswordValid
@@ -522,7 +525,7 @@ public class Registreren extends Activity {
          * zal hier opgevuld worden en meegegeven worden naar de functie die het
          * request zal versturen
          * @param voids
-         * @return
+         * @return true als het succesvol is zoniet false
          */
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -582,7 +585,9 @@ public class Registreren extends Activity {
                 @Override
                 public void failure(RetrofitError error) {
                     error.printStackTrace();
-                   // Toast.makeText(getBaseContext(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Niet Geregistreerd", Toast.LENGTH_SHORT).show();
+                    mEmailView.setError(getString(R.string.error_existing_email));
+                    mEmailView.requestFocus();
                 }
 
             };

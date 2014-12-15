@@ -122,7 +122,9 @@ public class AddChildActivity extends FragmentActivity {
                 return false;
             }
         });
-
+        /**
+         * Opent een datePicker wanner er naar het geboortedatum textview gegaan wordt
+         */
         mGeboortedatumView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -273,6 +275,9 @@ public class AddChildActivity extends FragmentActivity {
 
     }
 
+    /**
+     * Maakt een datePickerdialog aan en zet de waarde van het textview in op de gekozen waarde
+     */
     public void setDateTimeField() {
         Calendar newCalendar = Calendar.getInstance();
         dobPickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -289,7 +294,7 @@ public class AddChildActivity extends FragmentActivity {
     /**
      *  Kijkt of  de tekst in het rrn tekstveld een geldig
      * rijksregisternummer is
-     * @param rrn
+     * @param rrn de String om te valideren
      */
     private void isRrnValid(String rrn) {
         if (rrn.length() == 11) {
@@ -308,7 +313,7 @@ public class AddChildActivity extends FragmentActivity {
     /**
      * Kijkt of  de tekst in het postcode tekstveld een geldige
      * postcode is
-     * @param zipCode
+     * @param zipCode de te valideren string
      */
     private void isZipCodeValid(String zipCode){
 
@@ -378,10 +383,9 @@ public class AddChildActivity extends FragmentActivity {
     }
     /**
      *Maakt een kind object aan met de gegevens uit de tekstvelden en geeft dit door
-     * naar de asynchrone taak om het kind teo te voegen
+     * naar de asynchrone taak om het kind toe te voegen
      */
     public void attemptAdd() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String naam = mNaamView.getText().toString();
         String voornaam = mVoornaamView.getText().toString();
@@ -412,7 +416,7 @@ public class AddChildActivity extends FragmentActivity {
         /**
          * Constructor van de asynchrone task. Haalt hier het token op van de ingelogde gebruiker
          * om mee te kunnen geven in de header van het http request
-         * @param kind
+         * @param kind het kind dat aangemaakt moet worden op de server
          */
         public UserAddChildTask(Kind kind) {
             this.mKind =kind;
@@ -501,7 +505,7 @@ public class AddChildActivity extends FragmentActivity {
                         @Override
                         public void failure(RetrofitError error) {
                             error.printStackTrace();
-                            Log.i("AddChildActivity", mGeboortedatumView.getText().toString());
+                            Toast.makeText(getBaseContext(), "Mislukt", Toast.LENGTH_SHORT).show();
 
                             mAuthTask = null;
                             progressDialog.dismiss();

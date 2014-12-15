@@ -124,11 +124,6 @@ public interface RestService {
     @GET("/category/{id}")
     Category getSpecificCategory(@Path("id") int categoryId);
 
-
-    @FormUrlEncoded
-    @POST("/address/make")
-    Address makeAddress(@FieldMap Map<String, String> options);
-
     /**
      * Zal een lijst van monitors geven op basis van een bepaalde zoekstring.
      * @param searchString de zoekstring waarop gezocht wordt

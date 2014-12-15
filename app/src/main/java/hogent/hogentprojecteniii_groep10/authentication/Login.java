@@ -49,7 +49,7 @@ public class Login extends Activity {
     private boolean passwordValid;
 
     /**
-     * Initialiseert het scherm
+     * Initialiseert het scherm de eerste keer dat de activity gestart wordt
      * @param savedInstanceState
      */
     @Override
@@ -68,13 +68,16 @@ public class Login extends Activity {
         mLogoutForm = (LinearLayout) findViewById(R.id.logout_form_buttons);
 
         setUpListeners();
-        showButtonsForLoggedIn(readLoginData());
+        showButtonsForLoggedIn(HelperMethods.isLoggedIn(getApplication()));
     }
 
+    /**
+     * Initialiseert het scherm als de activity herstart wordt
+     */
     @Override
     protected void onResume() {
         super.onResume();
-        showButtonsForLoggedIn(readLoginData());
+        showButtonsForLoggedIn(HelperMethods.isLoggedIn(getApplication()));
     }
 
     /**
@@ -192,7 +195,7 @@ public class Login extends Activity {
     }
     /**
      * Kijkt of de tekst een geldig emailadres is
-     * @param email
+     * @param email de te valideren string
      */
     private void isEmailValid(String email) {
         String emailRegEx;
@@ -207,13 +210,14 @@ public class Login extends Activity {
     }
     /**
      * Kijkt of de tekst overeenkomt met de opgelegde regels voor wachtwoord
-     * @param password
+     * @param password de te valideren string
      */
     private void isPasswordValid(String password) {
         passwordValid =  !TextUtils.isEmpty(password);
     }
+
     /**
-     * Als alle velden correct gevalideerd zijn zal de knop om te registreren ge-enabled worden
+     * Als alle velden correct gevalideerd zijn zal de knop om in te loggen ge-enabled worden
      * anders zal de knop disabled worden. Bij de ongeldige velden komt ook een errorfield te staan
      */
     private void changeButtonState(){
@@ -228,6 +232,9 @@ public class Login extends Activity {
         }
     }
 
+    /**
+     * Zal de huidig ingelogde gebruiker uitloggen
+     */
     public void signOut(){
         SharedPreferences sharedPref = getApplication()
                 .getSharedPreferences(
@@ -239,17 +246,11 @@ public class Login extends Activity {
         finish();
     }
 
-    private boolean readLoginData() {
-        boolean isLoggedIn;
-        SharedPreferences sharedPref = getApplication()
-                .getSharedPreferences(
-                        getString(R.string.authorization_preference_file),
-                        Context.MODE_PRIVATE);
-        String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
-        isLoggedIn = !token.equals("No token");
-        return isLoggedIn;
-    }
-
+    /**
+     * Als er ingelogd is zal het login_form verdwijnen en het logout_form tevoorschijn komen,
+     * als er niet ingelogd is zal het omgekeerde gebeuren
+     * @param isLoggedIn true of false afhankelijk van of er ingelogd is
+     */
     private void showButtonsForLoggedIn(boolean isLoggedIn) {
         if(isLoggedIn){
             mLogoutForm.setVisibility(View.VISIBLE);
@@ -271,7 +272,7 @@ public class Login extends Activity {
         private RestClient restClient = new RestClient();
 
         /**
-         *
+         * Constructor
          * @param email
          * @param password
          */
@@ -293,7 +294,7 @@ public class Login extends Activity {
          * zal hier opgevuld worden en meegegeven worden naar de functie die het
          * request zal versturen
          * @param params
-         * @return
+         * @return returnt een boolean, true als het gelukt is, false als het niet gelukt is
          */
         @Override
         protected Boolean doInBackground(Void... params) {

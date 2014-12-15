@@ -22,7 +22,7 @@ public class RestClient {
 
     /**
      * Als de gebruiker ingelogd moet zijn zal hier het token naar de interceptor gestuurd worden
-     * @param token
+     * @param token de string die het token zou moeten bevatten
      */
     public RestClient(String token){
 
