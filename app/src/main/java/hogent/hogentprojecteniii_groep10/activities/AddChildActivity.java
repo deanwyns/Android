@@ -1,24 +1,17 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -27,37 +20,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hogent.hogentprojecteniii_groep10.R;
-import hogent.hogentprojecteniii_groep10.authentication.Login;
-import hogent.hogentprojecteniii_groep10.fragments.VacationDetailFragment;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
-import hogent.hogentprojecteniii_groep10.helpers.SessionRequestInterceptor;
-import hogent.hogentprojecteniii_groep10.interfaces.RestService;
-import hogent.hogentprojecteniii_groep10.main.Main;
-import hogent.hogentprojecteniii_groep10.models.Address;
-import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Kind;
-import hogent.hogentprojecteniii_groep10.models.Vacation;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.converter.GsonConverter;
 
 /**
  * Activity om een kind toe te voegen aan een account
@@ -75,6 +51,7 @@ public class AddChildActivity extends FragmentActivity {
 
     /**
      * Initialiseert het scherm
+     *
      * @param savedInstanceState
      */
     @Override
@@ -95,7 +72,44 @@ public class AddChildActivity extends FragmentActivity {
 
         setUpListeners();
         setDateTimeField();
+
+        prepareHiddenButtons();
     }
+
+    /**
+     * Verborgen 'knoppen' voor makkelijkere ingave bij de presentatie
+     */
+    private void prepareHiddenButtons() {
+        TextView addChild1 = (TextView) findViewById(R.id.child_info_lbl);
+        TextView addChild2 = (TextView) findViewById(R.id.address_info_lbl);
+
+        addChild1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNaamView.setText("De Mei");
+                mVoornaamView.setText("Jan");
+                mRrnView.setText("04021800736");
+                mStraatView.setText("Stationsstraat");
+                mHuisnummerView.setText("12");
+                mPostcodeView.setText("9000");
+                mStadView.setText("Gent");
+            }
+        });
+
+        addChild2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNaamView.setText("De Mei");
+                mVoornaamView.setText("Sofie");
+                mRrnView.setText("06051400230");
+                mStraatView.setText("Stationsstraat");
+                mHuisnummerView.setText("12");
+                mPostcodeView.setText("9000");
+                mStadView.setText("Gent");
+            }
+        });
+    }
+
     /**
      * Voegt Listeners toe aan de knoppen en de EditText velden
      * en stelt het gedrag in van de enter knop op het android toetsenbord
@@ -116,7 +130,7 @@ public class AddChildActivity extends FragmentActivity {
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 boolean isValidKey = keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER;
                 boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
-                if ((isValidAction || isValidKey)&& isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid){
+                if ((isValidAction || isValidKey) && isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid) {
                     attemptAdd();
                 }
                 return false;
@@ -287,12 +301,12 @@ public class AddChildActivity extends FragmentActivity {
                 mGeboortedatumView.setText(dateFormatter.format(newDate.getTime()));
             }
 
-        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
     }
 
     /**
-     *  Kijkt of  de tekst in het rrn tekstveld een geldig
+     * Kijkt of  de tekst in het rrn tekstveld een geldig
      * rijksregisternummer is
      * @param rrn de String om te valideren
      */
@@ -306,8 +320,8 @@ public class AddChildActivity extends FragmentActivity {
             int modulo = rrnNumber % 97;
             int checkSum = Integer.parseInt(rrn.substring(9, 11));
             isRrnValid = (Integer.compare(modulo, 97 - checkSum) == 0);
-        }else
-            isRrnValid=false;
+        } else
+            isRrnValid = false;
     }
 
     /**
@@ -315,7 +329,7 @@ public class AddChildActivity extends FragmentActivity {
      * postcode is
      * @param zipCode de te valideren string
      */
-    private void isZipCodeValid(String zipCode){
+    private void isZipCodeValid(String zipCode) {
 
         String zipCoderegex;
         Pattern pattern;
@@ -325,13 +339,13 @@ public class AddChildActivity extends FragmentActivity {
         pattern = Pattern.compile(zipCoderegex);
         Matcher matcher = pattern.matcher(zipCode);
 
-        isZipCodeValid =  matcher.matches();
+        isZipCodeValid = matcher.matches();
     }
 
     /**
      * Verandert de tekstkleur afhankelijk van de overeenstemmende booleans
      */
-    private void setErrors(){
+    private void setErrors() {
         if (isHuisnummerValid)
             mHuisnummerView.setTextColor(Color.rgb(80, 200, 120));
         else
@@ -372,15 +386,16 @@ public class AddChildActivity extends FragmentActivity {
      * Als alle velden correct gevalideerd zijn zal de knop om het kind toe te voegen
      * ge-enabled worden anders zal de knop disabled blijven
      */
-    private void changeButtonState(){
-        if (isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid){
+    private void changeButtonState() {
+        if (isHuisnummerValid && isNaamValid && isVoornaamValid && isRrnValid && isStraatValid && isStadValid && isZipCodeValid) {
             mToevoegenButton.setEnabled(true);
             setErrors();
-        }else {
+        } else {
             mToevoegenButton.setEnabled(false);
             setErrors();
         }
     }
+
     /**
      *Maakt een kind object aan met de gegevens uit de tekstvelden en geeft dit door
      * naar de asynchrone taak om het kind toe te voegen
@@ -419,7 +434,7 @@ public class AddChildActivity extends FragmentActivity {
          * @param kind het kind dat aangemaakt moet worden op de server
          */
         public UserAddChildTask(Kind kind) {
-            this.mKind =kind;
+            this.mKind = kind;
 
             SharedPreferences sharedPref =
                     getApplication().
@@ -429,6 +444,7 @@ public class AddChildActivity extends FragmentActivity {
             restClient = new RestClient(token);
 
         }
+
         /**
          * Voordat de task gestart wordt zal er een dialog getoond worden
          */
@@ -442,6 +458,7 @@ public class AddChildActivity extends FragmentActivity {
          * De parameter map die meegegeven zal worden met het HTTP request naar de server
          * zal hier opgevuld worden en meegegeven worden naar de functie die het
          * request zal versturen
+         *
          * @param voids
          * @return
          */
@@ -450,12 +467,11 @@ public class AddChildActivity extends FragmentActivity {
             Map<String, String> addChildParamMap = new HashMap<String, String>();
 
 
-
             addChildParamMap.put("first_name", mKind.getFirstName());
             addChildParamMap.put("last_name", mKind.getLastName());
             addChildParamMap.put("city", mKind.getCity());
             addChildParamMap.put("nrn", mKind.getNrn());
-            addChildParamMap.put("street_name",mKind.getStreetName());
+            addChildParamMap.put("street_name", mKind.getStreetName());
             addChildParamMap.put("house_number", mKind.getHouseNumber());
             addChildParamMap.put("city", mKind.getCity());
             addChildParamMap.put("postal_code", mKind.getPostalCode());
@@ -486,38 +502,41 @@ public class AddChildActivity extends FragmentActivity {
 
         /**
          * Zal het http request naar de server versturen en afhankelijk van of het kind toegevoegd
-         *  is of niet de succes functie of failure functie aanroepen
+         * is of niet de succes functie of failure functie aanroepen
+         *
          * @param addChildParamMap
          */
-        private void sendAddChildRequest(Map <String, String> addChildParamMap){
+        private void sendAddChildRequest(Map<String, String> addChildParamMap) {
 
-                    Callback<String> kind = new Callback<String>() {
-                        @Override
-                        public void success(String kind, Response response) {
-                            response.getBody();
-                            Toast.makeText(getBaseContext(), "Toegevoegd", Toast.LENGTH_SHORT).show();
+            Callback<String> kind = new Callback<String>() {
+                @Override
+                public void success(String kind, Response response) {
+                    response.getBody();
+                    Toast.makeText(getBaseContext(), "Toegevoegd", Toast.LENGTH_SHORT).show();
 
-                            mAuthTask = null;
-                            progressDialog.dismiss();
-                            finish();
-                        }
+                    mAuthTask = null;
+                    progressDialog.dismiss();
+                    finish();
+                }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                            error.printStackTrace();
-                            Toast.makeText(getBaseContext(), "Mislukt", Toast.LENGTH_SHORT).show();
+                @Override
+                public void failure(RetrofitError error) {
+                    error.printStackTrace();
+                    Toast.makeText(getBaseContext(), "Mislukt", Toast.LENGTH_SHORT).show();
 
-                            mAuthTask = null;
-                            progressDialog.dismiss();
-                            finish();
-                        }
 
-                    };
+                    mAuthTask = null;
+                    progressDialog.dismiss();
+                    finish();
+                }
 
-                    restClient.getRestService().addChild(addChildParamMap, kind);
+            };
+
+            restClient.getRestService().addChild(addChildParamMap, kind);
 
 
         }
+
         /**
          * Wanneer er geannuleerd wordt wordt de asynchrone task geannuleerd en
          * zal het dialog verdwijnen
