@@ -1,5 +1,7 @@
 package hogent.hogentprojecteniii_groep10.interfaces;
 
+import com.squareup.picasso.Downloader;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,11 +10,13 @@ import hogent.hogentprojecteniii_groep10.models.Category;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
 import hogent.hogentprojecteniii_groep10.models.Monitor;
+import hogent.hogentprojecteniii_groep10.models.MonitorResponse;
 import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.Registration;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.*;
 
 /**
@@ -20,6 +24,10 @@ import retrofit.http.*;
  */
 public interface RestService {
 
+    /**
+     * Haalt alle vakanties op
+     * @return een object dat de vakanties bevat
+     */
     @GET("/vacation")
     VacationResponse getVacationOverview();
 
@@ -84,6 +92,14 @@ public interface RestService {
     List<Registration> getRegistrationsForChild(@Path("childId") long childId);
 
     /**
+     * Methode voor een vakantie te liken.
+     * Verwacht ook een logintoken via de interceptor.
+     * @param vacationId het id van de vakantie
+     */
+    @POST("/user/me/{vacationId}/like")
+    void likeVacation(@Path("vacationId") long vacationId, Callback<Response> callback);
+
+    /**
      * Haalt alle categorieën op waar vakanties aan gelinkt kunnen zijn.
      * @return de lijst van bestaande categorieën
      */
@@ -108,9 +124,8 @@ public interface RestService {
      * @param searchString de zoekstring waarop gezocht wordt
      * @param callback de callback die wordt uitgevoerd bij het krijgen van een lijst van monitoren
      */
-    @FormUrlEncoded
-    @POST("/monitor/search")
-    void findMonitors(@Field("search_string") String searchString, Callback<List<Monitor>> callback);
+    @GET("/monitor/search")
+    void findMonitors(@Query("search_string") String searchString, Callback<MonitorResponse> callback);
 
 
 }

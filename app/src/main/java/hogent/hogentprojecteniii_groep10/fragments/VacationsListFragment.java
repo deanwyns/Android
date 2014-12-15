@@ -287,9 +287,10 @@ public class VacationsListFragment extends Fragment implements SearchView.OnQuer
                     @Override
                     public int compare(Vacation lhs, Vacation rhs) {
                         if (!likesSortedAscending)
-                            return lhs.getLikes() - rhs.getLikes();
-                        else
                             return rhs.getLikes() - lhs.getLikes();
+                        else
+                            return lhs.getLikes() - rhs.getLikes();
+
                     }
                 });
                 likesSortedAscending = !likesSortedAscending;

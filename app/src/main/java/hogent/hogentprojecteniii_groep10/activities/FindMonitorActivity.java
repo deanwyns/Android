@@ -28,6 +28,7 @@ import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Monitor;
+import hogent.hogentprojecteniii_groep10.models.MonitorResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -43,14 +44,6 @@ public class FindMonitorActivity extends Activity {
     private TextView findMonitorHelpLbl;
     private ArrayAdapter<Monitor> adapter;
     private List<Monitor> monitorList = new ArrayList<Monitor>();
-
-    //Zal opgevuld worden van de server als de back-end ooit wordt gemaakt.
-    private List<Monitor> existingMonitorsList = new ArrayList<Monitor>(
-            Arrays.asList(new Monitor("email1", "pass", "0474685148", "naam1", "voornaam1"),
-                    new Monitor("email2", "pass", "0474685148", "naam2", "voornaam2"),
-                    new Monitor("email3", "pass", "0474685148", "naam3", "voornaam3"),
-                    new Monitor("email4", "pass", "0474685148", "naam4", "voornaam4"))
-    );
 
     /**
      * Vult de view op bij het aanmaken van de activity.
@@ -103,28 +96,23 @@ public class FindMonitorActivity extends Activity {
     private void getMonitorsFromServer(String searchedValue) {
         monitorList.clear();
 
-        SharedPreferences sharedPref = this
-                .getSharedPreferences(this.getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
-        String token = sharedPref.getString(this.getResources().getString(R.string.authorization), "No token");
-        RestClient restClient = new RestClient(token);
-        Callback<List<Monitor>> monitorCallback = new Callback<List<Monitor>>() {
+        RestClient restClient = new RestClient();
+        Callback<MonitorResponse> monitorCallback = new Callback<MonitorResponse>() {
             @Override
-            public void success(List<Monitor> monitors, Response response) {
-                for(Monitor m : monitors){
+            public void success(MonitorResponse monitorResponse, Response response) {
+                for(Monitor m : monitorResponse.getMonitors()){
                     monitorList.add(m);
                     adapter.notifyDataSetChanged();
 
                     if(!monitorList.isEmpty())
                         findMonitorHelpLbl.setVisibility(View.INVISIBLE);
-                    else{
-                        findMonitorHelpLbl.setText(getResources().getString(R.string.monitor_not_found));
-                        findMonitorHelpLbl.setVisibility(View.VISIBLE);
-                    }
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
+                findMonitorHelpLbl.setText(getResources().getString(R.string.monitor_not_found));
+                findMonitorHelpLbl.setVisibility(View.VISIBLE);
                 error.printStackTrace();
             }
         };
@@ -161,9 +149,9 @@ public class FindMonitorActivity extends Activity {
             monitor = getArguments().getParcelable("monitor");
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             StringBuilder monitorData = new StringBuilder();
-            monitorData.append(getResources().getString(R.string.naam)).append(": ").append(monitor.getVoornaam()).append(" ").append(monitor.getNaam());
-            monitorData.append(System.lineSeparator()).append(getResources().getString(R.string.email)).append(": ").append(monitor.getEmailadres());
-            monitorData.append(System.lineSeparator()).append(getResources().getString(R.string.telNr)).append(": ").append(monitor.getTelNr());
+            monitorData.append(getResources().getString(R.string.naam)).append(": ").append(monitor.getFirstName()).append(" ").append(monitor.getLastName());
+            //monitorData.append(System.lineSeparator()).append(getResources().getString(R.string.email)).append(": ").append(monitor.getEmailadres());
+            //monitorData.append(System.lineSeparator()).append(getResources().getString(R.string.telNr)).append(": ").append(monitor.getTelNr());
             builder.setMessage(monitorData.toString())
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
