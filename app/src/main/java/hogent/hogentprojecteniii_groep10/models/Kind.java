@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 /**
  * De klasse die een Kind voorstelt in de applicatie.
  * Is Parcelable om doorgave mogelijk te maken tussen activities.
@@ -12,29 +14,44 @@ import com.google.gson.annotations.SerializedName;
 public class Kind implements Parcelable {
 
     private long id;
-    @SerializedName("lastName")
+    @SerializedName("last_name")
     private String lastName;
-    @SerializedName("firstName")
+    @SerializedName("first_name")
     private String firstName;
     @SerializedName("nrn")
     private String nrn;
-    /*@SerializedName("streetName")
+    @SerializedName("street_name")
     private String streetName;
-    @SerializedName("houseNumber")
-    private String houseNumber;*/
+    @SerializedName("house_number")
+    private String houseNumber;
     @SerializedName("city")
     private String city;
-    /*@SerializedName("postalCode")
-    private String postalCode;*/
+    @SerializedName("postal_code")
+    private String postalCode;
+    @SerializedName("date_of_birth")
+    private String dateOfBirth;
 
-    public Kind(String naam, String voornaam, String rrn/*, String straat, String huisnummer*/, String stad/*, String postcode*/) {
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public Kind(String naam, String voornaam, String rrn, String straat, String huisnummer, String stad, String postcode, String dateOfBirth) {
         this.lastName = naam;
         this.firstName = voornaam;
         this.nrn = rrn;
-        /*this.streetName = straat;
-        this.houseNumber = huisnummer;*/
+        this.streetName = straat;
+        this.houseNumber = huisnummer;
         this.city = stad;
-        /*this.postalCode = postcode;*/
+        this.postalCode = postcode;
+        this.dateOfBirth=dateOfBirth;
+
+    }
+
+    public Kind(String lastName, String firstName, String nrn, String city) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nrn = nrn;
+        this.city = city;
     }
 
     public long getId() {
@@ -53,22 +70,22 @@ public class Kind implements Parcelable {
         return nrn;
     }
 
-    /*public String getStreetName() {
+    public String getStreetName() {
         return streetName;
     }
 
     public String getHouseNumber() {
         return houseNumber;
     }
-*/
+
     public String getCity() {
         return city;
     }
 
-/*
+
     public String getPostalCode() {
         return postalCode;
-    }*/
+    }
 
     /**
      * Maakt het mogelijk om kind in een parcel te steken
@@ -80,11 +97,12 @@ public class Kind implements Parcelable {
         dest.writeString(lastName);
         dest.writeString(firstName);
         dest.writeString(nrn);
-        /*dest.writeString(streetName);
-        dest.writeString(houseNumber);*/
+        dest.writeString(streetName);
+        dest.writeString(houseNumber);
         dest.writeString(city);
-        /*dest.writeString(postalCode);*/
+        dest.writeString(postalCode);
         dest.writeLong(id);
+        dest.writeString(dateOfBirth);
     }
     /**
      * Constructor voor Kind die als parameter een parcel object meekrijgt
@@ -95,11 +113,12 @@ public class Kind implements Parcelable {
             lastName = in.readString();
             firstName = in.readString();
             nrn = in.readString();
-            /*streetName = in.readString();
-            houseNumber = in.readString();*/
+            streetName = in.readString();
+            houseNumber = in.readString();
             city = in.readString();
-            /*postalCode = in.readString();*/
+            postalCode = in.readString();
             id = in.readLong();
+            dateOfBirth=in.readString();
         }
 
 

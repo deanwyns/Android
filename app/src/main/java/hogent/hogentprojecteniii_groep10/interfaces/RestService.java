@@ -1,5 +1,6 @@
 package hogent.hogentprojecteniii_groep10.interfaces;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +65,7 @@ public interface RestService {
      */
     @FormUrlEncoded
     @POST("/user/me/addchild")
-    void addChild(@FieldMap Map<String, String> options,@Field("address_id") Long id , Callback<String> callback);
+    void addChild(@FieldMap Map<String, String> options , Callback<String> callback);
 
     /**
      * Geeft de lijst van kinderen terug van de huidig ingelogde persoon.

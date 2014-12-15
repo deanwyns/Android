@@ -1,5 +1,8 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +22,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +30,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -53,10 +64,14 @@ import retrofit.converter.GsonConverter;
  */
 public class AddChildActivity extends FragmentActivity {
 
-    private EditText mNaamView, mVoornaamView, mRrnView, mStraatView, mHuisnummerView, mPostcodeView, mStadView;
+    private EditText mNaamView, mVoornaamView, mRrnView, mStraatView,
+            mHuisnummerView, mPostcodeView, mStadView, mGeboortedatumView;
     private Button mToevoegenButton;
+    private SimpleDateFormat dateFormatter;
+    private DatePickerDialog dobPickerDialog;
     private UserAddChildTask mAuthTask = null;
     private boolean isNaamValid, isVoornaamValid, isRrnValid, isHuisnummerValid, isZipCodeValid, isStraatValid, isStadValid;
+    private Calendar newDate = Calendar.getInstance();
 
     /**
      * Initialiseert het scherm
@@ -66,6 +81,7 @@ public class AddChildActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_child);
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
         mNaamView = (EditText) findViewById(R.id.lastname_add_child);
         mVoornaamView = (EditText) findViewById(R.id.firstname_add_child);
@@ -75,8 +91,10 @@ public class AddChildActivity extends FragmentActivity {
         mPostcodeView = (EditText) findViewById(R.id.postcode_add_child);
         mStadView = (EditText) findViewById(R.id.stad_add_child);
         mToevoegenButton = (Button) findViewById(R.id.toevoegen_btn_add_child);
+        mGeboortedatumView = (EditText) findViewById(R.id.dob_add_child);
 
         setUpListeners();
+        setDateTimeField();
     }
     /**
      * Voegt Listeners toe aan de knoppen en de EditText velden
@@ -103,6 +121,14 @@ public class AddChildActivity extends FragmentActivity {
                 }
                 return false;
             }
+        });
+
+        mGeboortedatumView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dobPickerDialog.show();
+            }
+
         });
         /**
          * Valideert de inhoud van het tekstveld wanneer het verandert
@@ -247,19 +273,33 @@ public class AddChildActivity extends FragmentActivity {
 
     }
 
+    public void setDateTimeField() {
+        Calendar newCalendar = Calendar.getInstance();
+        dobPickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                newDate.set(year, monthOfYear, dayOfMonth);
+                mGeboortedatumView.setText(dateFormatter.format(newDate.getTime()));
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+    }
+
     /**
      *  Kijkt of  de tekst in het rrn tekstveld een geldig
      * rijksregisternummer is
      * @param rrn
      */
     private void isRrnValid(String rrn) {
-        isRrnValid = false;
+
         if (rrn.length() == 11) {
             int rrnNumber = Integer.parseInt(rrn.substring(0, 9));
             int modulo = rrnNumber % 97;
             int checkSum = Integer.parseInt(rrn.substring(9, 11));
             isRrnValid = (Integer.compare(modulo, 97 - checkSum) == 0);
-        }
+        }else
+            isRrnValid=false;
     }
 
     /**
@@ -268,6 +308,7 @@ public class AddChildActivity extends FragmentActivity {
      * @param zipCode
      */
     private void isZipCodeValid(String zipCode){
+
         String zipCoderegex;
         Pattern pattern;
         // Regex for a valid email address
@@ -276,7 +317,7 @@ public class AddChildActivity extends FragmentActivity {
         pattern = Pattern.compile(zipCoderegex);
         Matcher matcher = pattern.matcher(zipCode);
 
-        isZipCodeValid =  matcher.find();
+        isZipCodeValid =  matcher.matches();
     }
 
     /**
@@ -337,6 +378,7 @@ public class AddChildActivity extends FragmentActivity {
      * naar de asynchrone taak om het kind teo te voegen
      */
     public void attemptAdd() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String naam = mNaamView.getText().toString();
         String voornaam = mVoornaamView.getText().toString();
@@ -345,11 +387,12 @@ public class AddChildActivity extends FragmentActivity {
         String huisnummer = mHuisnummerView.getText().toString();
         String postcode = mPostcodeView.getText().toString();
         String stad = mStadView.getText().toString();
+        String dateOfBirth = mGeboortedatumView.getText().toString();
 
-        Kind child = new Kind(naam, voornaam, rrn, stad);
-        Address adres = new Address(straat, huisnummer,stad, postcode);
 
-        mAuthTask = new UserAddChildTask(child, adres);
+        Kind child = new Kind(naam, voornaam, rrn, straat, huisnummer, stad, postcode, dateOfBirth);
+
+        mAuthTask = new UserAddChildTask(child);
         mAuthTask.execute((Void) null);
 
     }
@@ -360,7 +403,6 @@ public class AddChildActivity extends FragmentActivity {
     public class UserAddChildTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Kind mKind;
-        private final Address mAdres;
         private RestClient restClient;
         private ProgressDialog progressDialog;
 
@@ -369,9 +411,8 @@ public class AddChildActivity extends FragmentActivity {
          * om mee te kunnen geven in de header van het http request
          * @param kind
          */
-        public UserAddChildTask(Kind kind, Address adres) {
+        public UserAddChildTask(Kind kind) {
             this.mKind =kind;
-            this.mAdres = adres;
 
             SharedPreferences sharedPref =
                     getApplication().
@@ -399,20 +440,22 @@ public class AddChildActivity extends FragmentActivity {
          */
         @Override
         protected Boolean doInBackground(Void... voids) {
-            Map <String, String> makeAddressMap = new HashMap<String, String>();
             Map<String, String> addChildParamMap = new HashMap<String, String>();
 
-            makeAddressMap.put("street_name",mAdres.getStreetName());
-            makeAddressMap.put("house_number", mAdres.getHouseNumber());
-            makeAddressMap.put("city", mAdres.getCity());
-            makeAddressMap.put("postal_code", mAdres.getPostalCode());
 
-            addChildParamMap.put("firstName", mKind.getFirstName());
-            addChildParamMap.put("lastName", mKind.getLastName());
+
+            addChildParamMap.put("first_name", mKind.getFirstName());
+            addChildParamMap.put("last_name", mKind.getLastName());
             addChildParamMap.put("city", mKind.getCity());
             addChildParamMap.put("nrn", mKind.getNrn());
+            addChildParamMap.put("street_name",mKind.getStreetName());
+            addChildParamMap.put("house_number", mKind.getHouseNumber());
+            addChildParamMap.put("city", mKind.getCity());
+            addChildParamMap.put("postal_code", mKind.getPostalCode());
+            addChildParamMap.put("date_of_birth", mKind.getDateOfBirth());
 
-            sendAddChildRequest(addChildParamMap, makeAddressMap);
+
+            sendAddChildRequest(addChildParamMap);
             return true;
         }
 
@@ -437,12 +480,8 @@ public class AddChildActivity extends FragmentActivity {
          *  is of niet de succes functie of failure functie aanroepen
          * @param addChildParamMap
          */
-        private void sendAddChildRequest(Map <String, String> addChildParamMap, Map <String, String> makeAddresParamMap){
+        private void sendAddChildRequest(Map <String, String> addChildParamMap){
 
-            Address adres2;
-            try{
-                adres2 = restClient.getRestService().makeAddress(makeAddresParamMap);
-                if (adres2 != null) {
                     Callback<String> kind = new Callback<String>() {
                         @Override
                         public void success(String kind, Response response) {
@@ -453,33 +492,13 @@ public class AddChildActivity extends FragmentActivity {
                         @Override
                         public void failure(RetrofitError error) {
                             error.printStackTrace();
+                            Log.i("AddChildActivity", mGeboortedatumView.getText().toString());
                         }
 
                     };
 
-                    restClient.getRestService().addChild(addChildParamMap, adres2.getId(), kind);
-                }
-                else
-                    Log.i("AddChildActivity","FOUTJE");
-            }catch (RetrofitError error){
-                error.printStackTrace();
-            }
+                    restClient.getRestService().addChild(addChildParamMap, kind);
 
-            Callback<String> kind = new Callback<String>() {
-                @Override
-                public void success(String kind, Response response) {
-                    response.getBody();
-                    Toast.makeText(getBaseContext(), "Toegevoegd", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    error.printStackTrace();
-                }
-
-            };
-
-            //restClient.getRestService().addChild(addChildParamMap,adres2.getId(), kind);
 
         }
         /**
