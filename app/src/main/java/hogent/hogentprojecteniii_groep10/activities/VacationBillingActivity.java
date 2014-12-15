@@ -34,7 +34,7 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
 
     private Vacation selectedVacation;
     private Kind[] signedUpChildren;
-    private EditText streetAndHousenumberTxt, postalCodeAndCityTxt, firstnameTxt, nameTxt;
+    private EditText streetTxt, postalCodeTxt, houseNumberTxt, cityTxt, firstnameTxt, nameTxt;
     private Button goToBillingOverviewBtn;
 
     /**
@@ -56,10 +56,15 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
         firstnameTxt.addTextChangedListener(this);
         nameTxt = (EditText) findViewById(R.id.billing_lastname_txt);
         nameTxt.addTextChangedListener(this);
-        streetAndHousenumberTxt = (EditText) findViewById(R.id.street_and_housenumber_txt);
-        streetAndHousenumberTxt.addTextChangedListener(this);
-        postalCodeAndCityTxt = (EditText) findViewById(R.id.postal_code_and_city_txt);
-        postalCodeAndCityTxt.addTextChangedListener(this);
+        streetTxt = (EditText) findViewById(R.id.street_txt);
+        streetTxt.addTextChangedListener(this);
+        postalCodeTxt = (EditText) findViewById(R.id.postal_code_txt);
+        postalCodeTxt.addTextChangedListener(this);
+        houseNumberTxt = (EditText) findViewById(R.id.housenumber_txt);
+        houseNumberTxt.addTextChangedListener(this);
+        cityTxt = (EditText) findViewById(R.id.city_txt);
+        cityTxt.addTextChangedListener(this);
+
         goToBillingOverviewBtn = (Button) findViewById(R.id.go_to_billing_overview_btn);
 
         goToBillingOverviewBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,8 +77,10 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
                     mBundle.putParcelableArray("SignedUpChildren", signedUpChildren);
                     mBundle.putString("firstnameTxt", firstnameTxt.getText().toString());
                     mBundle.putString("nameTxt", nameTxt.getText().toString());
-                    mBundle.putString("streetAndHousenumberTxt", streetAndHousenumberTxt.getText().toString());
-                    mBundle.putString("postalCodeAndCityTxt", postalCodeAndCityTxt.getText().toString());
+                    mBundle.putString("housenumberTxt", houseNumberTxt.getText().toString());
+                    mBundle.putString("postalCodeTxt", postalCodeTxt.getText().toString());
+                    mBundle.putString("cityTxt", cityTxt.getText().toString());
+                    mBundle.putString("streetTxt", streetTxt.getText().toString());
                     billingOverview.putExtras(mBundle);
                     startActivity(billingOverview);
                 } else {
@@ -96,8 +103,10 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
             public void onClick(View v) {
                 firstnameTxt.setText("Geert");
                 nameTxt.setText("De Mei");
-                streetAndHousenumberTxt.setText("Stationstraat 12");
-                postalCodeAndCityTxt.setText("9000");
+                streetTxt.setText("Stationstraat");
+                houseNumberTxt.setText("12");
+                postalCodeTxt.setText("900");
+                cityTxt.setText("Gent");
             }
         });
     }
@@ -120,33 +129,34 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
      * @return true als alle velden correct zijn ingevuld
      */
     private boolean validateTextFields() {
-        Pattern postalCodeAndCityPattern = Pattern.compile("^[1-9][0-9]{3} [a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$");
-        Matcher postalCodeAndCityMatcher = postalCodeAndCityPattern.matcher(postalCodeAndCityTxt.getText().toString());
+        Pattern postalCodePattern = Pattern.compile("^[1-9][0-9]{3}$");
+        Matcher postalCodeMatcher = postalCodePattern.matcher(postalCodeTxt.getText().toString());
 
-        Pattern streetAndHousenumberPattern = Pattern.compile("^((.){1,}(\\d){1,}(.){0,})$");
-        Matcher streetAndHousenumberMatcher = streetAndHousenumberPattern.matcher(streetAndHousenumberTxt.getText().toString());
+        Pattern HousenumberPattern = Pattern.compile("^\\d+$");
+        Matcher HousenumberMatcher = HousenumberPattern.matcher(houseNumberTxt.getText().toString());
 
-        if (!postalCodeAndCityMatcher.matches())
-            postalCodeAndCityTxt.setTextColor(Color.RED);
+        setTextColor(postalCodeTxt, postalCodeMatcher.matches());
+        setTextColor(houseNumberTxt, HousenumberMatcher.matches());
+        setTextColor(cityTxt, !cityTxt.toString().isEmpty());
+        setTextColor(streetTxt, !streetTxt.toString().isEmpty());
+        setTextColor(firstnameTxt, !firstnameTxt.getText().toString().isEmpty());
+        setTextColor(nameTxt, !nameTxt.getText().toString().isEmpty());
+
+        return HousenumberMatcher.matches() && HousenumberMatcher.matches() &&
+                !cityTxt.toString().isEmpty() && !streetTxt.toString().isEmpty() &&
+                !firstnameTxt.getText().toString().isEmpty() && !nameTxt.getText().toString().isEmpty();
+    }
+
+    /**
+     * Hulpmethode om textkleur van invoervakken aan te passen op basis van hun status
+     * @param textView de textview die aangepast wordt
+     * @param matched de status of de text correct is
+     */
+    private void setTextColor(TextView textView, boolean matched) {
+        if(!matched)
+            textView.setTextColor(Color.RED);
         else
-            postalCodeAndCityTxt.setTextColor(Color.rgb(80, 200, 120));
-
-        if (!streetAndHousenumberMatcher.matches())
-            streetAndHousenumberTxt.setTextColor(Color.RED);
-        else
-            streetAndHousenumberTxt.setTextColor(Color.rgb(80, 200, 120));
-
-        if (firstnameTxt.getText().toString().isEmpty())
-            firstnameTxt.setTextColor(Color.RED);
-        else
-            firstnameTxt.setTextColor(Color.rgb(80, 200, 120));
-
-        if (nameTxt.getText().toString().isEmpty())
-            nameTxt.setTextColor(Color.RED);
-        else
-            nameTxt.setTextColor(Color.rgb(80, 200, 120));
-
-        return postalCodeAndCityMatcher.matches() && streetAndHousenumberMatcher.matches() && !firstnameTxt.getText().toString().isEmpty() && !nameTxt.getText().toString().isEmpty();
+            textView.setTextColor(Color.rgb(80, 200, 120));
     }
 
 

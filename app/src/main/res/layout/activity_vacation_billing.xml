@@ -53,28 +53,75 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/billing_postal_address" />
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
-        android:hint="@string/street_and_housenumber"
-        android:id="@+id/street_and_housenumber_txt"
-        android:background="@drawable/edittext_top_bg"
-        android:padding="10dp"
-        android:layout_marginTop="4dp"/>
+        android:layout_height="wrap_content">
 
-    <EditText
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:inputType="textPostalAddress"
+            android:ems="10"
+            android:hint="@string/street"
+            android:id="@+id/street_txt"
+            android:background="@drawable/edittext_top_bg"
+            android:padding="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="5dp" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:layout_height="wrap_content"
+            android:hint="@string/housenumber"
+            android:id="@+id/housenumber_txt"
+            android:background="@drawable/edittext_top_bg"
+            android:padding="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="5dp"
+            android:inputType="numberSigned"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
-        android:hint="@string/postal_code_and_city"
-        android:id="@+id/postal_code_and_city_txt"
-        android:background="@drawable/edittext_bottom_bg"
-        android:layout_marginTop="-2dp"
-        android:padding="10dp"
-        android:layout_marginBottom="4dp"/>
+        android:layout_gravity="center_horizontal">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/postal_code"
+            android:id="@+id/postal_code_txt"
+            android:background="@drawable/edittext_bottom_bg"
+            android:layout_marginTop="-2dp"
+            android:padding="10dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="5dp"
+            android:inputType="numberSigned"/>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/city"
+            android:id="@+id/city_txt"
+            android:background="@drawable/edittext_bottom_bg"
+            android:layout_marginTop="-2dp"
+            android:padding="10dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="5dp" />
+
+
+    </LinearLayout>
+
+
 
     <Button
         android:layout_width="fill_parent"

@@ -1,7 +1,9 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,15 +15,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.main.Main;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Een laatste overzicht die de gegevens toont die ingevuld zijn bij een inschrijving.
@@ -30,7 +39,7 @@ public class VacationSignupOverviewActivity extends Activity {
 
     private Vacation selectedVacation;
     private Kind[] signedUpChildren;
-    private String streetAndHousenumberTxt, postalCodeAndCityTxt, firstnameTxt, nameTxt;
+    private String housenumberTxt, postalCodeTxt, streetTxt, cityTxt, firstnameTxt, nameTxt;
     private TextView signupOverviewVacationTitleLbl, signupOverviewVacationDateLbl,
             signupOverviewVacationPriceLbl, signupOverviewVacationTotalPriceLbl,
             signupOverviewBillingNameLbl, signupOverviewBillingAddressStreetHousenumberLbl,
@@ -54,8 +63,10 @@ public class VacationSignupOverviewActivity extends Activity {
         if (parcelableArray != null) {
             signedUpChildren = Arrays.copyOf(parcelableArray, parcelableArray.length, Kind[].class);
         }
-        streetAndHousenumberTxt = getIntent().getStringExtra("streetAndHousenumberTxt");
-        postalCodeAndCityTxt = getIntent().getStringExtra("postalCodeAndCityTxt");
+        streetTxt = getIntent().getStringExtra("streetTxt");
+        postalCodeTxt = getIntent().getStringExtra("postalCodeTxt");
+        cityTxt = getIntent().getStringExtra("cityTxt");
+        housenumberTxt = getIntent().getStringExtra("housenumberTxt");
         firstnameTxt = getIntent().getStringExtra("firstnameTxt");
         nameTxt = getIntent().getStringExtra("nameTxt");
 
@@ -76,8 +87,8 @@ public class VacationSignupOverviewActivity extends Activity {
         signupOverviewVacationPriceLbl.setText(String.format("€%.2f", selectedVacation.getBaseCost()));
         signupOverviewVacationTotalPriceLbl.setText(String.format("€%.2f", selectedVacation.getBaseCost() * signedUpChildren.length));
         signupOverviewBillingNameLbl.setText(firstnameTxt + " " + nameTxt);
-        signupOverviewBillingAddressStreetHousenumberLbl.setText(streetAndHousenumberTxt);
-        signupOverviewBillingAddressPostalcodeCityLbl.setText(postalCodeAndCityTxt);
+        signupOverviewBillingAddressStreetHousenumberLbl.setText(streetTxt + " " + housenumberTxt);
+        signupOverviewBillingAddressPostalcodeCityLbl.setText(postalCodeTxt + " " + cityTxt);
 
         for(Kind child : signedUpChildren){
             TextView childTextView = new TextView(getApplicationContext());
@@ -98,7 +109,38 @@ public class VacationSignupOverviewActivity extends Activity {
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:Server stuff
+                SharedPreferences sharedPref = getApplicationContext()
+                        .getSharedPreferences(getApplicationContext().getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
+                String token = sharedPref.getString(getApplicationContext().getResources().getString(R.string.authorization), "No token");
+                RestClient restClient = new RestClient(token);
+                Callback<Response> callback = new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Er kon niet ingeschreven worden.", Toast.LENGTH_SHORT).show();
+                    }
+                };
+                Map<String, String> registerValues = new HashMap<String, String>();
+
+                registerValues.put("vacation_id", Long.toString(selectedVacation.getId()));
+                registerValues.put("is_paid", Integer.toString(0)); //Niet betaald?
+                registerValues.put("facturation_first_name", firstnameTxt);
+                registerValues.put("facturation_last_name", nameTxt);
+                registerValues.put("street_name", streetTxt);
+                registerValues.put("postal_code", postalCodeTxt);
+                registerValues.put("house_number", housenumberTxt);
+                registerValues.put("city", cityTxt);
+
+                for(Kind k : signedUpChildren){
+                    registerValues.put("child_id", Long.toString(k.getId()));
+                    restClient.getRestService().registerChild(registerValues, k.getId(), callback);
+                }
+
 
                 Intent intent = new Intent(getApplicationContext(), Main.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
