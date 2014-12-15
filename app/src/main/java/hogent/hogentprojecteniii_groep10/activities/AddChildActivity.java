@@ -292,9 +292,12 @@ public class AddChildActivity extends FragmentActivity {
      * @param rrn
      */
     private void isRrnValid(String rrn) {
-
         if (rrn.length() == 11) {
             int rrnNumber = Integer.parseInt(rrn.substring(0, 9));
+
+            if (newDate.get(Calendar.YEAR)>=2000){
+                rrnNumber = rrnNumber+2000000000;
+            }
             int modulo = rrnNumber % 97;
             int checkSum = Integer.parseInt(rrn.substring(9, 11));
             isRrnValid = (Integer.compare(modulo, 97 - checkSum) == 0);
