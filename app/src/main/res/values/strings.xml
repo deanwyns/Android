@@ -145,5 +145,9 @@
     <string name="name_colon">Naam:</string>
     <string name="title_activity_registrations_overview">Inschrijvingen</string>
     <string name="max_children_achieved">Om nog een kind in te schrijven moet u hem/haar eerst aanmaken.\nSelecteer \"Mijn kind staat niet in het lijstje\".</string>
+    <string name="street">Straat</string>
+    <string name="housenumber">Huisnummer</string>
+    <string name="city">Gemeente</string>
+    <string name="postal_code">Postcode</string>
 
 </resources>

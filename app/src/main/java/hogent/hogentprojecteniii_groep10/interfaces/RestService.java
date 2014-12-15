@@ -91,6 +91,10 @@ public interface RestService {
     @GET("/user/me/{childId}/registrations")
     List<Registration> getRegistrationsForChild(@Path("childId") long childId);
 
+    @FormUrlEncoded
+    @POST("/user/me/{childId}/register")
+    void registerChild(@FieldMap Map<String, String> registerValues, @Path("childId") long childId, Callback<Response> callback);
+
     /**
      * Methode voor een vakantie te liken.
      * Verwacht ook een logintoken via de interceptor.
