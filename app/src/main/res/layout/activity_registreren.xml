@@ -19,6 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/accountgegevens"
+                android:id="@+id/register_account_label"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 />
 

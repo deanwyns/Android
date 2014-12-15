@@ -37,11 +37,12 @@ public class Registreren extends Activity {
     private Button mRegistrerenButton/* mCancelButton*/;
     private UserRegisterTask mAuthTask = null;
     private boolean isTelnrValid, isEmailValid, isPasswordValid, isVoornaamMoederValid, isNaamMoederValid,
-    isRrnMoederValid, isBevestigPasswordValid, isNaamVaderValid, isVoornaamVaderValid,
+            isRrnMoederValid, isBevestigPasswordValid, isNaamVaderValid, isVoornaamVaderValid,
             isRrnVaderValid, isParentDataValid;
 
     /**
-     *  Initialiseert het scherm
+     * Initialiseert het scherm
+     *
      * @param savedInstanceState
      */
     @Override
@@ -62,12 +63,36 @@ public class Registreren extends Activity {
         mBevestigPasswordView = (EditText) findViewById(R.id.bevestig_password);
         changeValidityParentData();
         setUpListeners();
+
+        prepareHiddenButton();
+    }
+
+    /**
+     * Een verborgen 'knop' voor het invullen van gegevens bij de presentatie.
+     */
+    private void prepareHiddenButton() {
+        TextView registerLbl = (TextView) findViewById(R.id.register_account_label);
+
+        registerLbl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mVoornaamMoederView.setText("Mieke");
+                mNaamMoederView.setText("De Mei");
+                mRrnMoederView.setText("86020500615");
+                mNaamVaderView.setText("");
+                mVoornaamVaderView.setText("");
+                mRrnVaderView.setText("");
+                mTelNrView.setText("0474524875");
+                mEmailView.setText("mieke.demei@gmail.be");
+                mPasswordView.setText("miekedemei");
+                mBevestigPasswordView.setText("miekedemei");
+            }
+        });
     }
 
     /**
      * Voegt Listeners toe aan de knoppen en de EditText velden
      * en stelt het gedrag in van de enter knop op het android toetsenbord
-     *
      */
     private void setUpListeners() {
         mRegistrerenButton.setOnClickListener(new View.OnClickListener() {
@@ -79,17 +104,17 @@ public class Registreren extends Activity {
         /**
          *  Als de inhoud van de tekstvelden ongeldig is doet de enterknop op het toetsenbord bij het laatste
          *  tekstveld niets anders zal de registratie gestart worden
-        */
+         */
         mRrnVaderView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 boolean isValidKey = keyEvent != null && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER;
                 boolean isValidAction = actionId == EditorInfo.IME_ACTION_DONE;
 
-                if ((isValidAction || isValidKey)&& isTelnrValid && isEmailValid && isPasswordValid
+                if ((isValidAction || isValidKey) && isTelnrValid && isEmailValid && isPasswordValid
                         && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid
                         && isNaamVaderValid && isVoornaamVaderValid && isRrnVaderValid
-                        && isBevestigPasswordValid){
+                        && isBevestigPasswordValid) {
                     attemptRegistration();
                 }
                 return false;
@@ -102,11 +127,13 @@ public class Registreren extends Activity {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
                 isPasswordValid(s.toString());
                 changeButtonState();
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -119,12 +146,14 @@ public class Registreren extends Activity {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                isVoornaamMoederValid = s.length()!= 0;
+                isVoornaamMoederValid = s.length() != 0;
                 changeValidityParentData();
                 changeButtonState();
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -137,13 +166,15 @@ public class Registreren extends Activity {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                isNaamMoederValid = s.length()!=0;
+                isNaamMoederValid = s.length() != 0;
                 changeValidityParentData();
                 changeButtonState();
 
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -156,12 +187,14 @@ public class Registreren extends Activity {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
                 isRrnMoederValid = isRrnValid(s.toString());
                 changeValidityParentData();
                 changeButtonState();
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -174,11 +207,13 @@ public class Registreren extends Activity {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
                 isTelNrValid(s.toString());
                 changeButtonState();
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -191,11 +226,13 @@ public class Registreren extends Activity {
             @Override
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
                 isEmailValid(s.toString());
                 changeButtonState();
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -209,11 +246,13 @@ public class Registreren extends Activity {
             public void beforeTextChanged(CharSequence s, int i, int i2, int i3) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
                 passwordsMatch(mPasswordView.getText().toString(), s.toString());
                 changeButtonState();
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -232,11 +271,12 @@ public class Registreren extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
-                isNaamVaderValid = s.length()!=0;
+                isNaamVaderValid = s.length() != 0;
                 changeValidityParentData();
                 changeButtonState();
 
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -277,7 +317,7 @@ public class Registreren extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int i, int i2, int i3) {
 
-                    isRrnVaderValid=isRrnValid(s.toString());
+                isRrnVaderValid = isRrnValid(s.toString());
 
                 changeValidityParentData();
                 changeButtonState();
@@ -294,20 +334,20 @@ public class Registreren extends Activity {
     }
 
     /**
-     *Wanneer geen van de tekstvelden van de vader ingevuld zijn worden de booleans ervoor op
+     * Wanneer geen van de tekstvelden van de vader ingevuld zijn worden de booleans ervoor op
      * true gezet zodat ze geen invloed hebben op het verdere verloop
      */
-    public void changeValidityParentData(){
+    public void changeValidityParentData() {
         isParentDataValid = (isNaamVaderValid && isVoornaamVaderValid && isRrnVaderValid) ||
                 (isNaamMoederValid && isVoornaamMoederValid && isRrnMoederValid);
 
-        if (isNaamMoederValid || isVoornaamMoederValid || isRrnMoederValid){
-                mRrnVaderView.setError(null);
-                mNaamVaderView.setError(null);
-                mVoornaamVaderView.setError(null);
+        if (isNaamMoederValid || isVoornaamMoederValid || isRrnMoederValid) {
+            mRrnVaderView.setError(null);
+            mNaamVaderView.setError(null);
+            mVoornaamVaderView.setError(null);
         }
 
-        if (isNaamVaderValid || isVoornaamVaderValid || isRrnVaderValid){
+        if (isNaamVaderValid || isVoornaamVaderValid || isRrnVaderValid) {
             mRrnMoederView.setError(null);
             mNaamMoederView.setError(null);
             mVoornaamMoederView.setError(null);
@@ -316,7 +356,7 @@ public class Registreren extends Activity {
     }
 
     /**
-     *Maakt een ouder object aan met de gegevens uit de tekstvelden en geeft dit door
+     * Maakt een ouder object aan met de gegevens uit de tekstvelden en geeft dit door
      * naar de asynchrone taak om te registreren
      */
     public void attemptRegistration() {
@@ -332,28 +372,30 @@ public class Registreren extends Activity {
         String rrnVader = mRrnVaderView.getText().toString();
         String telNr = mTelNrView.getText().toString();
 
-            Ouder ouder = new Ouder(naamMoeder,voornaamMoeder,rrnMoeder, naamVader,voornaamVader, rrnVader,  telNr,email, password);
-            mAuthTask = new UserRegisterTask(ouder, password2);
-            mAuthTask.execute((Void) null);
+        Ouder ouder = new Ouder(naamMoeder, voornaamMoeder, rrnMoeder, naamVader, voornaamVader, rrnVader, telNr, email, password);
+        mAuthTask = new UserRegisterTask(ouder, password2);
+        mAuthTask.execute((Void) null);
 
     }
 
     /**
-     *Kijkt of het ingegeven telefoonnummer een geldig belgisch telefoonnummer is
+     * Kijkt of het ingegeven telefoonnummer een geldig belgisch telefoonnummer is
+     *
      * @param telnr
      */
-    private void isTelNrValid(String telnr){
+    private void isTelNrValid(String telnr) {
         String telnrRegex;
         Pattern patternTelnr;
         telnrRegex = "0(\\d{3}|\\d{2})\\d{6}";
         patternTelnr = Pattern.compile(telnrRegex);
         Matcher matcher = patternTelnr.matcher(telnr);
 
-        isTelnrValid =  matcher.find();
+        isTelnrValid = matcher.find();
     }
 
     /**
      * Kijkt of de tekst een geldig emailadres is
+     *
      * @param email
      */
     private void isEmailValid(String email) {
@@ -365,48 +407,51 @@ public class Registreren extends Activity {
         pattern = Pattern.compile(emailRegEx);
         Matcher matcher = pattern.matcher(email);
 
-        isEmailValid =  matcher.find() && !email.isEmpty();
+        isEmailValid = matcher.find() && !email.isEmpty();
     }
 
     /**
-     *Kijkt of de tekst in het wachtwoord tekstveld overeenkomt met de tekst in het
+     * Kijkt of de tekst in het wachtwoord tekstveld overeenkomt met de tekst in het
      * bevestig wachtwoord tekstveld
+     *
      * @param pw1
      * @param pw2
      */
     private void passwordsMatch(String pw1, String pw2) {
-        isBevestigPasswordValid =  pw1.equals(pw2);
+        isBevestigPasswordValid = pw1.equals(pw2);
     }
 
     /**
      * Kijkt of de tekst in het rrn tekstveld een geldig
      * rijksregisternummer is
+     *
      * @param rrn
      * @return
      */
-    private boolean isRrnValid(String rrn){
-        if (rrn.length()==11) {
-            int rrnNumber = Integer.parseInt(rrn.substring(0,9));
+    private boolean isRrnValid(String rrn) {
+        if (rrn.length() == 11) {
+            int rrnNumber = Integer.parseInt(rrn.substring(0, 9));
             int modulo = rrnNumber % 97;
-            int checkSum = Integer.parseInt(rrn.substring(9,11));
-            return (Integer.compare(modulo, 97-checkSum)==0);
-        }else
+            int checkSum = Integer.parseInt(rrn.substring(9, 11));
+            return (Integer.compare(modulo, 97 - checkSum) == 0);
+        } else
             return false;
     }
 
     /**
      * Kijkt of de tekst in het wachtwoord tekstvenster overeenkomt met de opgelegde regels
+     *
      * @param password
      */
     private void isPasswordValid(String password) {
-        isPasswordValid =  password.length()>= 6;
+        isPasswordValid = password.length() >= 6;
     }
 
     /**
      * Stelt het errorfield in van de tekstvelden afhankelijk van de geldigheid van de tekstvelden
      * verwijdert het veld wanneer de gegevens geldig zijn
      */
-    public void setErrors(){
+    public void setErrors() {
         if (isTelnrValid && isEmailValid && isPasswordValid
                 && isVoornaamMoederValid && isNaamMoederValid && isRrnMoederValid
                 && isBevestigPasswordValid && isVoornaamVaderValid && isNaamVaderValid && isRrnVaderValid) {
@@ -420,23 +465,23 @@ public class Registreren extends Activity {
             mVoornaamVaderView.setError(null);
             mNaamVaderView.setError(null);
             mRrnVaderView.setError(null);
-        }else{
+        } else {
             if (!isTelnrValid)
                 mTelNrView.setError(getString(R.string.error_invalid_telephonenumber));
             else
                 mTelNrView.setError(null);
 
-            if(!isEmailValid)
+            if (!isEmailValid)
                 mEmailView.setError(getString(R.string.error_invalid_email));
             else
                 mEmailView.setError(null);
 
-            if(!isPasswordValid)
+            if (!isPasswordValid)
                 mPasswordView.setError(getString(R.string.error_invalid_password));
             else
                 mPasswordView.setError(null);
 
-            if(!isBevestigPasswordValid)
+            if (!isBevestigPasswordValid)
                 mBevestigPasswordView.setError(getString(R.string.error_passwords_different));
             else
                 mBevestigPasswordView.setError(null);
@@ -478,11 +523,11 @@ public class Registreren extends Activity {
      * Als alle velden correct gevalideerd zijn zal de knop om te registreren ge-enabled worden
      * anders zal de knop disabled worden
      */
-    private void changeButtonState(){
+    private void changeButtonState() {
         if (isTelnrValid && isEmailValid && isPasswordValid
-                && isBevestigPasswordValid && isParentDataValid){
+                && isBevestigPasswordValid && isParentDataValid) {
             mRegistrerenButton.setEnabled(true);
-        }else{
+        } else {
             mRegistrerenButton.setEnabled(false);
         }
         setErrors();
@@ -499,13 +544,12 @@ public class Registreren extends Activity {
         private RestClient restClient = new RestClient();
 
         /**
-         *
          * @param ouder
          * @param passwordConfirmed
          */
         public UserRegisterTask(Ouder ouder, String passwordConfirmed) {
-           this.mOuder=ouder;
-           this.passwordConfirmed=passwordConfirmed;
+            this.mOuder = ouder;
+            this.passwordConfirmed = passwordConfirmed;
         }
 
         /**
@@ -521,6 +565,7 @@ public class Registreren extends Activity {
          * De parameter map die meegegeven zal worden met het HTTP request naar de server
          * zal hier opgevuld worden en meegegeven worden naar de functie die het
          * request zal versturen
+         *
          * @param voids
          * @return
          */
@@ -537,7 +582,7 @@ public class Registreren extends Activity {
             signUpParamMap.put("last_name_mother", mOuder.getNaam());
             signUpParamMap.put("nrn_mother", mOuder.getRrnMoeder());
             signUpParamMap.put("first_name_father", mOuder.getVoornaamVader());
-            signUpParamMap.put("last_name_father",  mOuder.getNaamVader());
+            signUpParamMap.put("last_name_father", mOuder.getNaamVader());
             signUpParamMap.put("nrn_father", mOuder.getRrnVader());
 
             sendSignUpRequest(signUpParamMap);
@@ -548,6 +593,7 @@ public class Registreren extends Activity {
          * Na de task zal het dialog verdwijnen, de asynchrone task gestopt worden
          * Als het registreren succesvol is zal de login activity gestart worden en
          * de huidige activity gestopt worden
+         *
          * @param success is true als het registreren succesvol is zoniet false
          */
         @Override
@@ -558,7 +604,7 @@ public class Registreren extends Activity {
                 Intent loginIntent = new Intent(getApplicationContext(), Login.class);
                 startActivity(loginIntent);
                 finish();
-            }else {
+            } else {
                 Toast.makeText(getBaseContext(), "Niet Geregistreerd", Toast.LENGTH_SHORT).show();
                 mEmailView.setError(getString(R.string.error_existing_email));
                 mEmailView.requestFocus();
@@ -566,11 +612,12 @@ public class Registreren extends Activity {
         }
 
         /**
-         *  Zal het http request naar de server versturen en afhankelijk van of het registreren
-         *  wel of niet succesvol was de succes functie of failure functie aanroepen
+         * Zal het http request naar de server versturen en afhankelijk van of het registreren
+         * wel of niet succesvol was de succes functie of failure functie aanroepen
+         *
          * @param signupParamMap de map die de gegevens van de te registreren ouder bevat
          */
-        private void sendSignUpRequest(Map<String, String> signupParamMap){
+        private void sendSignUpRequest(Map<String, String> signupParamMap) {
 
             Callback<String> gebruiker = new Callback<String>() {
                 @Override
@@ -582,7 +629,7 @@ public class Registreren extends Activity {
                 @Override
                 public void failure(RetrofitError error) {
                     error.printStackTrace();
-                   // Toast.makeText(getBaseContext(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getBaseContext(), error.getBody().toString(), Toast.LENGTH_SHORT).show();
                 }
 
             };
@@ -599,4 +646,4 @@ public class Registreren extends Activity {
             progressDialog.dismiss();
         }
     }
- }
+}
