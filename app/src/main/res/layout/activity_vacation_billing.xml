@@ -81,8 +81,7 @@
             android:background="@drawable/edittext_top_bg"
             android:padding="10dp"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="5dp"
-            android:inputType="numberSigned"/>
+            android:layout_marginStart="5dp"/>
 
     </LinearLayout>
 

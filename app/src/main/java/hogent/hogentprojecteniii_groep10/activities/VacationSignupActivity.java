@@ -30,6 +30,7 @@ import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.models.Address;
+import hogent.hogentprojecteniii_groep10.models.ChildrenResponse;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
@@ -60,7 +61,6 @@ public class VacationSignupActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vacation_signup);
 
-        kinderen = new Kind[0];
         vacation = (Vacation) getIntent().getParcelableExtra("SpecificVacation");
 
         addChildToAccountBtn = (Button) findViewById(R.id.add_child_to_account_btn);
@@ -155,7 +155,7 @@ public class VacationSignupActivity extends Activity {
         return true;
     }
 
-    public class GetChildrenTask extends AsyncTask<Void, Void, List<Kind>> {
+    public class GetChildrenTask extends AsyncTask<Void, Void, ChildrenResponse> {
         private RestClient restClient;
 
         public GetChildrenTask() {
@@ -169,22 +169,24 @@ public class VacationSignupActivity extends Activity {
         }
 
         @Override
-        protected List<Kind> doInBackground(Void... voids) {
-            return restClient.getRestService().getChildren();
+        protected ChildrenResponse doInBackground(Void... voids) {
+            try{
+                return restClient.getRestService().getChildren();
+            }catch(RetrofitError e){
+                return new ChildrenResponse();
+            }
         }
 
         @Override
-        protected void onPostExecute(List<Kind> children) {
-            kinderen = new Kind[children.size()];
-            for (int i = 0; i < children.size(); i++){
-                kinderen[i] = children.get(i);
+        protected void onPostExecute(ChildrenResponse childrenResponse) {
+            if(childrenResponse.getChildren() != null){
+                List<Kind> children = childrenResponse.getChildren();
+                kinderen = new Kind[children.size()];
+                for (int i = 0; i < children.size(); i++){
+                    kinderen[i] = children.get(i);
+                }
+                setupAdapter();
             }
-
-            //Temp tot back-end eindelijk werkt
-            kinderen = new Kind[1];
-            kinderen[0] = new Kind("De Mei", "Jan", "12365489", "Stad");
-
-            setupAdapter();
         }
     }
 

@@ -132,7 +132,7 @@ public class VacationBillingActivity extends Activity implements TextWatcher {
         Pattern postalCodePattern = Pattern.compile("^[1-9][0-9]{3}$");
         Matcher postalCodeMatcher = postalCodePattern.matcher(postalCodeTxt.getText().toString());
 
-        Pattern HousenumberPattern = Pattern.compile("^\\d+$");
+        Pattern HousenumberPattern = Pattern.compile("^\\d+([a-zA-Z])?$");
         Matcher HousenumberMatcher = HousenumberPattern.matcher(houseNumberTxt.getText().toString());
 
         setTextColor(postalCodeTxt, postalCodeMatcher.matches());

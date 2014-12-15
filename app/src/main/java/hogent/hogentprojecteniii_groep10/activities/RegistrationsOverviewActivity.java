@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,9 +26,12 @@ import java.util.List;
 
 import hogent.hogentprojecteniii_groep10.R;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
+import hogent.hogentprojecteniii_groep10.models.ChildrenResponse;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Registration;
+import hogent.hogentprojecteniii_groep10.models.RegistrationsResponse;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
+import retrofit.RetrofitError;
 
 /**
  * Toont een overzicht van inschrijvingen per kind
@@ -51,8 +55,8 @@ public class RegistrationsOverviewActivity extends Activity {
 
         childVacationListView = (ExpandableListView) findViewById(R.id.children_vacations_exp_listview);
 
-        //prepareListData();
-        prepareDummyListData();
+        prepareListData();
+        //prepareDummyListData();
 
 
         //Doet momenteel nog niks. Indien tijd over het naar de vakantie laten gaan.
@@ -128,15 +132,15 @@ public class RegistrationsOverviewActivity extends Activity {
     public class GetChildrenAndVacationsTask extends AsyncTask<Void, Void, Void> {
         private RestClient restClient;
 
-        public GetChildrenAndVacationsTask() {
-            SharedPreferences sharedPref =
-                    getApplication().
-                            getSharedPreferences(getString(R.string.authorization_preference_file),
-                                    Context.MODE_PRIVATE);
-            String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
-            restClient = new RestClient(token);
-
-        }
+//        public GetChildrenAndVacationsTask() {
+//            SharedPreferences sharedPref =
+//                    getApplication().
+//                            getSharedPreferences(getString(R.string.authorization_preference_file),
+//                                    Context.MODE_PRIVATE);
+//            String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
+//            restClient = new RestClient(token);
+//
+//        }
 
         /**
          * Hier gebeuren veel requests. Slecht voor het netwerk, maar kan momenteel niet anders.
@@ -147,7 +151,13 @@ public class RegistrationsOverviewActivity extends Activity {
          */
         @Override
         protected Void doInBackground(Void... voids) {
-            List<Kind> children = restClient.getRestService().getChildren();
+            SharedPreferences sharedPref =
+                    getApplication().getSharedPreferences(getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
+            String token = sharedPref.getString(getResources().getString(R.string.authorization), "No token");
+            restClient = new RestClient(token);
+
+            ChildrenResponse childrenResponse = restClient.getRestService().getChildren();
+            List<Kind> children = childrenResponse.getChildren();
 
             listDataHeader = new ArrayList<Kind>();
             listDataChild = new HashMap<Kind, List<Vacation>>();
@@ -155,12 +165,24 @@ public class RegistrationsOverviewActivity extends Activity {
             for (Kind k : children) {
                 listDataHeader.add(k);
                 List<Vacation> vacationsForChild = new ArrayList<Vacation>();
+                try {
+                    restClient = new RestClient(token);
 
-                for (Registration v : restClient.getRestService().getRegistrationsForChild(k.getId())) {
-                    Vacation currentVacation = restClient.getRestService().getVacation(v.getVacationId());
-                    vacationsForChild.add(currentVacation);
+                    RegistrationsResponse registrationsResponse = restClient.getRestService().getRegistrationsForChild(k.getId());
+                    List<Registration> registrations = registrationsResponse.getRegistrations();
+
+                    for (Registration v : registrations) {
+                        Vacation currentVacation = restClient.getRestService().getVacation(v.getVacationId());
+                        Log.i("RegistrationsOvervview", v.getVacationId() + "");
+                        Log.i("RegistrationsOvervview", currentVacation.getTitle());
+                        vacationsForChild.add(currentVacation);
+                    }
+                    listDataChild.put(k, vacationsForChild);
+                } catch (RetrofitError e) {
+                    listDataHeader.remove(k);
+                    e.printStackTrace();
                 }
-                listDataChild.put(k, vacationsForChild);
+
             }
             return null;
         }
@@ -173,7 +195,7 @@ public class RegistrationsOverviewActivity extends Activity {
                 public void run() {
                     prepareAdapter();
 
-                    if(listDataChild.isEmpty())
+                    if (listDataChild.isEmpty())
                         Toast.makeText(getApplicationContext(), "Er zijn geen inschrijvingen!", Toast.LENGTH_SHORT).show();
                 }
             });

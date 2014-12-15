@@ -25,7 +25,7 @@ public class RestClient {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setRequestInterceptor(new SessionRequestInterceptor(token))
                 .setEndpoint(BASE_URL)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         restService = restAdapter.create(RestService.class);
@@ -35,7 +35,7 @@ public class RestClient {
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(BASE_URL)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         restService = restAdapter.create(RestService.class);

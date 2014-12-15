@@ -9,12 +9,14 @@ import java.util.Map;
 
 import hogent.hogentprojecteniii_groep10.models.Address;
 import hogent.hogentprojecteniii_groep10.models.Category;
+import hogent.hogentprojecteniii_groep10.models.ChildrenResponse;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.LoginToken;
 import hogent.hogentprojecteniii_groep10.models.Monitor;
 import hogent.hogentprojecteniii_groep10.models.MonitorResponse;
 import hogent.hogentprojecteniii_groep10.models.Photo;
 import hogent.hogentprojecteniii_groep10.models.Registration;
+import hogent.hogentprojecteniii_groep10.models.RegistrationsResponse;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
 import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import retrofit.Callback;
@@ -82,7 +84,7 @@ public interface RestService {
      * @return de lijst van kinderen van dit account.
      */
     @GET("/user/me/children")
-    List<Kind> getChildren();
+    ChildrenResponse getChildren();
 
     /**
      * Haalt alle registraties op van een bepaald kind.
@@ -91,7 +93,7 @@ public interface RestService {
      * @return
      */
     @GET("/user/me/{childId}/registrations")
-    List<Registration> getRegistrationsForChild(@Path("childId") long childId);
+    RegistrationsResponse getRegistrationsForChild(@Path("childId") long childId);
 
     @FormUrlEncoded
     @POST("/user/me/{childId}/register")

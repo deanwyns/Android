@@ -1,13 +1,16 @@
 package hogent.hogentprojecteniii_groep10.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,11 +26,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import hogent.hogentprojecteniii_groep10.R;
+import hogent.hogentprojecteniii_groep10.helpers.HelperMethods;
 import hogent.hogentprojecteniii_groep10.helpers.RestClient;
 import hogent.hogentprojecteniii_groep10.main.Main;
 import hogent.hogentprojecteniii_groep10.models.Gebruiker;
 import hogent.hogentprojecteniii_groep10.models.Kind;
 import hogent.hogentprojecteniii_groep10.models.Vacation;
+import hogent.hogentprojecteniii_groep10.models.VacationResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -109,22 +114,7 @@ public class VacationSignupOverviewActivity extends Activity {
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPref = getApplicationContext()
-                        .getSharedPreferences(getApplicationContext().getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
-                String token = sharedPref.getString(getApplicationContext().getResources().getString(R.string.authorization), "No token");
-                RestClient restClient = new RestClient(token);
-                Callback<Response> callback = new Callback<Response>() {
-                    @Override
-                    public void success(Response response, Response response2) {
-                        Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
-                    }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Er kon niet ingeschreven worden.", Toast.LENGTH_SHORT).show();
-                    }
-                };
                 Map<String, String> registerValues = new HashMap<String, String>();
 
                 registerValues.put("vacation_id", Long.toString(selectedVacation.getId()));
@@ -136,9 +126,12 @@ public class VacationSignupOverviewActivity extends Activity {
                 registerValues.put("house_number", housenumberTxt);
                 registerValues.put("city", cityTxt);
 
+
+                Log.i("VacationSignupOverview", Arrays.toString(signedUpChildren));
+
                 for(Kind k : signedUpChildren){
                     registerValues.put("child_id", Long.toString(k.getId()));
-                    restClient.getRestService().registerChild(registerValues, k.getId(), callback);
+                    new RegisterChildTask(registerValues, k.getId()).execute();
                 }
 
 
@@ -160,5 +153,44 @@ public class VacationSignupOverviewActivity extends Activity {
         if( getActionBar() != null)
             getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         return true;
+    }
+
+    public class RegisterChildTask extends AsyncTask<Map<String, String>, Void, Void> {
+        private Map<String, String> registerValues;
+        private long childId;
+        private RestClient restClient;
+
+        public RegisterChildTask(Map<String, String> registerValues, long childId){
+            this.registerValues = registerValues;
+            this.childId = childId;
+
+            SharedPreferences sharedPref = getApplicationContext()
+                    .getSharedPreferences(getApplicationContext().getString(R.string.authorization_preference_file), Context.MODE_PRIVATE);
+            String token = sharedPref.getString(getApplicationContext().getResources().getString(R.string.authorization), "No token");
+            restClient = new RestClient(token);
+        }
+
+        @Override
+        protected Void doInBackground(Map<String, String>... params) {
+
+            Log.i("VacationSignupOverview", "Registering: " + childId);
+
+            Callback<Response> callback = new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    Toast.makeText(getApplicationContext(), "Een inschrijving is gemaakt!", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    error.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Er kon niet ingeschreven worden.", Toast.LENGTH_SHORT).show();
+                }
+            };
+            restClient.getRestService().registerChild(registerValues, childId, callback);
+
+
+            return null;
+        }
     }
 }
