@@ -343,14 +343,16 @@ public class Login extends Activity {
          */
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            progressDialog.dismiss();
+
             if (success) {
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+
+            mAuthTask = null;
+            progressDialog.dismiss();
         }
         /**
          * Wanneer er geannuleerd wordt wordt de asynchrone task geannuleerd en

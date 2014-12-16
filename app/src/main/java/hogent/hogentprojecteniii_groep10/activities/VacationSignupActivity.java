@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -88,6 +89,7 @@ public class VacationSignupActivity extends Activity {
 
         //Vervanging van spinner uit XML omdat je niet zomaar themes & styles kan toepassen in code
         Spinner childSpinner = new Spinner(getApplicationContext(), null, android.R.attr.spinnerStyle);
+        childSpinner.setBackgroundColor(Color.BLACK);
         spinnerList.add(childSpinner);
         childSpinner.setAdapter(adapter);
         childrenSpinnerLayout.addView(childSpinner);
@@ -102,6 +104,7 @@ public class VacationSignupActivity extends Activity {
             public void onClick(View v) {
                 if(spinnerList != null && kinderen != null && spinnerList.size() < kinderen.length){
                     Spinner childSpinner = new Spinner(getApplicationContext(), null, android.R.attr.spinnerStyle);
+                    childSpinner.setBackgroundColor(Color.BLACK);
                     spinnerList.add(childSpinner);
                     childSpinner.setAdapter(adapter);
                     childrenSpinnerLayout.addView(childSpinner);
