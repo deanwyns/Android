@@ -5,7 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Instellingen</string>
     <string name="nieuwsoverzicht">Nieuwsoverzicht</string>
-    <string name="newsfeed">Foto\'s van jou zijn toegevoegd aan actiekamp\nJoetz is cool!\nNog een hoogtepunt</string>
+    <string name="newsfeed">Foto\'s van jou zijn toegevoegd aan actiekamp\nJoetz is cool! - blog\nNieuwe vakantie beschikbaar!</string>
     <string name="title_activity_vacation_overview">Vakanties</string>
     <string name="vacation_title_sort_btn">Titel ^</string>
     <string name="vacation_date_sort_btn">Datum ^</string>
